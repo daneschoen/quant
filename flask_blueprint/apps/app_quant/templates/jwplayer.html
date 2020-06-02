@@ -1,0 +1,416 @@
+<html>
+
+<head>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/freezeframe_styles.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/css/ionicons.min.css">
+
+  <style>
+
+    h3 {
+      color: #101010;
+      font-family: Helvetica, Arial, sans-serif;
+      margin: 20px;
+      font-size: 20px;
+    }
+
+    .vid {
+      margin:15px;
+    }
+
+    .image_index_container {
+        width: 430px;
+        height: 286px;
+    }
+
+    /* resize images */
+    .image_index_container img {
+        width: 100%;
+        height: auto;
+    }
+
+    #videosList {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0px 80px;
+    }
+    @media (max-width: 1250px) {
+        #videosList {
+          padding: 0px 50px; }
+    }
+    @media (max-width: 900px) {
+        #videosList {
+          padding: 60px 20px; }
+    }
+
+    #videosList .video {
+        width: 50%;
+        display: inline-block;
+        float: left;
+        position: relative;
+        overflow: hidden;
+    }
+    @media (max-width: 500px) {
+          #videosList .video {
+            width: 100%; }
+    }
+    #videosList .video .videoSlate {
+          width: 100%;
+          height: 0;
+          padding: 60% 0 0 0;
+          -webkit-transition: 5000ms 50ms;
+          -moz-transition: 5000ms 50ms;
+          transition: 5000ms 50ms;
+    }
+    #videosList .video .videoSlate:after {
+            content: ' ';
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            -webkit-transition: 500ms 50ms;
+            -moz-transition: 500ms 50ms;
+            transition: 500ms 50ms;
+    }
+    #videosList .video .videoSlate video {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+    }
+    #videosList .video .videoListCopy {
+          display: inline-block;
+          text-align: center;
+          width: 100%;
+          z-index: 20;
+    }
+
+
+    #videosList1 {
+     max-width: 600px;
+     overflow: hidden;
+    }
+
+    .video_background {
+      background-image: url('http://img.youtube.com/vi/nZcejtAwxz4/maxresdefault.jpg');
+      height: 330px;
+      width: 600px;
+      margin-bottom: 50px;
+    }
+
+    /* Hide Play button + controls on iOS */
+    /*
+    video::-webkit-media-controls {
+        display:none !important;
+    }
+    */
+
+  </style>
+
+</head>
+
+<body>
+  <h3>MetaPlayer &raquo; Examples &raquo; JWPlayer with v3 UI</h3>
+
+  <div class="vid">
+
+      <div class="metaplayer">
+        <div id='div_jwplayer_0'>Loading video...</div>
+      </div>
+      <div id='searchbar'></div>
+      <div id='transcript'></div>
+
+  </div>
+
+  <div class="vid">
+    <!---->
+    <iframe width="640" height="360"
+      src="https://www.youtube.com/embed/Ofx7w_7dDEc" allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="vid">
+    <div id="div_jwplayer_1" style='width:640px;height:480px;'>Loading video...
+    </div>
+  </div>
+
+  <div class="vid">
+    <h3>webm - jwplayer</h3>
+    <div id="div_jwplayer_2">Loading video...
+    </div>
+  </div>
+
+  <div class="vid">
+    <h3>webm - video html5</h3>
+    <video width="640" height="360" class="video">
+      <source src="/static/images/gifs/VElrqlO.webm" type="video/webm">
+    </video>
+  </div>
+
+  <
+  <div class="vid image_index_container">
+    <h3>gif - freezeframe</h3>
+    <div>
+      <img src="/static/images/gifs/be_peeingstatue.gif" alt="Belgium"
+       class="freezeframe freezeframe-responsive">
+    </div>
+  </div>
+
+  <div class="vid">
+    <h3>gif - click</h3>
+    <!--div class="div_img_click"-->
+    <figure>
+      <img src="/static/images/gifs/be_peeingstatue.png" class="img_click"
+       alt="" data-alt="/static/images/gifs/be_peeingstatue.gif">
+    </figure>
+  </div>
+
+  <div class="vid">
+    <h3>jwplayer - mp4</h3>
+    <div id="div_jwplayer_4">Loading video...
+    </div>
+  </div>
+
+  <div class="vid">
+    <h3>iframe - mp4</h3>
+    <iframe width="640" height="360" frameborder="0"
+      src="/static/images/gifs/us_tacotruck.mp4" allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="vid">
+    <h3>HTML5 video controls  - mp4 converted from webm</h3>
+    <video width="640" height="360" class="video_controls">
+      <source src="/static/images/gifs/us_anythinggoes.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="vid video_hover">
+    <h3>HTML5 video hover - mp4 converted from webm</h3>
+    <video width="640" height="360" loop>
+      <source src="/static/images/gifs/us_anythinggoes.mp4" type="video/mp4">
+    </video>
+  </div>
+
+
+
+  <div class="image_index_container">
+    <h3>gif (converted from webm)</h3>
+    <div>
+      <img src="/static/images/gifs/us_anythinggoes.gif" alt=""
+       class="freezeframe freezeframe-responsive">
+    </div>
+  </div>
+
+
+  <div id="videosList">
+
+    <div class="video_hover video">
+      <div class="videoListCopy">
+        <a href="#" class="buttonMore">
+          <div class="breaker"><div class="line"></div></div>
+          <div class="buttonContent">
+              <div class="linkArrowContainer">
+                  <div class="iconArrowRight"></div>
+                  <div class="iconArrowRightTwo"></div>
+              </div>
+              <span>Others</span>
+          </div>
+            </a>
+      </div>
+      <div class="videoSlate">
+        <video class="thevideo" loop>
+          <source src="http://www.w3schools.com/html/movie.ogg" type="video/ogg">
+        Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <div class="video_hover video">
+      <div class="videoListCopy">
+        <a href="#" class="buttonMore">
+          <div class="breaker"><div class="line"></div></div>
+          <div class="buttonContent">
+              <div class="linkArrowContainer">
+                  <div class="iconArrowRight"></div>
+                  <div class="iconArrowRightTwo"></div>
+              </div>
+              <span>Others</span>
+          </div>
+        </a>
+      </div>
+      <div class="videoSlate">
+        <video class="thevideo" loop>
+          <source src="http://www.w3schools.com/html/movie.ogg" type="video/ogg">
+        Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div id="videosList1">
+    <div class="video_background video_hover">
+      <video class="thevideo" loop preload="none">
+        <source src="http://giant.gfycat.com/VerifiableTerrificHind.mp4" type="video/mp4">
+        <source src="http://giant.gfycat.com/VerifiableTerrificHind.webm" type="video/webm">
+      Your browser does not support the video tag.
+      </video>
+    </div>
+    Hover mouse over video. Desktop only [ Obviously! ;) ]
+  </div>
+
+
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/jquery.min.js"><\/script>')</script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <!--script src="/static/js/bootstrap.min.js" type="text/javascript" ></script-->
+
+  <script src="/static/js/jquery.color.js" type="text/javascript"></script>
+  <script src="/static/js/jquery-glowing.js" type="text/javascript"></script>
+
+  <!--script src="https://content.jwplatform.com/libraries/oMnwktOc.js" type="text/javascript" ></script-->
+  <script src="/static/js/jwplayer.js" type="text/javascript"></script>
+  <script> jwplayer.key="q55vZEYnRhQ2Bk8oiO6NyMS+cKQriJ56CwHgag==";</script>
+
+  <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+  <script src="/static/js/freezeframe.min.js"></script>
+
+  <script src="/static/js/app_laplacian.js"></script>
+
+  <script type="text/javascript">
+    //$( document ).ready(function() {
+    $(function() {
+      /*
+      //$('.freezeframe').freezeframe();
+      //https://www.youtube.com/watch?v=GaoLU6zKaws
+      ff = new freezeframe().freeze();
+
+      $('video').hover(
+        function(){
+          var attr = $(this).attr('controls');
+          if (typeof attr !== typeof undefined && attr !== false) {
+            this.removeAttribute("controls");
+            $(this).prop("controls", "");  //* IE
+            //$(this).removeProp("controls", false);
+            console.log('REMOVED');
+          } else {
+            this.setAttribute("controls", "controls");
+            console.log('not set - just set');
+          }
+        }
+      )
+    */
+    });
+  </script>
+
+
+  <script type="text/javascript">
+    var playerInstance = jwplayer("div_jwplayer_0");
+    playerInstance.setup({
+      file: "//www.youtube.com/watch?v=Ofx7w_7dDEc",
+      width: 640,
+      height: 360,
+      //skin: '/static/css/glow.css',
+    });
+  </script>
+
+  <script type='text/javascript'>
+    jwplayer('div_jwplayer_1').setup({
+        //'flashplayer': 'http://www.mysite.com/jwplayer/player.swf',
+        'file': '//www.youtube.com/watch?v=Ofx7w_7dDEc',
+        //'image': 'http://www.mysite.com/graphics/splash.jpg',
+        'controlbar': 'bottom',
+        'width': '640',
+        'height': '480',
+    });
+  </script>
+
+  <script type="text/javascript">
+    jwplayer("div_jwplayer_2").setup({
+      file: "/static/images/gifs/VElrqlO.webm",
+      width: 640,
+      height: 360,
+      events: {
+        onReady: function () {
+          this.play(); this.pause();
+        }
+      }
+    });
+
+    /*
+    jwplayer("div_jwplayer_3").setup({
+      file: "/static/images/gifs/be_peeingstatue.gif",
+      width: 640,
+      height: 360,
+    });
+    */
+    jwplayer("div_jwplayer_4").setup({
+      file: "/static/images/gifs/us_tacotruck.mp4",
+      width: 640,
+      height: 360,
+      skin: '/static/css/glow.css',
+      events: {
+        onReady: function () {
+          this.play(); this.pause();
+        }
+      }
+    });
+
+  </script>
+
+  <script>
+    /*
+    var jwp, video, player;
+
+    $(function () {
+
+       jwp = jwplayer('div_jwplayer').setup({
+           controls: false, // v6
+           controlbar: "none", //v5
+           width: "600",
+           height: "300",
+           autostart: true,
+           icons: false, // disable a big play button on the middle of screen
+           plugins: {
+               viral: {
+                   onpause: false,
+                   oncomplete: false,
+                   allowmenu: false
+               }
+           }, // disable all viral features.
+           flashplayer: "//publishing.ramp.com/FileResource/widgets/metaplayer3/external/jwplayer/player.swf",
+           file: "//publishing.ramp.com/FileResource/widgets/metaplayer3/external/jwplayer/blank.mp4"
+
+       });
+
+       jwp.onReady(function () {
+           video = MetaPlayer.jwplayer(jwp);
+           video.autoplay = true;
+
+           player = MetaPlayer(video)
+               .controlbar({
+               fullscreen: true
+           })
+               .captionconfig()
+               .transcript("#transcript")
+               .searchbar("#searchbar")
+               .mrss("//publishing.ramp.com/FileResource/widgets/metaplayer3/examples/data/elephants.mrss.xml")
+               .srt()
+               .load();
+       });
+
+    });
+    */
+  <script>
+</body>
+</html>

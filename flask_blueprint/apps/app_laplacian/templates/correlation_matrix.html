@@ -1,0 +1,998 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+<html lang="en">
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
+  <!--meta charset="utf-8"-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+
+  <title>Daniel Cho</title>
+  
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">  
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet" />
+
+  <!--link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/base/jquery-ui.css" rel="stylesheet" /-->
+  <!--link href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" type="text/css" rel="stylesheet" /-->
+  <!--link href="/static/js/jquery-ui-1.10.3.css" rel="stylesheet" /-->
+
+  <!--link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"-->
+  <link href="/static/css/font-awesome.css" rel="stylesheet" />
+
+  <!--[if IE 7]>
+    <link href="/static/css/font-awesome-ie7.min.css" rel="stylesheet" />
+  <![endif]-->
+
+  <!-- fonts -->
+  <link href="/static/css/css.css" rel="stylesheet" />
+
+  <!-- themes -->
+  <link href="/static/css/boot_dash.css" rel="stylesheet" />
+  <link href="/static/css/theme.css" rel="stylesheet" />
+
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/static/css/ace-ie.min.css" />
+  <![endif]-->
+
+  <!-- DATEPICKER AND TIMEPICKER CSS -->
+  <link href="/static/css/datepicker.css" rel="stylesheet">
+  <!--link href="/static/css/bootstrap-timepicker.min.css" rel="stylesheet"-->
+  <!--link href="../static/css/prettify.css" rel="stylesheet"-->
+  <link href="/static/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+  <!--
+    styles for this page
+  -->
+  <link href="/static/css/index.css" rel="stylesheet">
+
+  <!--
+    inline styles for this page
+  -->
+  <style type='text/css'>
+    body{
+      background-color: #f9f9f9;
+    }
+    .donut_factors {
+      background-color: #ffffff;
+      /**border: 1px solid gray; **/
+      font: 10px sans-serif;
+      text-shadow: none;
+      height: 320px;
+      width: 320px;
+    }
+    .donut_factors .total{
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .donut_factors .units{
+      fill: gray;
+      font-size: 12px;
+    }
+    .donut_factors .label{
+      fill: #CCC;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .donut_factors .value{
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    .axis {
+      font: 10px sans-serif;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    .axis .domain {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: .3;
+      stroke-width: 10px;
+      stroke-linecap: round;
+    }
+
+    .axis .halo {
+      fill: none;
+      stroke: #ddd;
+      stroke-width: 8px;
+      stroke-linecap: round;
+    }
+
+    .slider .handle {
+      fill: #fff;
+      stroke: #000;
+      stroke-opacity: 0.5;
+      stroke-width: 1.25px;
+      pointer-events: none;
+    }
+
+
+    p.reportTitle{
+      font: 23px sans-serif;
+      text-align: center;
+    }
+    p.reportSubTitle{
+      font: 17px sans-serif;
+      margin-left:0px;
+    }
+    p.result_title{
+      font: 17px sans-serif;
+      font-weight: bold;
+      color: #a74514;   /* #23067a; #56667a; */
+      text-align: center;
+      margin-left: 50px;
+      margin-bottom: 4px;
+    }
+
+    .riskFactors_title{
+      font: 15px sans-serif;
+      font-weight: bold;
+      color: #464646;
+      text-align: center;
+      margin-top: -20px;
+    }
+
+    ul.riskFactors {list-style-type:square}
+
+    .row_result{
+      margin-bottom: 40px;
+    }
+
+	.forum { padding: 40px;
+      /* background: #eee; */
+      font-family: Verdana, Arial; font-size: 12px; }
+
+	a { text-decoration: none; }
+
+    pre { background: #fff; width: 460px; padding: 10px 20px; border-left: 5px solid #ccc; margin: 0 0 20px; }
+	p { font-size: 18px; line-height: 24px; margin: 0 0 30px; }
+	input { padding: 0; }
+
+	#content { width: 600px; }
+
+	ul, ol { padding-left: 20px; line-height: 18px; }
+    div#forum_thread ul, li {list-style-type: none;}
+
+	.biglist { font-size: 110%; font-weight: bold; background: #fff; padding: 10px 40px; margin: 0; }
+
+	.jcollapsible { font-size: 125%; font-weight: bold; }
+
+	#example, #example2, #example3 { width: 120px; float: left; margin-right: 40px; }
+	#example2, #example2 ul { list-style-type: none; }
+
+	#example3, #example3 ul { list-style: none; }
+
+	#comments { padding: 0; margin: 0; }
+	#comments li { float: left; padding: 10px 0 0; }
+	.comment { background: #fff; padding: 10px; display: block; overflow: hidden; }
+	.comment-author { float: left; width: 50px; font-size: 10px; text-align: center; margin: 0 10px 10px 0; }
+	.comment-body, .comment-body p { font-size: 12px; line-height: 18px; margin: 0; }
+
+
+    .modal-backdrop  {background: none;}
+
+  </style>
+
+</head>
+
+<!--body class="navbar-fixed pull-top"-->
+<!--body class="pull-top"-->
+<body class="navbar-fixed">
+
+  {% include 'laplacian/navbar.html' %}
+
+  <!--
+  Modal
+  -->
+
+  <div class="modal fade modal-nobackdrop" id="modal_project_correlation_matrix" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Correlation Matrix of Set of Assets</h4>
+        </div>
+        <div class="modal-body">
+          This application retrieves data from Yahoo Finance and produces a correlation matrix of returns and
+          generates a scatter plot and heat map.
+          <br><br>Note: if used often, Yahoo may throttle data download and you will see less than a year's worth of data :(
+          <br><br>
+          This app's stack consists of MongoDB, Django, Python, NumPy, SciPy, Pandas, Matplotlib, and D3.js
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade modal-nobackdrop" id="modal_project_quantlib" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">QuantLib</h4>
+        </div>
+        <div class="modal-body">
+          This application retrieves data from Yahoo Finance and produces a correlation matrix of each pairwise returns.
+
+          time series chart of the rolling 30-day correlation between them.
+          <br><br>
+          This app's stack consists of MongoDB, Django, Python, NumPy, SciPy, Pandas, and QuantLib
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+  Main container begins
+  -->
+  <div class="main-container" id="main-container">
+    <div class="main-container-inner" style="margin-left:70px; margin-right:90px">
+      <a class="menu-toggler" id="menu-toggler" href="#">foo</a>
+
+
+    <!--{ % include 'showcase/provider_sidebar.html' % } 
+      -->
+
+      <!--div class="main-content"-->
+
+      <!-- { % include 'showcase/search_bar.html' % }
+      -->
+
+        <!--div class="page-content"-->
+
+          <!--=== PAGE HEADER ===-->
+          <!--div class="page-header">
+            <h1><strong>
+              Health Diagnostics
+            </strong></h1>
+          </div-->
+
+
+          <!--=== PAGE CONTENT BEGINS HERE ===-->
+          <div style="margin-top: 60px"></div>
+          <p style="font: 30px sans-serif;">Correlation Matrix</p>
+
+          <div id="search" class="row">
+	        <div class="col-xs-12">
+
+              <div class="form-group">
+                  <form action="{% url 'correlation_matrix' %}" method="post">
+                    {% csrf_token %}
+                    <div class="col-xs-12">
+                      <p style="font: 17px sans-serif; margin-bottom: 10px; margin-left:-15px">Enter five stock tickers:</p>
+                      <input type="text" id="ticker1" name="ticker1" class="-form-control" style="width: 100px; margin-left:-15px"
+                             value="{{user_entered.ticker1}}"> &nbsp;&nbsp;
+                      <input type="text" id="ticker2" name="ticker2" class="-form-control" style="width: 100px; "
+                             value="{{user_entered.ticker2}}"> &nbsp;&nbsp;
+                      <input type="text" id="ticker3" name="ticker3" class="-form-control" style="width: 100px; "
+                             value="{{user_entered.ticker3}}"> &nbsp;&nbsp;
+                      <input type="text" id="ticker4" name="ticker4" class="-form-control" style="width: 100px; "
+                             value="{{user_entered.ticker4}}"> &nbsp;&nbsp;
+                      <input type="text" id="ticker5" name="ticker5" class="-form-control" style="width: 100px; "
+                             value="{{user_entered.ticker5}}"> &nbsp;&nbsp;
+                      <a href="#" id="explain_modal" style="font:8px; text-decoration:none;">*Explanation</a>
+                      <!--input type="submit" value="Search"  -->
+                      <!--input id="input_btn_search" type="submit" name="btn" class="btn btn-success" value="Search" /-->
+                    </div>
+
+                    <!--div class="col-xs-6">
+                      <p style="font: 17px sans-serif; margin-bottom: 10px">Correlation Period in Days :</p>
+                      <input type="text" id="corr_days" name="corr_days" class="-form-control" style="width: 80px;"
+                             value="{% if user_entered %} {{user_entered.corr_days}} {% else %} 30 {% endif %}"> &nbsp;&nbsp;
+                    </div-->
+                    <div style="clear:both;"></div>
+                    {% if error_message %}<p style="color: #d40000;font: 13px sans-serif; margin: 5px 5px 0 0">{{ error_message }}</p>{% endif %}
+                    <!--input id="input_btn_search" type="submit" class="btn btn-info btn-sm" value="Run" /-->
+                    <!--button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"-->
+                    <input type="submit" value="Run" class="btn btn-info btn-sm" style="margin-top: 7px;"/>
+                  </form>
+
+                <div style="margin-bottom: 40px">
+                </div>
+
+              </div>
+
+            </div> <!-- xs-12 -->
+          </div>  <!-- /.row -->
+
+
+          <div id="search_details_ask" style="font-size: 17px; margin-bottom: 10px; display: none; width:200px">
+            <span class="togglebut">+</span> Enter further details
+          </div>
+
+          <div id="search_details" style="display: none; margin-bottom: 70px">
+            <div class="row">
+              <div class="col-xs-12">
+
+                <div class="div_detail_slider" id="svg_slider_1">
+                  <p style="font-size: 15px; margin-left:30px;">Strength of Memory</p>
+                </div>
+                <div class="div_detail_slider" id="svg_slider_2">
+                  <p style="font-size: 15px; margin-left:30px;">Strength of Long-Term Memory</p>
+                </div>
+                <div class="div_detail_slider" id="svg_slider_3">
+                  <p style="font-size: 15px; margin-left:30px;">Strength of Short-Term Memory</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+          <div id="result" class="result" style="display: none;
+            margin-left:-70px; margin-top: 10px; margin-bottom: 30px">
+
+            <div class="row row_result">
+              <div class="col-xs-12">
+
+                  <div style="float:left">
+                    <p class="result_title" style="text-align: center">Correlation Matrix Scatter Plots</p>
+                    <img src="/static/images/corr_matrix_scatter.png" alt="correlation scatter plot"><br>
+                    <p class="result_title" style="text-align: center">Correlation Matrix Heat Map (png)</p>
+                    <img src="/static/images/corr_matrix_heat.png" alt="correlation heat map png"><br>
+                    <p class="result_title" style="text-align: center">Correlation Matrix Heat Map (svg)</p>
+                    <img src="/static/images/corr_matrix_heat.svg" alt="correlation heat map svg"><br>
+                  </div>
+
+                  <!--div class="riskFactors_title" style="float:left">
+                    <span class="togglebut">+</span> Risk Factors (Potential Causes)
+                  </div>
+
+                  <div style="display: none; float:left" id="riskFactors_1_1">
+                    <ul class="riskFactors" style="list-style-type:square">
+                      <li>
+                        foo
+                      </li>
+                      <li>
+                        bar
+                      </li>
+
+                    </ul>
+
+                  </div-->
+
+                  <!--div class="donut_factors" id="svg_donut_1_2" style="float:left">
+                    <p class="result_title">Depression</p>
+                  </div>
+
+                  <div class="donut_factors" id="svg_donut_1_3" style="float:left">
+                    <p class="result_title">Marijuana (cannibis) use</p>
+                  </div>
+                  <div style="clear:both;"></div-->
+
+              </div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 70px"></div>
+        <!--/div-->   <!-- /.page-content -->
+      <!--/div-->   <!-- /.main-content -->
+
+    </div> <!-- end div "main-container-inner" -->
+  </div>   <!-- end div class="main-container" -->
+
+
+  <!-- ====================================
+  SCRIPTS start here
+  =========================================
+  -->
+
+  <!-- JS -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">window.jQuery || document.write('<script src="/static/js/jquery-1.10.2.min.js"><\/script>')</script>
+
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript" ></script-->
+  <!--script src="https://cdn.jquerytools.org/1.2.7/all/jquery.tools.min.js" type="text/javascript"></script-->
+  <!--script src="static/js/jquery-ui-1.10.3.js" type="text/javascript"></script-->
+
+  <!-- Bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+  <!--script src="/static/js/bootstrap.min.js"></script-->
+  <!--script type="text/javascript"></script> if(typeof($.fn.modal) === 'undefined') {document.write('<script src="/static/js/bootstrap.min.js" type="text/javascript"><\/script>')}</script-->
+  <script src="/static/js/boot_dash.js" type="text/javascript"></script>
+  <script src="/static/js/theme.js" type="text/javascript"></script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!-- if lt IE 9> script src="../../docs-assets/js/ie8-responsive-file-warning.js"><script><![endif]-->
+  <!--script src="../../assets/js/ie-emulation-modes-warning.js"></script-->
+
+  <script src="/static/js/utils.js" type="text/javascript"></script>
+  <!--script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"></script-->
+  <script src="/static/js/d3.min.js" type="text/javascript"></script>
+
+  <script type="text/javascript" src="/static/js/jCollapsible.js"></script>
+
+  <script type="text/javascript">
+
+    $(function() {
+
+      var success = "{{success}}";
+      if (success){
+        $("#result").show();
+      } else {
+        $("#result").hide();
+      }
+
+      /* return render(request, 'laplacian/rolling_correlation.html', {'success': True})
+
+      console.log(a);
+      if (a){
+        alert("success exists");  //* for success = True OR False! but in html django template { % if success % } is negative!
+      }
+
+      if (a == true){
+        alert("true");       //* X  if success = True in python views.py
+      }
+      if (a == "True"){
+        alert("True str");   //* ok
+      }
+      if (a == "False"){
+        alert("False str");  //* ok
+      }
+      */
+
+      //jQuery.noConflict();
+      //$("#myModal").modal('show');
+
+      $("#explain_modal").click(function(){
+         $('#modal_project_correlation_matrix').modal('show');
+      });
+
+
+      $("#search_details").hide();
+      $("#search_details_ask").hide();
+
+      /*
+
+      $('.show_hide').toggle(function(){
+        $("#plus").text("-");
+        $(".slidingDiv").slideDown();
+      },function(){
+        $("#plus").text("+");
+        $(".slidingDiv").slideUp();
+      });
+      */
+
+      $("#search_details_ask").click(function(){
+
+        $(".togglebut").html(function(_, html) {
+          //var $but = $("#togglebut");
+          //$but.html($but.html() == "+" ? "-" : "+");
+          return $.trim(html) == '+' ? '-' : '+';
+        });
+
+        $(".search_detail_slider").remove();
+        detail_slider("svg_slider_1");
+        detail_slider("svg_slider_2");
+        detail_slider("svg_slider_3");
+        $("#search_details").toggle();
+
+      });
+
+
+      $(".riskFactors_title").click(function(){
+
+        $(".togglebut").html(function(_, html) {
+          //var $but = $("#togglebut");
+          //$but.html($but.html() == "+" ? "-" : "+");
+          return $.trim(html) == '+' ? '-' : '+';
+        });
+
+        $("#riskFactors_1_1").toggle();
+
+      });
+
+
+      $("#forum_display").click(function(){
+
+        $(".togglebut").html(function(_, html) {
+          //var $but = $("#togglebut");
+          //$but.html($but.html() == "+" ? "-" : "+");
+          return $.trim(html) == '+' ? '-' : '+';
+        });
+
+        $("#forum").toggle();
+
+      });
+
+      $("#input_btn_search").click(function() {
+        //? $('.modal-backdrop').removeClass("modal-backdrop");
+        $('#modal_project_correlation_matrix').modal('show');
+
+        /**
+        $(".result_donut").remove();
+        $("#search_details_ask").show();
+        //$("#search_details").show();
+        $("#result").show();
+
+        calcSearch("svg_donut_1_1");
+        calcSearch("svg_donut_1_2");
+        calcSearch("svg_donut_1_3");
+        calcSearch("svg_donut_2_1");
+        calcSearch("svg_donut_2_2");
+        calcSearch("svg_donut_2_3");
+
+        $("#forum_display").show();
+        */
+      });
+
+
+    });
+
+    /*
+    function goSearch(){
+      $("#result").show();
+      calcSearch();
+    }
+    */
+  </script>
+
+
+  <script type="text/javascript">
+
+    function calcSearch(div_id){
+
+      div_id = "#" + div_id;
+
+      var svg_w = 400;
+      var svg_h = 280;
+      var r = 90;
+      var ir = 40;
+      var textOffset = 14;
+      var tweenDuration = 250;
+
+      //* OBJECTS TO BE POPULATED WITH DATA LATER
+      var lines, valueLabels, nameLabels;
+      var pieData = [];
+      var oldPieData = [];
+      var filteredPieData = [];
+
+      //* D3 helper function to populate pie slice parameters from array data
+      //* takes an incoming data array and give you back an object with the necessary angle and radius
+      //* parameters to construct an arc.
+      var donut = d3.layout.pie().value(function(d){
+        return d.octetTotalCount;
+      });
+
+      //* ordinal - ordering; cardinal - counting
+      var color = d3.scale.category20();
+
+      //D3 helper function to draw arcs, populates parameter "d" in path object
+      var arc = d3.svg.arc()
+        .startAngle(function(d){ return d.startAngle; })
+        .endAngle(function(d){ return d.endAngle; })
+        .innerRadius(ir)
+        .outerRadius(r);
+
+      ///////////////////////////////////////////////////////////
+      // GENERATE FAKE DATA /////////////////////////////////////
+      ///////////////////////////////////////////////////////////
+      var arrayRange = 100000; //range of potential values for each item
+      var arraySize;
+      var streakerDataAdded;
+
+      //* random number generator to return an object with two keys, port and octetTotalCount
+      function fillArray() {
+        var c = Math.ceil(Math.random()*(arrayRange));
+        //console.log(c);
+        return {
+          port: "factor",
+          //octetTotalCount: Math.ceil(Math.random()*(arrayRange))
+          octetTotalCount: c
+        };
+
+      }
+
+      ///////////////////////////////////////////////////////////
+      // CREATE VIS & GROUPS ////////////////////////////////////
+      ///////////////////////////////////////////////////////////
+
+      var vis = d3.select(div_id).append("svg:svg")
+        .attr("width", svg_w)
+        .attr("height", svg_h)
+        .attr("class", "result_donut");
+
+      //GROUP FOR ARCS/PATHS
+      var arc_group = vis.append("svg:g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + (svg_w/2) + "," + (svg_h/2) + ")");
+
+      //GROUP FOR LABELS
+      var label_group = vis.append("svg:g")
+        .attr("class", "label_group")
+        .attr("transform", "translate(" + (svg_w/2) + "," + (svg_h/2) + ")");
+
+      //GROUP FOR CENTER TEXT
+      var center_group = vis.append("svg:g")
+        .attr("class", "center_group")
+        .attr("transform", "translate(" + (svg_w/2) + "," + (svg_h/2) + ")");
+
+      //PLACEHOLDER GRAY CIRCLE
+      var paths = arc_group.append("svg:circle")
+          .attr("fill", "#EFEFEF")
+          .attr("r", r);
+
+      ///////////////////////////////////////////////////////////
+      // CENTER TEXT ////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////
+
+      //WHITE CIRCLE BEHIND LABELS
+      var whiteCircle = center_group.append("svg:circle")
+        .attr("fill", "white")
+        .attr("r", ir);
+
+      // "TOTAL" LABEL
+      var totalLabel = center_group.append("svg:text")
+        .attr("class", "label")
+        .attr("dy", -15)
+        .attr("text-anchor", "middle") // text-align: right
+        .text("TOTAL");
+
+      //TOTAL TRAFFIC VALUE
+      var totalValue = center_group.append("svg:text")
+        .attr("class", "total")
+        .attr("dy", 7)
+        .attr("text-anchor", "middle") // text-align: right
+        .text("Waiting...");
+
+      //UNITS LABEL
+      var totalUnits = center_group.append("svg:text")
+        .attr("class", "units")
+        .attr("dy", 21)
+        .attr("text-anchor", "middle"); // text-align: right
+        //** .text("kb");
+
+
+      ///////////////////////////////////////////////////////////
+      // STREAKER CONNECTION ////////////////////////////////////
+      ///////////////////////////////////////////////////////////
+
+      //** var updateInterval = window.setInterval(update_donut, 1500);
+
+      //window.setInterval(update, 1500);
+      /*
+       setTimeout(function(){
+        writeNext(i + 1);
+      }, 2000);
+      //* setTimeout(myFunction, 5000);
+      */
+
+      update_donut();
+      update_donut();
+
+      // to run each time data is generated
+      function update_donut() {
+
+        arraySize = Math.ceil(Math.random()*10);
+        streakerDataAdded = d3.range(arraySize).map(fillArray);
+//console.log(streakerDataAdded);
+//console.log(arraySize);
+
+        oldPieData = filteredPieData;
+        pieData = donut(streakerDataAdded);
+
+        var totalOctets = 0;
+        filteredPieData = pieData.filter(filterData);
+        function filterData(element, index, array) {
+          element.name = streakerDataAdded[index].port;
+          element.value = streakerDataAdded[index].octetTotalCount;
+          totalOctets += element.value;
+          return (element.value > 0);
+        }
+
+        if(filteredPieData.length > 0 && oldPieData.length > 0){
+
+          //* REMOVE PLACEHOLDER CIRCLE
+          arc_group.selectAll("circle").remove();
+
+          totalValue.text(function(){
+            var kb = totalOctets/1024;
+            return kb.toFixed(1);
+            //return bchart.label.abbreviated(totalOctets*8);
+          });
+
+          //* DRAW ARC PATHS
+          paths = arc_group.selectAll("path").data(filteredPieData);
+          paths.enter().append("svg:path")
+            .attr("stroke", "white")
+            .attr("stroke-width", 0.5)
+            .attr("fill", function(d, i) { return color(i); })
+            .transition()
+              .duration(tweenDuration)
+              .attrTween("d", pieTween);
+          paths
+            .transition()
+              .duration(tweenDuration)
+              .attrTween("d", pieTween);
+          paths.exit()
+            .transition()
+              .duration(tweenDuration)
+              .attrTween("d", removePieTween)
+            .remove();
+
+          //DRAW TICK MARK LINES FOR LABELS
+          lines = label_group.selectAll("line").data(filteredPieData);
+          lines.enter().append("svg:line")
+            .attr("x1", 0)
+            .attr("x2", 0)
+            .attr("y1", -r-3)
+            .attr("y2", -r-8)
+            .attr("stroke", "gray")
+            .attr("transform", function(d) {
+              return "rotate(" + (d.startAngle+d.endAngle)/2 * (180/Math.PI) + ")";
+            });
+          lines.transition()
+            .duration(tweenDuration)
+            .attr("transform", function(d) {
+              return "rotate(" + (d.startAngle+d.endAngle)/2 * (180/Math.PI) + ")";
+            });
+          lines.exit().remove();
+
+          //DRAW LABELS WITH PERCENTAGE VALUES
+          valueLabels = label_group.selectAll("text.value").data(filteredPieData)
+            .attr("dy", function(d){
+              if ((d.startAngle+d.endAngle)/2 > Math.PI/2 && (d.startAngle+d.endAngle)/2 < Math.PI*1.5 ) {
+                return 5;
+              } else {
+                return -7;
+              }
+            })
+            .attr("text-anchor", function(d){
+              if ( (d.startAngle+d.endAngle)/2 < Math.PI ){
+                return "beginning";
+              } else {
+                return "end";
+              }
+            })
+            .text(function(d){
+              var percentage = (d.value/totalOctets)*100;
+              return percentage.toFixed(1) + "%";
+            });
+
+          valueLabels.enter().append("svg:text")
+            .attr("class", "value")
+            .attr("transform", function(d) {
+              return "translate(" + Math.cos(((d.startAngle+d.endAngle - Math.PI)/2)) * (r+textOffset) + "," + Math.sin((d.startAngle+d.endAngle - Math.PI)/2) * (r+textOffset) + ")";
+            })
+            .attr("dy", function(d){
+              if ((d.startAngle+d.endAngle)/2 > Math.PI/2 && (d.startAngle+d.endAngle)/2 < Math.PI*1.5 ) {
+                return 5;
+              } else {
+                return -7;
+              }
+            })
+            .attr("text-anchor", function(d){
+              if ( (d.startAngle+d.endAngle)/2 < Math.PI ){
+                return "beginning";
+              } else {
+                return "end";
+              }
+            }).text(function(d){
+              var percentage = (d.value/totalOctets)*100;
+              return percentage.toFixed(1) + "%";
+            });
+
+          valueLabels.transition().duration(tweenDuration).attrTween("transform", textTween);
+
+          valueLabels.exit().remove();
+
+          //DRAW LABELS WITH ENTITY NAMES
+          nameLabels = label_group.selectAll("text.units").data(filteredPieData)
+            .attr("dy", function(d){
+              if ((d.startAngle+d.endAngle)/2 > Math.PI/2 && (d.startAngle+d.endAngle)/2 < Math.PI*1.5 ) {
+                return 17;
+              } else {
+                return 5;
+              }
+            })
+            .attr("text-anchor", function(d){
+              if ((d.startAngle+d.endAngle)/2 < Math.PI ) {
+                return "beginning";
+              } else {
+                return "end";
+              }
+            }).text(function(d){
+              return d.name;
+            });
+
+          nameLabels.enter().append("svg:text")
+            .attr("class", "units")
+            .attr("transform", function(d) {
+              return "translate(" + Math.cos(((d.startAngle+d.endAngle - Math.PI)/2)) * (r+textOffset) + "," + Math.sin((d.startAngle+d.endAngle - Math.PI)/2) * (r+textOffset) + ")";
+            })
+            .attr("dy", function(d){
+              if ((d.startAngle+d.endAngle)/2 > Math.PI/2 && (d.startAngle+d.endAngle)/2 < Math.PI*1.5 ) {
+                return 17;
+              } else {
+                return 5;
+              }
+            })
+            .attr("text-anchor", function(d){
+              if ((d.startAngle+d.endAngle)/2 < Math.PI ) {
+                return "beginning";
+              } else {
+                return "end";
+              }
+            }).text(function(d){
+              return d.name;
+            });
+
+          nameLabels.transition().duration(tweenDuration).attrTween("transform", textTween);
+
+          nameLabels.exit().remove();
+        }
+      }
+
+
+      ///////////////////////////////////////////////////////////
+      // FUNCTIONS //////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////
+
+      // Interpolate the arcs in data space.
+      function pieTween(d, i) {
+        var s0;
+        var e0;
+        if(oldPieData[i]){
+          s0 = oldPieData[i].startAngle;
+          e0 = oldPieData[i].endAngle;
+        } else if (!(oldPieData[i]) && oldPieData[i-1]) {
+          s0 = oldPieData[i-1].endAngle;
+          e0 = oldPieData[i-1].endAngle;
+        } else if(!(oldPieData[i-1]) && oldPieData.length > 0){
+          s0 = oldPieData[oldPieData.length-1].endAngle;
+          e0 = oldPieData[oldPieData.length-1].endAngle;
+        } else {
+          s0 = 0;
+          e0 = 0;
+        }
+        var i = d3.interpolate({startAngle: s0, endAngle: e0}, {startAngle: d.startAngle, endAngle: d.endAngle});
+        return function(t) {
+          var b = i(t);
+          return arc(b);
+        };
+      }
+
+      function removePieTween(d, i) {
+        s0 = 2 * Math.PI;
+        e0 = 2 * Math.PI;
+        var i = d3.interpolate({startAngle: d.startAngle, endAngle: d.endAngle}, {startAngle: s0, endAngle: e0});
+        return function(t) {
+          var b = i(t);
+          return arc(b);
+        };
+      }
+
+      function textTween(d, i) {
+        var a;
+        if(oldPieData[i]){
+          a = (oldPieData[i].startAngle + oldPieData[i].endAngle - Math.PI)/2;
+        } else if (!(oldPieData[i]) && oldPieData[i-1]) {
+          a = (oldPieData[i-1].startAngle + oldPieData[i-1].endAngle - Math.PI)/2;
+        } else if(!(oldPieData[i-1]) && oldPieData.length > 0) {
+          a = (oldPieData[oldPieData.length-1].startAngle + oldPieData[oldPieData.length-1].endAngle - Math.PI)/2;
+        } else {
+          a = 0;
+        }
+        var b = (d.startAngle + d.endAngle - Math.PI)/2;
+
+        var fn = d3.interpolateNumber(a, b);
+        return function(t) {
+          var val = fn(t);
+          return "translate(" + Math.cos(val) * (r+textOffset) + "," + Math.sin(val) * (r+textOffset) + ")";
+        };
+      }
+
+    }
+
+  </script>
+
+
+  <script type="text/javascript">
+    function detail_slider(div_id){
+      div_id = "#" + div_id;
+
+      var margin = {top: -40, right: 30, bottom: 10, left: 35},
+          width = 660 - margin.left - margin.right,
+          height = 70 - margin.bottom - margin.top;
+
+      var x = d3.scale.linear()
+          .domain([0, 100])
+          .range([0, width])
+          .clamp(true);
+
+      var brush = d3.svg.brush()
+          .x(x)
+          .extent([0, 0])
+          .on("brush", brushed);
+
+      var svg = d3.select(div_id).append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .attr("class", "search_detail_slider")
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height / 2 + ")")
+          .call( d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(function(d) { return d + "%"; })  //.tickFormat(function(d) { return d + "°"; })
+            .tickSize(0)
+            .tickPadding(12)
+          )
+        .select(".domain")
+        .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+          .attr("class", "halo");
+
+      var slider = svg.append("g")
+          .attr("class", "slider")
+          .call(brush);
+
+      slider.selectAll(".extent,.resize")
+          .remove();
+
+      slider.select(".background")
+          .attr("height", height);
+
+      var handle = slider.append("circle")
+          .attr("class", "handle")
+          .attr("transform", "translate(0," + height / 2 + ")")
+          .attr("r", 9);
+
+      slider
+          .call(brush.event)
+        .transition() // gratuitous intro!
+          .duration(750)
+          .call(brush.extent([70, 70]))
+          .call(brush.event);
+
+      function brushed() {
+        var value = brush.extent()[0];
+
+        if (d3.event.sourceEvent) { // not a programmatic event
+          value = x.invert(d3.mouse(this)[0]);
+          brush.extent([value, value]);
+        }
+
+        handle.attr("cx", x(value));
+        //d3.select("body").style("background-color", d3.hsl(value, .8, .8));
+      }
+    }
+
+  </script>
+
+
+</body>
+
+</html>
+

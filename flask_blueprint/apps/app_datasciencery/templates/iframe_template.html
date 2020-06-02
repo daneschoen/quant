@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+
+<head>
+  {% include 'index_head_dia_.html' %}
+
+  <style type="text/css">
+  </style>
+
+</head>
+
+<body class="dashboard body_fixed_padding" style="background-color: rgb(255, 255, 255);">
+
+  {% include 'index_nav.html' %}
+
+
+  <!-- =====================        MODALS        =========================  -->
+  {% include 'index_modals.html' %}
+
+  <!-- ================    MAIN - container after header    ================ -->
+
+  <iframe src="http://www.quantcypher.com/_scatter-histogram/" style="border:none;height:100%;width:100%;"></iframe>
+
+  <!-- ============================ JS scripts ============================= -->
+
+  {% include 'index_tail_dia_.html' %}
+
+  <script>
+    $(function() {
+
+    });
+  </script>
+
+</body>
+
+</html>

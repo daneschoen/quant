@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <center>
+        <h1>Login</h1>
+      </center>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <!--form action="/account/login" method="post"-->
+      <form method="POST">
+        <div class="form-group">
+          <label for="txtUsername">Username</label>
+          <input type="text" class="form-control" id="txtUsername" name="txtUsername"/>
+        </div>
+        <div class="form-group">
+          <label for="txtPassword">Password</label>
+          <input type="password" class="form-control" id="txtPassword" name="txtPassword"/>
+        </div>
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+      <div class="row">
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+</div>
+
+<script type="text/javascript">
+
+  $(function() {
+    /*
+    'use strict';
+    alert('wokring');
+    */
+  });
+
+</script>
+
+
+<script type="text/babel">
+  var Input = React.createClass({
+    propTypes: {
+        name: React.PropTypes.string.isRequired,
+        type: React.PropTypes.oneOf(INPUT_TYPES).isRequired,
+        placeholder: React.PropTypes.string,
+        label: React.PropTypes.string,
+        required: React.PropTypes.bool,
+        oneOf: React.PropTypes.array,
+        minLength: React.PropTypes.int
+    },
+
+    getInitialState: function() { return {}; },
+
+    getValue: function() {
+        return this.refs.input.getDOMNode().value;
+    },
+
+    renderInput: function(){
+        var className = "form-control input-md";
+        return <input type={this.props.type} className={className}
+            placeholder={this.props.placeholder} ref="input"/>;
+    },
+
+    renderLabel: function(){
+        return <label>{this.props.label}</label> ? this.props.label : undefined;
+    },
+
+    render: function(){
+        var className = "form-group";
+        if (this.state.error)
+            className += ' has-error';
+        return (
+            <div className={className} onBlur={this.onBlur} onFocus={this.onFocus}>
+                {this.renderInput()}
+                {this.renderLabel()}
+            </div>
+        );
+    },
+
+    onBlur: function(e){
+        var value = this.getValue();
+        var error;
+        if (this.props.required && !value)
+            error = 'required';
+        else if (this.props.oneOf && !(value in this.props.oneOf))
+            error = 'oneOf';
+        else if (this.props.minLength && value.length < this.props.minLength)
+            error = 'minLength';
+        this.setState({error: error});
+    },
+
+    onFocus: function(e) {
+        this.setState({error: false});
+        e.stopPropagation();
+    }
+  });
+
+
+  var Form = React.createClass({
+    mixins: [BootStrapMixin],
+
+    propTypes: {
+        callback: React.PropTypes.func.isRequired,
+    },
+
+    getDefaultProps: function() {
+        return {
+            bsClass: "form"
+        };
+    },
+
+    onSubmit: function(e) {
+        e.preventDefault();
+        if (e.target.type == 'submit')
+            this.props.callback(this.getValues());
+    },
+
+    render: function(){
+        var className = this.extendClassName();
+        return this.transferPropsTo(
+            <form onClick={this.onSubmit} className={className} role="form" action="#">
+                {this.props.children}
+            </form>
+        );
+    },
+
+    getValues: function() {
+        var values= {errors: {}};
+        var err;
+        jQuery.each(this.props.children, function(idx, child){
+            if (child && child.props.name) {
+                values[child.props.name] = child.getValue();
+                err = child.state.error;
+                if (err)
+                    values.errors[child.props.name] = err;
+            }
+        });
+        return values;
+    },
+  });
+</script>
+
+{% endblock %}

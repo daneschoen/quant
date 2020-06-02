@@ -1,0 +1,103 @@
+<style>
+  .box{
+      margin: 0 auto;
+      width: 300px;
+      padding: 30px;
+      font-family: georgia;
+  }
+
+  .border-shadow-right {
+    border-right: 1px solid #dbd8cf;
+    background: linear-gradient(right, #eee 0%, #fff 10%);
+    background: -ms-linear-gradient(right, #eee 0%, #fff 10%);
+    background: -moz-linear-gradient(right, #eee 0%, #fff 10%);
+    background: -webkit-linear-gradient(right, #eee 0%, #fff 10%);
+    box-shadow: -44px 120px 80px -72px #fff inset, -44px -120px 80px -72px #fff inset;
+    min-height: 400px;
+  }
+
+</style>
+<!-- ==================================
+     LEFT SIDEBAR col-xs-2
+     ================================== -->
+<!--div class="col-xs-2" style="padding-left: 0px !important; margin-left: 0px !important; font-size:0.9em"-->
+<div class="col-xs-12 col-sm-3 border-shadow-right" style="font-size:0.9em; margin-right:-40px">
+  <div id="div_sidebar_left">
+  <!-- SIDEBAR 1/3 -->
+  <div class="results-sidebar-box">
+    <h4 class="blue" id="a" style='font-weight:600'>Machine Learning &nbsp; + &nbsp; Statistics</h4>
+    <ul class="list-unstyled">
+      <!--
+      <li><a href="{ % url 'nlp_resume' %}">Analyze resume</a></li>
+      <li><a href="{ % url 'nlp_facebook' %}">Analyze Facebook</a></li>
+      <li><a href="{ % url 'nlp_article_blog' %}">Analyze article and blog</a></li>
+      -->
+      <li><a href="//quantcypher.com/datascience/" class="mainmenu" style="font-size: 1.09em; color: rgb(70,70,70)">Data Science</a></li>
+      <li><a href="{{ url_for('app_laplacian.stream_model_training') }}" class="mainmenu" style="font-size: 1.09em; color: rgb(70,70,70)">TensorFlow Training</a></li>
+      <!--
+      <li><a href="{ { url_for('app_laplacian.ml_zemletryaseniye') } }">Earthquake Analysis</a></li>
+      <li><a href="{ { url_for('app_laplacian.ml_health') } }">NLP Analyze Health</a></li>
+      -->
+    </ul>
+    <hr>
+  </div>
+  <!-- end SIDEBAR 2/3-->
+
+  <!-- SIDEBAR 2/3-->
+  <div class="results-sidebar-box">
+    <h4 class="blue" id="b" style='font-weight:600'>Quant</h4>
+    <ul class="list-unstyled">
+      <!--
+      <li><a href="{ { url_for('app_laplacian.correlation_rolling') } }">Rolling Correlation</a></li>
+      <li><a href="{ { url_for('app_laplacian.correlation_matrix') } }">Correlation Matrix of Set of Assets</a></li>
+      <li><a href="{ { url_for('app_laplacian.distributions') } }">Distributions</a></li>
+      <li><a href="{ { url_for('app_laplacian.quant_quantlib') } }">QuantLib</a></li>
+      <div style="margin-bottom:10px"></div>
+      -->
+      <li><a href="{{ url_for('app_laplacian.tradeapp') }}" style="color: rgb(125,125,125)">Trading Application</a></li>
+    </ul>
+    <hr>
+  </div>
+  <!-- end SIDEBAR 2/3-->
+
+  <!-- SIDEBAR 3/3 -->
+  <div class="results-sidebar-box">
+    <h4 class="blue" id="c" style='font-weight:600'>Reactive Graphs<br>Dynamic 2-D + 3-D Charts</h4>
+    <ul class="list-unstyled">
+      <li><a href="{{ url_for('app_laplacian.d3_scatter_dynamic') }}" style="color: rgb(125,125,125)">SPLOM Scatter Matrix</a></li>
+      <li><a href="{{ url_for('app_laplacian.scatter_histogram') }}" style="color: rgb(125,125,125)">Density, Distribution and Histograms</a></li>
+
+      <div style="margin-bottom:10px"></div>
+      <li><a href="{{ url_for('app_laplacian.stream_wind') }}" style="font-size: 1.09em; color: rgb(70,70,70)">Realtime Wind Plot</a></li>
+
+      <li><a href="{{ url_for('app_laplacian.threed') }}" style="font-size: 1.09em; color: rgb(70,70,70)">WebGL 3D Plots</a></li>
+
+      <div style="margin-bottom:10px"></div>
+      <li><a href="{{ url_for('app_laplacian.threed_cube') }}" style="color: rgb(125,125,125)">WebGL 3D Scatter Chart</a></li>
+      <li><a href="{{ url_for('app_laplacian.threed_cube_webgl_d3') }}" style="color: rgb(125,125,125)">WebGL 3D + D3 Scatter Chart</a></li>
+      <li><a href="{{ url_for('app_laplacian.threed_animation') }}" style="color: rgb(125,125,125)">3D Animation</a></li>
+
+      <div style="margin-bottom:10px"></div>
+
+      <li><a href="{{ url_for('app_laplacian.d3_line_histogram_dynamic') }}" style="color: rgb(125,125,125)">Apple Battery Analysis using D3</a></li>
+      <!--
+      <li><a href="{{ url_for('app_laplacian.gis_rainfall') }}">GIS Weather Data</a></li>
+      <li><a href="{{ url_for('app_laplacian.gis_openlayers_esri') }}">GIS OpenLayers and ESRI REST API</a></li>
+      <li><a href="{{ url_for('app_laplacian.gis_typhoon_tracking') }}">GIS Typhoon Tracking</a></li>
+      <li><a href="{{ url_for('app_laplacian.gis_openlayers_kml_earthquake') }}">GIS OpenLayers + KML Earthquake</a></li>
+      <li><a href="{{ url_for('app_laplacian.gis_river') }}">GIS D3.js River</a></li>
+      -->
+      <div style="margin-bottom:10px"></div>
+      <!--
+      <li><a href="{{ url_for('app_laplacian.d3_geo_sat_land') }}">D3.js Satellite Grid</a></li>
+      <li><a href="{{ url_for('app_laplacian.d3_geo_sat_tiles') }}">D3.js Satellite Map Tiles</a></li>
+      <li><a href="{{ url_for('app_laplacian.d3_geo_projection_earth_torus') }}">D3.js Geo Projection Torus</a></li>
+      <li><a href="{{ url_for('app_laplacian.d3_geo_projection_earth_mollweide') }}">D3.js Geo Projection Mollweide</a></li>
+      -->
+    </ul>
+    <hr>
+  </div>
+  <!-- end SIDEBAR 3/3-->
+  </div>
+</div>
+<!--search sidebar col end-->

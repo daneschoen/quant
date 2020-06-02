@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Stocks</title>
+        
+<link rel="stylesheet" href="bokeh_files/bokeh.css" type="text/css">
+<link rel="stylesheet" href="bokeh_files/bokeh-widgets.css" type="text/css">
+<link rel="stylesheet" href="bokeh_files/bokeh-tables.css" type="text/css">
+        
+<script type="text/javascript" src="bokeh_files/bokeh.js"></script>
+<script type="text/javascript" src="bokeh_files/bokeh-widgets.js"></script>
+<script type="text/javascript" src="bokeh_files/bokeh-tables.js"></script>
+<script type="text/javascript" src="bokeh_files/bokeh-gl.js"></script>
+<script type="text/javascript">
+    Bokeh.set_log_level("info");
+</script>
+    <script type="text/javascript">// Promises 
+var _eid_promises = {}; 
+// Turn the incoming message from extension 
+// into pending Promise resolving 
+window.addEventListener("message", function(event) { 
+    if(event.source !== window) return; 
+    if(event.data.src && (event.data.src === "background.js")) { 
+        console.log("Page received: "); 
+        console.log(event.data); 
+        // Get the promise 
+        if(event.data.nonce) { 
+            var p = _eid_promises[event.data.nonce]; 
+            // resolve 
+            if(event.data.result === "ok") { 
+                if(event.data.signature !== undefined) { 
+                    p.resolve({hex: event.data.signature}); 
+                } else if(event.data.version !== undefined) { 
+                    p.resolve(event.data.extension + "/" + event.data.version); 
+                } else if(event.data.cert !== undefined) { 
+                    p.resolve({hex: event.data.cert}); 
+                } else { 
+                    console.log("No idea how to handle message"); 
+                    console.log(event.data); 
+                } 
+            } else { 
+                // reject 
+                p.reject(new Error(event.data.result)); 
+            } 
+            delete _eid_promises[event.data.nonce]; 
+        } else { 
+            console.log("No nonce in event msg"); 
+        } 
+    } 
+}, false); 
+ 
+ 
+function TokenSigning() { 
+    function nonce() { 
+        var val = ""; 
+        var hex = "abcdefghijklmnopqrstuvwxyz0123456789"; 
+        for(var i = 0; i < 16; i++) val += hex.charAt(Math.floor(Math.random() * hex.length)); 
+        return val; 
+    } 
+ 
+    function messagePromise(msg) { 
+        return new Promise(function(resolve, reject) { 
+            // amend with necessary metadata 
+            msg["nonce"] = nonce(); 
+            msg["src"] = "page.js"; 
+            // send message 
+            window.postMessage(msg, "*"); 
+            // and store promise callbacks 
+            _eid_promises[msg.nonce] = { 
+                resolve: resolve, 
+                reject: reject 
+            }; 
+        }); 
+    } 
+    this.getCertificate = function(options) { 
+        var msg = {type: "CERT", lang: options.lang}; 
+        console.log("getCertificate()"); 
+        return messagePromise(msg); 
+    }; 
+    this.sign = function(cert, hash, options) { 
+        var msg = {type: "SIGN", cert: cert.hex, hash: hash.hex, hashtype: hash.type, lang: options.lang}; 
+        console.log("sign()"); 
+        return messagePromise(msg); 
+    }; 
+    this.getVersion = function() { 
+        console.log("getVersion()"); 
+        return messagePromise({ 
+            type: "VERSION" 
+        }); 
+    }; 
+}</script></head>
+    <body>
+        
+        <div class="bk-root">
+            <div class="bk-plotdiv" id="b5997edd-d866-44bb-a12f-39f38c3b1410"><div id="F88F50C5EEE04E26AE507EBF829E023B" class="bk-grid bk-grid-column bk-layout-fixed" style="position: relative; width: 900px; height: 750px;"><div id="C0B2FC9086DE4CD6ACF6E6C9BBEF18AF" class="bk-grid bk-grid-row bk-layout-fixed" style="position: relative; width: 850px; height: 350px;"><div id="A057EA30139141E18603BD44A38FD0DE" class="bk-plot-layout bk-layout-fixed" style="position: relative; width: 350px; height: 350px;"><div id="1CAD3716340B43548159A0AA605320BB" class="bk-plot-wrapper" style="position: absolute; left: 0px; top: 0px; width: 350px; height: 350px;"><div id="D79C29C9C8714E328A81A7336277E66F" class="bk-canvas-wrapper" style="touch-action: none; -moz-user-select: none; width: 350px; height: 350px; cursor: default;"><canvas class="bk-canvas" style="width: 350px; height: 350px;" width="700" height="700"></canvas><div class="bk-canvas-overlays"><div id="BE051A47550E430ABE991A7038D4896A" class="bk-shading" style="display: none;"></div></div><div class="bk-canvas-events"><div id="108EBBD914054041AFA5E16DD5A21F7B" style="position: absolute; left: 320px; top: 29px; width: 30px; height: 297px; overflow: hidden;"><div id="694702C4AD974EB19D1B89D8EF45EEB1" class="bk-toolbar bk-toolbar-right"><a href="https://bokeh.pydata.org/" target="_blank" class="bk-logo bk-logo-small"></a><div class="bk-button-bar"><div id="385E718AB1594CAF96D62EBCB2C51B1B" class="bk-toolbar-button bk-tool-icon-pan bk-active" title="Pan"></div><div id="A7BDADD865E840FFBB413874CF87BBB6" class="bk-toolbar-button bk-tool-icon-box-select" title="Box Select"></div></div><div class="bk-button-bar"><div id="D4CDE5AAE45B4490A11CB80AF50BB4FE" class="bk-toolbar-button bk-tool-icon-wheel-zoom" title="Wheel Zoom"></div></div><div class="bk-button-bar"><div id="7D2B137DE8454AAE9B77FF35EAD4DE93" class="bk-toolbar-button bk-tool-icon-reset" title="Reset"></div></div></div></div></div></div></div></div><div id="80C145260B4442F097F754CF7960564B" class="bk-grid bk-grid-column bk-layout-fixed" style="position: relative; width: 500px; height: 310px;"><div id="FE138BCF3715458AAC2B5F451EE704D4" class="bk-widget-box bk-layout-fixed" style="width: 280px;"><div id="91D6162EFD22484391BA44536C19FE31" class="bk-widget bk-layout-fixed"><label for="bdcd1b56-7975-49df-8975-f57bd6d3f989"></label><select class="bk-widget-form-input" id="bdcd1b56-7975-49df-8975-f57bd6d3f989"><option selected="selected" value="AAPL">AAPL</option><option value="INTC">INTC</option><option value="BRCM">BRCM</option><option value="YHOO">YHOO</option></select></div></div><div id="797793FD260D446799551F865D6AB637" class="bk-widget-box bk-layout-fixed" style="width: 280px;"><div id="E736FDD69C314FF19236929C836A3A73" class="bk-widget bk-layout-fixed"><label for="91077e79-2b70-4262-b416-184607b89138"></label><select class="bk-widget-form-input" id="91077e79-2b70-4262-b416-184607b89138"><option selected="selected" value="GOOG">GOOG</option><option value="INTC">INTC</option><option value="BRCM">BRCM</option><option value="YHOO">YHOO</option></select></div></div><div id="C9D490B198314DB59778B7337BA1ED18" class="bk-widget-box bk-layout-fixed" style="width: 480px;"><div id="CDF13AD149FF41DC8E759D0537E2EAAA" class="bk-widget bk-layout-fixed" style="width: 500px;"><div style="width: 500px;"><pre style="overflow: auto;">              AAPL         GOOG  AAPL_returns  GOOG_returns
+count  2259.000000  2259.000000   2259.000000   2259.000000
+mean    218.622859   494.511681      0.194531      0.349513
+std     171.689673   164.611263      5.238089      9.410682
+min      14.977300    99.950000    -62.237000    -62.400000
+25%      80.444500   392.800000     -1.629450     -4.090000
+50%     163.136000   499.650000      0.146000      0.240000
+75%     337.961000   595.440000      2.153500      4.960000
+max     685.662000   923.670000     48.618000     89.310000</pre></div></div></div></div></div><div id="FA1893029EB9455DAE33ECF72C8A5615" class="bk-grid bk-grid-column bk-layout-fixed" style="position: relative; width: 900px; height: 400px;"><div id="711BF07CB7CF4EE293C5C033AF722D21" class="bk-plot-layout bk-layout-fixed" style="position: relative; width: 900px; height: 200px;"><div id="AFE8F2AE82A246E69752CD4C35E459E3" class="bk-plot-wrapper" style="position: absolute; left: 0px; top: 0px; width: 900px; height: 200px;"><div id="C6AE2E6895964715A3FC70F8996EADAA" class="bk-canvas-wrapper" style="touch-action: none; -moz-user-select: none; width: 900px; height: 200px;"><canvas class="bk-canvas" style="width: 900px; height: 200px;" width="1800" height="400"></canvas><div class="bk-canvas-overlays"><div id="BF844F001AE04873B1BEC9A4441D17D6" class="bk-shading" style="display: none;"></div></div><div class="bk-canvas-events"><div id="4CB4B43029AF4686B8E258B61E938069" style="position: absolute; left: 870px; top: 29px; width: 30px; height: 147px; overflow: hidden;"><div id="B2B3122A3D5648388AE4FA6179E3CF38" class="bk-toolbar bk-toolbar-right"><a href="https://bokeh.pydata.org/" target="_blank" class="bk-logo bk-logo-small"></a><div class="bk-button-bar"><div id="BB65E13058284C8A83591426476FA208" class="bk-toolbar-button bk-tool-icon-pan" title="Pan"></div><div id="596815A598B44CF7B740FAD2DD4E42EE" class="bk-toolbar-button bk-tool-icon-box-select bk-active" title="Box Select (x-axis)"></div></div><div class="bk-button-bar"><div id="23EDFBEE48204F108FAE9971C25AB68D" class="bk-toolbar-button bk-tool-icon-wheel-zoom" title="Wheel Zoom"></div></div><div class="bk-button-bar"><div id="1A400BF2B918454998D066CDC8B53A5F" class="bk-toolbar-button bk-tool-icon-reset" title="Reset"></div></div></div></div></div></div></div></div><div id="7615AD1D6A464892AD0A2B11C6A38662" class="bk-plot-layout bk-layout-fixed" style="position: relative; width: 900px; height: 200px;"><div id="745722DD9F5A467D9A84CFCF6D46F1AF" class="bk-plot-wrapper" style="position: absolute; left: 0px; top: 0px; width: 900px; height: 200px;"><div id="3385AF2BBB7949FA81D75BEE9C4001EA" class="bk-canvas-wrapper" style="touch-action: none; -moz-user-select: none; width: 900px; height: 200px;"><canvas class="bk-canvas" style="width: 900px; height: 200px;" width="1800" height="400"></canvas><div class="bk-canvas-overlays"><div id="64B45B79A8934CFB8F1FB35ED1067EDC" class="bk-shading" style="display: none;"></div></div><div class="bk-canvas-events"><div id="242DE555B64542EB89483B4778D0A641" style="position: absolute; left: 870px; top: 29px; width: 30px; height: 147px; overflow: hidden;"><div id="A1C60AAA64794DB5A84C2FC7E7FA665A" class="bk-toolbar bk-toolbar-right"><a href="https://bokeh.pydata.org/" target="_blank" class="bk-logo bk-logo-small"></a><div class="bk-button-bar"><div id="873FE816079B48F6A1C1CF6F04AF6A4D" class="bk-toolbar-button bk-tool-icon-pan" title="Pan"></div><div id="5CDBC72836404E5B8A0C0DF859CFC6C0" class="bk-toolbar-button bk-tool-icon-box-select bk-active" title="Box Select (x-axis)"></div></div><div class="bk-button-bar"><div id="69D1DDC119394BC2931BA75F3464EDBC" class="bk-toolbar-button bk-tool-icon-wheel-zoom" title="Wheel Zoom"></div></div><div class="bk-button-bar"><div id="ABE5A202773147D0B2BF48958CF4113F" class="bk-toolbar-button bk-tool-icon-reset" title="Reset"></div></div></div></div></div></div></div></div></div></div></div>
+        </div>
+        
+        <script type="application/json" id="f20ac988-5fec-49da-846d-938e855e7aa1">
+          {}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('f20ac988-5fec-49da-846d-938e855e7aa1').textContent;
+                  var render_items = [{"elementid":"b5997edd-d866-44bb-a12f-39f38c3b1410","sessionid":"Mmdti2weoHZpD9RZKw9bJSRrJZGGUIshxT1KkBFM7QWg","use_for_title":true}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing")
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+</body></html>

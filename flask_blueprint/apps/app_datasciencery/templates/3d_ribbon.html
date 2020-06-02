@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+
+{% include 'index_head_dia_.html' %}
+
+<style type="text/css">
+</style>
+
+<body class="dashboard  body_fixed_padding" >
+
+  {% include 'index_nav.html' %}
+
+  <!-- =====================        MODALS        =========================  -->
+  {% include 'index_modals.html' %}
+
+  <!-- ================    MAIN - container after header    ================ -->
+  <div class="page-container-fluid">
+    <div class="page-content-wrapper">
+      <div class="content sm-gutter">
+
+        <!--
+        <div data-pages="parallax">
+          <div class=" container no-padding container-fixed-lg">
+            <div class="inner" style="transform: translateY(0px); opacity: 1;">
+
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+
+            </div>
+          </div>
+        </div>
+        -->
+
+        <div class="container-fluid sm-padding-8">
+          <div class="row">
+            <div class="col d-flex flex-column">
+              <div class="card social-card share full-width m-b-5 no-border full-height" data-social="item">
+              <!--div class= "card no-border widget-12 widget-loader-circle no-margin col ar-1-1 sm-vh-75"-->
+                <row>
+                  <div class="card-block d-flex flex-column full-height ">
+                    <h2 class="m-t-5" style="text-align: center">Top 10 Coins</h2>
+
+                    <div id="div_plot_3d_ribbon" class="" style="margin-top:-15px;"></div>
+                  </div>
+                </row>
+                <row>
+                  <p class="hint_text_center">
+                  Hold down and rotate the 3-D chart to view from different angles; e.g., 2-D side view, overhead view, etc.<br>
+                  Scroll over the chart to zoom in and out.
+                  <p>
+                  <div class="article">
+                    This 3-D chart shows the <em>change</em> in price of the top ten cryptocoins for the last 100 days.<br>
+                    That is, if you were to have invested in any of these coins 100 days ago, the graph shows the performance of your investmment up to today. <br>
+                    It can be clearly seen that EOS has had the most market interest lately.
+                  </div>
+                  </p>
+                  <p>
+                  </p>
+                </row>
+
+            <!--/div-->
+            </div>
+           </div>
+          </div>  <!-- row -->
+        </div>  <!-- container-fluid -->
+
+      </div>  <!-- content sm-gutter -->
+
+      <!--  Very last bar - copyright stuff  -->
+      {% include 'index_footer.html' %}
+
+    </div>  <!--page-content-wrapper -->
+  </div>  <!-- page-container -->
+
+  <!-- =============    end:  MAIN - container after header    ============= -->
+
+  <!-- ???
+  <div class="overlay hide" data-pages="search">
+
+    <div class="overlay-content has-results m-t-20">
+
+    <div class="container-fluid">
+
+    <img class="overlay-brand" src="./evo_dash_files/logo_2x.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+
+    <a href="#" class="close-icon-light overlay-close text-black fs-16">
+    <i class="pg-close"></i>
+    </a>
+    </div>
+
+    <div class="container-fluid">
+      <input id="overlay-search" class="no-border overlay-search bg-transparent" placeholder="Search..." autocomplete="off" spellcheck="false">
+      <br>
+      <div class="inline-block">
+      <div class="checkbox right">
+      <input id="checkboxn" type="checkbox" value="1" checked="checked">
+      <label for="checkboxn"><i class="fa fa-search"></i> Search within page</label>
+      </div>
+      </div>
+      <div class="inline-block m-l-10">
+      <p class="fs-13">Press enter to search</p>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <span>
+      <strong>suggestions :</strong>
+      </span>
+      <span id="overlay-suggestions"></span>
+      <br>
+      <div class="search-results m-t-40">
+      <p class="bold">Pages Search Results</p>
+      <div class="row">
+    <div class="col-md-6">
+
+    <div class="">
+      <div class="thumbnail-wrapper d48 circular bg-success text-white inline m-t-10">
+      <div>
+      <img width="50" height="50" src="./evo_dash_files/avatar2x.jpg" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" alt="">
+      </div>
+      </div>
+
+      <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5"><span class="semi-bold result-name">ice cream</span> on pages</h5>
+      <p class="hint-text">via john smith</p>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="thumbnail-wrapper d48 circular bg-success text-white inline m-t-10">
+      <div>T</div>
+      </div>
+
+      <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5"><span class="semi-bold result-name">ice cream</span> related topics</h5>
+      <p class="hint-text">via pages</p>
+      </div>
+    </div>
+
+    <div class="">
+
+    <div class="thumbnail-wrapper d48 circular bg-success text-white inline m-t-10">
+      <div><i class="fa fa-headphones large-text "></i>
+      </div>
+      </div>
+      <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5"><span class="semi-bold result-name">ice cream</span> music</h5>
+      <p class="hint-text">via pagesmix</p>
+      </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+
+    <div class="">
+      <div class="thumbnail-wrapper d48 circular bg-info text-white inline m-t-10">
+      <div><i class="fa fa-facebook large-text "></i>
+      </div>
+      </div>
+      <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5"><span class="semi-bold result-name">ice cream</span> on facebook</h5>
+      <p class="hint-text">via facebook</p>
+      </div>
+    </div>
+
+
+    <div class="">
+      <div class="thumbnail-wrapper d48 circular bg-complete text-white inline m-t-10">
+      <div><i class="fa fa-twitter large-text "></i>
+      </div>
+      </div>
+      <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5">Tweats on<span class="semi-bold result-name"> ice cream</span></h5>
+      <p class="hint-text">via twitter</p>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="thumbnail-wrapper d48 circular text-white bg-danger inline m-t-10">
+      <div><i class="fa fa-google-plus large-text "></i>
+      </div>
+      </div>
+       <div class="p-l-10 inline p-t-5">
+      <h5 class="m-b-5">Circles on<span class="semi-bold result-name"> ice cream</span></h5>
+      <p class="hint-text">via google plus</p>
+      </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>
+
+  </div>
+  -->   <!-- overlay-hide -->
+
+
+  <!--
+  <div class="pg-colors">
+    <div class="bg-success" data-color="success"></div>
+    <div class="bg-danger" data-color="danger"></div>
+    <div class="bg-primary" data-color="primary"></div>
+    <div class="bg-complete" data-color="complete"></div>
+  </div>
+
+  <div id="drift-widget-container" style="position: absolute; z-index: 2147483647;">
+    <iframe id="drift-widget" src="#" frameborder="0" title="Drift Messenger" style="border: none; display: block; position: fixed; top: auto; left: auto; bottom: 24px; right: 24px; width: 76px !important; height: 76px !important; visibility: visible; z-index: 2147483647; max-height: 100vh; max-width: 100vw; transition: none; background: none transparent; opacity: 1;" class="drift-widget-welcome-online">
+    </iframe>
+  </div>
+
+
+  <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+    <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+    </div>
+  </div>
+
+  -->
+
+  <!-- ============================ JS scripts ============================= -->
+
+  {% include 'index_tail_dia_.html' %}
+
+  <script>
+    $(function() {
+      app_quant.threed_ribbon.init();
+    });
+  </script>
+
+</body>
+
+</html>

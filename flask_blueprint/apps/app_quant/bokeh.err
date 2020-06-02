@@ -1,0 +1,54 @@
+2018-04-05 17:01:29,285 Starting Bokeh server version 0.12.15 (running on Tornado 5.0.1)
+2018-04-05 17:01:29,396 Bokeh app running at: http://localhost:5006/bokeh
+2018-04-05 17:01:29,396 Starting Bokeh server with process id: 9868
+2018-04-05 17:03:07,571 200 GET /bokeh (127.0.0.1) 1122.65ms
+2018-04-05 17:03:07,766 200 GET /static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66 (127.0.0.1) 33.31ms
+2018-04-05 17:03:07,766 200 GET /static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595 (127.0.0.1) 16.25ms
+2018-04-05 17:03:07,767 200 GET /static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62 (127.0.0.1) 14.73ms
+2018-04-05 17:03:07,776 200 GET /static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28 (127.0.0.1) 12.86ms
+2018-04-05 17:03:07,782 200 GET /static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d (127.0.0.1) 22.56ms
+2018-04-05 17:03:07,900 200 GET /static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987 (127.0.0.1) 3.34ms
+2018-04-05 17:03:07,903 200 GET /static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6 (127.0.0.1) 9.12ms
+2018-04-05 17:03:08,645 304 GET /static/js/bokeh.min.js.map (127.0.0.1) 42.20ms
+2018-04-05 17:03:08,668 101 GET /bokeh/ws?bokeh-protocol-version=1.0&bokeh-session-id=UgPA2MNLzaSmAVC7bI1BMwNKhpdrukUECkTiefQHJW8U (127.0.0.1) 21.37ms
+2018-04-05 17:03:08,669 WebSocket connection opened
+2018-04-05 17:03:08,669 ServerConnection created
+2018-04-05 17:13:42,356 WebSocket connection closed: code=1001, reason=None
+2018-04-05 17:13:43,244 200 GET /bokeh (127.0.0.1) 765.62ms
+2018-04-05 17:13:43,520 200 GET /static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66 (127.0.0.1) 206.83ms
+2018-04-05 17:13:43,522 200 GET /static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595 (127.0.0.1) 158.19ms
+2018-04-05 17:13:43,522 200 GET /static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62 (127.0.0.1) 144.84ms
+2018-04-05 17:13:43,524 200 GET /static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28 (127.0.0.1) 133.92ms
+2018-04-05 17:13:43,539 200 GET /static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6 (127.0.0.1) 46.64ms
+2018-04-05 17:13:43,542 200 GET /static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987 (127.0.0.1) 16.55ms
+2018-04-05 17:13:43,554 200 GET /static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d (127.0.0.1) 130.65ms
+2018-04-05 17:13:43,949 101 GET /bokeh/ws?bokeh-protocol-version=1.0&bokeh-session-id=TlgidSBGWTL3Zi8w2iLkISPbl15ADo9MOH9PpywF9u7n (127.0.0.1) 0.78ms
+2018-04-05 17:13:43,949 WebSocket connection opened
+2018-04-05 17:13:43,949 ServerConnection created
+2018-04-05 17:13:43,985 304 GET /static/js/bokeh.min.js.map (127.0.0.1) 2.44ms
+2018-04-05 20:20:36,077 WebSocket connection closed: code=1001, reason=None
+2018-04-05 20:20:40,153 200 GET /bokeh (127.0.0.1) 3520.01ms
+2018-04-05 20:20:40,732 200 GET /static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66 (127.0.0.1) 291.95ms
+2018-04-05 20:20:40,733 200 GET /static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595 (127.0.0.1) 244.28ms
+2018-04-05 20:20:40,734 200 GET /static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62 (127.0.0.1) 216.30ms
+2018-04-05 20:20:40,740 200 GET /static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28 (127.0.0.1) 93.66ms
+2018-04-05 20:20:40,791 200 GET /static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6 (127.0.0.1) 102.11ms
+2018-04-05 20:20:40,798 200 GET /static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987 (127.0.0.1) 23.78ms
+2018-04-05 20:20:40,824 200 GET /static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d (127.0.0.1) 251.99ms
+2018-04-05 20:20:42,429 304 GET /static/js/bokeh.min.js.map (127.0.0.1) 6.06ms
+2018-04-05 20:20:42,692 101 GET /bokeh/ws?bokeh-protocol-version=1.0&bokeh-session-id=hYkAFrWuGZTyINrs6bDZQ0pccji15Mj9kpfeO0zLfdeu (127.0.0.1) 2.68ms
+2018-04-05 20:20:42,692 WebSocket connection opened
+2018-04-05 20:20:42,693 ServerConnection created
+2018-04-06 00:18:22,593 WebSocket connection closed: code=1001, reason=None
+2018-04-06 00:18:26,490 200 GET /bokeh (127.0.0.1) 3433.25ms
+2018-04-06 00:18:26,967 200 GET /static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66 (127.0.0.1) 333.15ms
+2018-04-06 00:18:26,970 200 GET /static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595 (127.0.0.1) 316.90ms
+2018-04-06 00:18:26,973 200 GET /static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62 (127.0.0.1) 311.81ms
+2018-04-06 00:18:26,978 200 GET /static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28 (127.0.0.1) 294.27ms
+2018-04-06 00:18:27,013 200 GET /static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6 (127.0.0.1) 199.36ms
+2018-04-06 00:18:27,015 200 GET /static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987 (127.0.0.1) 35.83ms
+2018-04-06 00:18:27,031 200 GET /static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d (127.0.0.1) 366.62ms
+2018-04-06 00:18:27,838 101 GET /bokeh/ws?bokeh-protocol-version=1.0&bokeh-session-id=bHu8xUw0xnZ8kFTcUeWdlOOT4qMExZLh5FlTWCPK8l0W (127.0.0.1) 1.54ms
+2018-04-06 00:18:27,838 WebSocket connection opened
+2018-04-06 00:18:27,839 ServerConnection created
+2018-04-06 21:05:09,728 WebSocket connection closed: code=None, reason=None

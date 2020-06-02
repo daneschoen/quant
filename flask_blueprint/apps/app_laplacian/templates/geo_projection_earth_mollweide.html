@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+
+<html lang="en-us" xmlns:ng="http://angularjs.org" ng-app>
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
+  <!--meta charset="utf-8"-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+
+  <title>D3 Projection of Earth</title>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <!--link href="/static/css/bootstrap.min.css" rel="stylesheet" /-->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet" />
+
+  <!--link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/base/jquery-ui.css" rel="stylesheet" /-->
+  <!--link href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" type="text/css" rel="stylesheet" /-->
+  <!--link href="/static/js/jquery-ui-1.10.3.css" rel="stylesheet" /-->
+
+  <!-- fonts -->
+  <!--link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"-->
+  <link href="/static/css/font-awesome.css" rel="stylesheet" />
+  <!--[if IE 7]>
+    <link href="/static/css/font-awesome-ie7.min.css" rel="stylesheet" />
+  <![endif]-->
+  <link href="/static/css/css.css" rel="stylesheet" />
+
+  <!-- themes -->
+  <link href="/static/css/boot_dash.css" rel="stylesheet" />
+  <link href="/static/css/theme.css" rel="stylesheet" />
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/static/css/ace-ie.min.css" />
+  <![endif]-->
+
+  <!--
+    styles for this page
+  -->
+  <link href="/static/css/index.css" rel="stylesheet">
+    
+  <style>
+    #map { cursor: move; }
+  </style>
+  
+</head>
+  
+<body class="navbar-fixed">
+
+  {% include 'laplacian/navbar.html' %}
+
+  <!--
+  Modal
+  -->
+  <div class="modal fade modal-nobackdrop" id="modal_x" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">Rolling Correlation</h4>
+        </div>
+        <div class="modal-body" style="font: 10px">
+          The multi-line chart is enabled to zoom and pan. Double click to revert to original view. Single click
+          any individual line for detailed view of that series in the larger chart below. As mouse moves in the multi-line chart the histogram updates
+          to show the level of gaussian characteristics and variance level of the data set.
+          <br><br>
+          This app's stack consists of MongoDB, Django, Python, NumPy, SciPy, Pandas, Matplotlib, and D3.js
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+
+  <h1 style="text-align: center; margin-top: 60px">Map Projection Mollweide</h1>
+  
+  <div id="map" style="margin-left: 70px"></div>
+
+  <!--
+  <p><select id="projection-menu"></select>
+  <button id="pause">Pause</button>
+  -->
+
+  <div class="wrapper">
+  </div>
+
+  
+  <!--=============== JS libraries ===============-->
+  <!-- jQuery -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/jquery-1.10.2.min.js"><\/script>')</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+  <!--script src="/static/js/jquery-ui-1.10.3.js" type="text/javascript" ></script-->
+  <!--script src="/static/js/jquery.tools.min.js" type="text/javascript" ></script-->
+  <!--script src="/static/jquery.ui.timepicker.js" type="text/javascript"></script-->
+
+  <!-- Bootstrap -->
+  <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+  <!--script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script-->
+  <!--script> if(typeof($.fn.modal) === 'undefined') {document.write('<script src="/static/js/bootstrap.min.js"><\/script>')}</script-->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+  <![endif]-->
+    <!--script src="/static/js/html5shiv.js"></script-->
+    <!--script src="/static/js/respond.min.js"></script-->
+
+  <!-- Custom Theme js -->
+  <script src="/static/js/boot_dash.js" type="text/javascript"></script>
+  <script src="/static/js/theme.js" type="text/javascript"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!-- if lt IE 9> script src="../../docs-assets/js/ie8-responsive-file-warning.js"><script><![endif]-->
+  <!--script src="../../assets/js/ie-emulation-modes-warning.js"></script-->
+
+  <!-- D3 -->
+  <script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"></script>
+  <!--script src="/static/js/d3.min.js" type="text/javascript"></script-->
+  <script src="http://d3js.org/d3.geo.projection.v0.min.js" type="text/javascript" charset="utf-8"></script>
+  <!--script src="http://d3js.org/topojson.v1.min.js"></script-->
+  <script src="http://d3js.org/topojson.v1.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <!--=============== JS custom ===============-->
+  <script src="/static/js/jCollapsible.js" type="text/javascript" ></script>
+
+  <script src="/static/js/utils.js" type="text/javascript"></script>
+
+  <script>
+  
+  var ratio = window.devicePixelRatio || 1,
+      width = 960 * ratio,
+      height = 500 * ratio;
+  
+  var options = [
+    {name: "Aitoff", projection: d3.geo.aitoff()},
+    //{name: "Albers", projection: d3.geo.albers().scale(145).parallels([20, 50])},
+    {name: "August", projection: d3.geo.august().scale(60)},
+    {name: "Baker", projection: d3.geo.baker().scale(100)},
+    {name: "Boggs", projection: d3.geo.boggs()},
+    {name: "Bonne", projection: d3.geo.bonne().scale(100)},
+    {name: "Bromley", projection: d3.geo.bromley()},
+    {name: "Collignon", projection: d3.geo.collignon().scale(93)},
+    {name: "Craster Parabolic", projection: d3.geo.craster()},
+    {name: "Eckert I", projection: d3.geo.eckert1().scale(165)},
+    {name: "Eckert II", projection: d3.geo.eckert2().scale(165)},
+    {name: "Eckert III", projection: d3.geo.eckert3().scale(180)},
+    {name: "Eckert IV", projection: d3.geo.eckert4().scale(180)},
+    {name: "Eckert V", projection: d3.geo.eckert5().scale(170)},
+    {name: "Eckert VI", projection: d3.geo.eckert6().scale(170)},
+    {name: "Eisenlohr", projection: d3.geo.eisenlohr().scale(60)},
+    {name: "Equirectangular (Plate Carr�e)", projection: d3.geo.equirectangular()},
+    {name: "Fahey", projection: d3.geo.fahey().scale(120)},
+    {name: "Gall Stereographic", projection: d3.geo.cylindricalStereographic().parallel(45).scale(140)},
+    {name: "Goode Homolosine", projection: d3.geo.homolosine()},
+    {name: "Ginzburg IV", projection: d3.geo.ginzburg4().scale(120)},
+    {name: "Ginzburg V", projection: d3.geo.ginzburg5().scale(120)},
+    {name: "Ginzburg VI", projection: d3.geo.ginzburg6().scale(120)},
+    {name: "Ginzburg VIII", projection: d3.geo.ginzburg8().scale(120)},
+    {name: "Ginzburg IX", projection: d3.geo.ginzburg9().scale(120)},
+    {name: "Gringorten", projection: d3.geo.gringorten().scale(220)},
+    {name: "Guyou", projection: d3.geo.guyou().scale(150)},
+    {name: "Hammer", projection: d3.geo.hammer().scale(165)},
+    {name: "Hill", projection: d3.geo.hill().scale(120)},
+    {name: "Kavrayskiy VII", projection: d3.geo.kavrayskiy7()},
+    {name: "Lagrange", projection: d3.geo.lagrange().scale(120)},
+    {name: "Lambert cylindrical equal-area", projection: d3.geo.cylindricalEqualArea()},
+    {name: "Larriv�e", projection: d3.geo.larrivee().scale(95)},
+    {name: "Laskowski", projection: d3.geo.laskowski().scale(120)},
+    {name: "Loximuthal", projection: d3.geo.loximuthal()},
+    {name: "Mercator", projection: d3.geo.mercator().scale(100)},
+    {name: "Miller", projection: d3.geo.miller().scale(100)},
+    {name: "McBryde�Thomas Flat-Polar Parabolic", projection: d3.geo.mtFlatPolarParabolic()},
+    {name: "McBryde�Thomas Flat-Polar Quartic", projection: d3.geo.mtFlatPolarQuartic()},
+    {name: "McBryde�Thomas Flat-Polar Sinusoidal", projection: d3.geo.mtFlatPolarSinusoidal()},
+    {name: "Mollweide", projection: d3.geo.mollweide().scale(165)},
+    {name: "Natural Earth", projection: d3.geo.naturalEarth()},
+    {name: "Nell�Hammer", projection: d3.geo.nellHammer()},
+    {name: "Polyconic", projection: d3.geo.polyconic().scale(100)},
+    {name: "Rectangular Polyconic", projection: d3.geo.rectangularPolyconic().scale(120)},
+    {name: "Robinson", projection: d3.geo.robinson()},
+    {name: "Sinusoidal", projection: d3.geo.sinusoidal()},
+    {name: "Sinu-Mollweide", projection: d3.geo.sinuMollweide()},
+    {name: "Times", projection: d3.geo.times().scale(140)},
+    {name: "Van der Grinten", projection: d3.geo.vanDerGrinten().scale(75)},
+    {name: "Van der Grinten II", projection: d3.geo.vanDerGrinten2().scale(75)},
+    {name: "Van der Grinten III", projection: d3.geo.vanDerGrinten3().scale(75)},
+    {name: "Van der Grinten IV", projection: d3.geo.vanDerGrinten4().scale(120)},
+    {name: "Wagner IV", projection: d3.geo.wagner4()},
+    {name: "Wagner VI", projection: d3.geo.wagner6()},
+    {name: "Wagner VII", projection: d3.geo.wagner7()},
+    {name: "Winkel Tripel", projection: d3.geo.winkel3()}
+  ];
+  
+  var initial = [-71, 42, 0],
+      rotate = initial.slice(),
+      pause = 1,
+      velocity = [.010, -.002],
+      t0 = Date.now();
+  
+  var interval = setInterval(loop, 5000),
+      i = 0,
+      n = options.length - 1;
+  
+  var projection = options[i].projection;
+
+  /*
+  options.forEach(function(option) {
+    option.projection
+        .translate([width / 2, height / 2])
+        .scale(option.projection.scale() * ratio)
+        .clipExtent([[2 * ratio, 2 * ratio], [width - 2 * ratio, height - 2 * ratio]]);
+  });
+  
+  d3.select("#pause").on("click", function() {
+    if (!(pause ^= 4)) {
+      t0 = Date.now();
+      initial = rotate.slice();
+    }
+  });
+  */
+  var graticule = d3.geo.graticule()(),
+      land,
+      boundaries;
+  
+  var canvas = d3.select("#map").append("canvas")
+      .attr("width", width)
+      .attr("height", height)
+      .style("width", width / ratio + "px")
+      .style("height", height / ratio + "px")
+      .call(d3.behavior.drag()
+        .origin(function() { return {x: rotate[0], y: -rotate[1]}; })
+        .on("dragstart", function() { pause |= 1; })
+        .on("drag", function(d) {
+          rotate[0] = d3.event.x;
+          rotate[1] = -d3.event.y;
+          projection.rotate(rotate);
+          redraw(path);
+        })
+        .on("dragend", function() {
+          pause &= ~1;
+          t0 = Date.now();
+          initial = rotate.slice();
+        }));
+  
+  var context = canvas.node().getContext("2d");
+  context.fillStyle = "#f9f9f9";
+  context.strokeStyle = "#000";
+  
+  var path = d3.geo.path()
+      .projection(projection)
+      .context(context);
+  
+  var menu = d3.select("#projection-menu")
+      .on("change", change);
+  
+  menu.selectAll("option")
+      .data(options)
+    .enter().append("option")
+      .text(function(d) { return d.name; });
+  
+  function loop() {
+    //if (pause) return;
+    if (true) return;
+    var j = Math.floor(Math.random() * n);
+    menu.property("selectedIndex", i = j + (j >= i));
+    update(options[i]);
+  }
+  
+  function change() {
+    clearInterval(interval);
+    update(options[this.selectedIndex]);
+  }
+  var o = {name:"Mollweide", projection:d3.geo.mollweide().scale(165)};
+  update(o);
+  
+  function pathTween(projection0, projection1, rotate) {
+    projection0.rotate([0, 0, 0]);
+    projection1.rotate([0, 0, 0]);
+    var t = 0,
+        projection = d3.geo.projection(function(lambda, phi) {
+            lambda *= 180 / Math.PI, phi *= 180 / Math.PI;
+            var p0 = projection0([lambda, phi]), p1 = projection1([lambda, phi]);
+            return [(1 - t) * p0[0] + t * p1[0], (1 - t) * -p0[1] + t * -p1[1]];
+          })
+          .rotate(rotate)
+          .scale(1)
+          .translate([width / 2, height / 2])
+          .clipExtent(projection0.clipExtent()),
+        path = d3.geo.path().projection(projection).context(context);
+    return function() {
+      return function(u) {
+        t = u;
+        redraw(path);
+      };
+    };
+  }
+  
+  function update(option) {
+    pause |= 2;
+    canvas.transition()
+        .duration(750)
+        .tween("path", pathTween(projection, projection = option.projection, initial = rotate.slice()))
+        .each("end", function() {
+          pause &= ~2;
+          t0 = Date.now();
+        });
+    path.projection(projection);
+  }
+  
+  d3.timer(function() {
+    if (pause) return;
+    var t = Date.now() - t0;
+    rotate[0] = initial[0] + velocity[0] * t;
+    rotate[1] = initial[1] + velocity[1] * t;
+    projection.rotate(rotate);
+    redraw(path);
+  });
+  
+  function redraw(path) {
+    context.clearRect(0, 0, width, height);
+    context.lineWidth = .5 * ratio;
+    if (land) {
+      context.strokeStyle = "#000";
+      context.beginPath(), path(land), context.fill(), context.stroke();
+      context.beginPath(), path(boundaries), context.stroke();
+    }
+    context.strokeStyle = "#999";
+    context.beginPath(), path(graticule), context.stroke();
+    context.lineWidth = 2.5 * ratio, context.strokeStyle = "#000";
+    context.beginPath(), path({type: "Sphere"}), context.stroke();
+  }
+  
+  d3.json("/static/js/geo_world.json", function(error, world) {
+    land = topojson.feature(world, world.objects.land);
+    boundaries = topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; });
+  });
+
+  </script>
+
+</body>
+</html>

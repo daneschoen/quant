@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+
+{% include 'index_head_rak_.html' %}
+
+<body class="body_light body_fixed_padding">
+
+  {% include 'index_nav.html' %}
+
+  <!-- =====================        MODALS        =========================  -->
+  {% include 'index_modals.html' %}
+
+  <!-- ================    MAIN - container after header    ================ -->
+  <div class="page-container-fluid">
+    <div class="page-content-wrapper">
+      <div class="content sm-gutter">
+
+        <div class="container-fluid_rak sm-padding-8">
+
+            <div class="card card-transparent">
+
+              <div class="card-header  ">
+                <div class="card-title">News
+                </div>
+              </div>
+
+              <div class="m-0 row card-block">
+                <!--
+                <div class="col-lg-4 no-padding">
+                  <div class="p-r-30">
+                    <h3>Effortless Customization</h3>
+                    <br>
+                    <p>Cards are pluggable UI components that are managed and displayed in a web portal. Cards in Pages are created by reusing the <a href="http://getbootstrap.com/components/#cards">cards</a> introduced in Bootstrap to enable effortless customization.
+                    </p>
+                  </div>
+                </div>
+                -->
+
+                <div class="col-lg-8 sm-no-padding">
+                  <div class="card card-transparent">
+                    <!--   ARTICLES INCLUDE HERE   -->
+                    {% include 'articles/causes-bitcoin-decline.html' %}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+        </div>  <!-- container-fluid -->
+
+      </div>  <!-- content sm-gutter -->
+
+      <!--  Very last bar - copyright stuff  -->
+      {% include 'index_footer.html' %}
+
+    </div>  <!--page-content-wrapper -->
+  </div>  <!-- page-container -->
+
+  <!-- =============    end:  MAIN - container after header    ============= -->
+
+  <!-- ==========================   JS scripts   =========================== -->
+
+  {% include 'index_tail_rak_.html' %}
+
+  <script>
+    $(function() {
+      app_quant.raks_.init();
+    });
+  </script>
+
+</body>
+
+</html>

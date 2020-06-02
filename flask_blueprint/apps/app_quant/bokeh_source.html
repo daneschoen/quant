@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>http://localhost:5006/bokeh</title><link rel="stylesheet" type="text/css" href="bokeh_source_files/viewsource.css"></head><body id="viewsource" class="highlight" style="-moz-tab-size: 4" contextmenu="actions"><pre id="line1"><span>
+<span id="line2"></span></span><span class="doctype">&lt;!DOCTYPE html&gt;</span><span>
+<span id="line3"></span></span><span>&lt;<span class="start-tag">html</span> <span class="attribute-name">lang</span>="<a class="attribute-value">en</a>"&gt;</span><span>
+<span id="line4"></span>    </span><span>&lt;<span class="start-tag">head</span>&gt;</span><span>
+<span id="line5"></span>        </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">charset</span>="<a class="attribute-value">utf-8</a>"&gt;</span><span>
+<span id="line6"></span>        </span><span>&lt;<span class="start-tag">title</span>&gt;</span><span>Stocks</span><span>&lt;/<span class="end-tag">title</span>&gt;</span><span>
+<span id="line7"></span>        
+<span id="line8"></span></span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>" <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66">static/css/bokeh.min.css?v=f7fe43f4980a82921415acbd60d5fd66</a>" <span class="attribute-name">type</span>="<a class="attribute-value">text/css</a>" <span>/</span>&gt;</span><span>
+<span id="line9"></span></span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>" <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595">static/css/bokeh-widgets.min.css?v=e2198c0464ced10f820b120714112595</a>" <span class="attribute-name">type</span>="<a class="attribute-value">text/css</a>" <span>/</span>&gt;</span><span>
+<span id="line10"></span></span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>" <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62">static/css/bokeh-tables.min.css?v=89abce161b192f3f74677f425212bd62</a>" <span class="attribute-name">type</span>="<a class="attribute-value">text/css</a>" <span>/</span>&gt;</span><span>
+<span id="line11"></span>        
+<span id="line12"></span></span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>" <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d">static/js/bokeh.min.js?v=f8e9c08dc7d95ab8b8ffd3109ad0ae0d</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line13"></span></span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>" <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28">static/js/bokeh-widgets.min.js?v=a2dd57b513ce6b5a818fc187fe161f28</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line14"></span></span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>" <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6">static/js/bokeh-tables.min.js?v=290ceee4270c39d8e53f1ffcc71980c6</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line15"></span></span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>" <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://localhost:5006/static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987">static/js/bokeh-gl.min.js?v=7301df140b8889d43d68cef71bd7a987</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line16"></span></span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>"&gt;</span><span>
+<span id="line17"></span>    Bokeh.set_log_level("info");
+<span id="line18"></span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line19"></span>    </span><span>&lt;/<span class="end-tag">head</span>&gt;</span><span>
+<span id="line20"></span>    </span><span>&lt;<span class="start-tag">body</span>&gt;</span><span>
+<span id="line21"></span>        
+<span id="line22"></span>        </span><span>&lt;<span class="start-tag">div</span> <span class="attribute-name">class</span>="<a class="attribute-value">bk-root</a>"&gt;</span><span>
+<span id="line23"></span>            </span><span>&lt;<span class="start-tag">div</span> <span class="attribute-name">class</span>="<a class="attribute-value">bk-plotdiv</a>" <span class="attribute-name">id</span>="<a class="attribute-value">b5997edd-d866-44bb-a12f-39f38c3b1410</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">div</span>&gt;</span><span>
+<span id="line24"></span>        </span><span>&lt;/<span class="end-tag">div</span>&gt;</span><span>
+<span id="line25"></span>        
+<span id="line26"></span>        </span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">application/json</a>" <span class="attribute-name">id</span>="<a class="attribute-value">f20ac988-5fec-49da-846d-938e855e7aa1</a>"&gt;</span><span>
+<span id="line27"></span>          {}
+<span id="line28"></span>        </span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line29"></span>        </span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">type</span>="<a class="attribute-value">text/javascript</a>"&gt;</span><span>
+<span id="line30"></span>          (function() {
+<span id="line31"></span>            var fn = function() {
+<span id="line32"></span>              Bokeh.safely(function() {
+<span id="line33"></span>                (function(root) {
+<span id="line34"></span>                  function embed_document(root) {
+<span id="line35"></span>                    
+<span id="line36"></span>                  var docs_json = document.getElementById('f20ac988-5fec-49da-846d-938e855e7aa1').textContent;
+<span id="line37"></span>                  var render_items = [{"elementid":"b5997edd-d866-44bb-a12f-39f38c3b1410","sessionid":"Mmdti2weoHZpD9RZKw9bJSRrJZGGUIshxT1KkBFM7QWg","use_for_title":true}];
+<span id="line38"></span>                  root.Bokeh.embed.embed_items(docs_json, render_items);
+<span id="line39"></span>                
+<span id="line40"></span>                  }
+<span id="line41"></span>                  if (root.Bokeh !== undefined) {
+<span id="line42"></span>                    embed_document(root);
+<span id="line43"></span>                  } else {
+<span id="line44"></span>                    var attempts = 0;
+<span id="line45"></span>                    var timer = setInterval(function(root) {
+<span id="line46"></span>                      if (root.Bokeh !== undefined) {
+<span id="line47"></span>                        embed_document(root);
+<span id="line48"></span>                        clearInterval(timer);
+<span id="line49"></span>                      }
+<span id="line50"></span>                      attempts++;
+<span id="line51"></span>                      if (attempts &gt; 100) {
+<span id="line52"></span>                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing")
+<span id="line53"></span>                        clearInterval(timer);
+<span id="line54"></span>                      }
+<span id="line55"></span>                    }, 10, root)
+<span id="line56"></span>                  }
+<span id="line57"></span>                })(window);
+<span id="line58"></span>              });
+<span id="line59"></span>            };
+<span id="line60"></span>            if (document.readyState != "loading") fn();
+<span id="line61"></span>            else document.addEventListener("DOMContentLoaded", fn);
+<span id="line62"></span>          })();
+<span id="line63"></span>        </span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
+<span id="line64"></span>    </span><span>&lt;/<span class="end-tag">body</span>&gt;</span><span>
+<span id="line65"></span></span><span>&lt;/<span class="end-tag">html</span>&gt;</span><span></span></pre><menu type="context" id="actions"><menuitem id="goToLine" label="Go to Line…" accesskey="L"></menuitem><menuitem id="wrapLongLines" label="Wrap Long Lines" type="checkbox"></menuitem><menuitem id="highlightSyntax" label="Syntax Highlighting" type="checkbox" checked="true"></menuitem></menu></body></html>

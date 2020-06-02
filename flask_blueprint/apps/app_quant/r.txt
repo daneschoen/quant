@@ -1,0 +1,64 @@
+setwd("Horizon/development/awork_Eclipse/Strat")
+
+spus<-read.table(file="spusdiff.csv",sep=",")
+spus.lm<-lm(spus[,1]~spus[,2])
+
+us<-read.table(file="usdiff.csv",sep=",")
+us.lm<-lm(us[,1]~us[,2])
+
+summary(spus.lm)
+opar <- par(mfrow = c(2,2), oma = c(0, 0, 1.1, 0))
+plot(us.lm, las = 1)      # Residuals, Fitted, ...
+par(opar)
+
+
+As seen by other posts, there are many ways to accomplish this sort of
+thing.  For simple tasks I've often found it easiest to call R from my
+script (in my case Python).  I've not used BATCH mode and instead
+call R like this:
+
+    R --slave --no-save < script.R
+
+A common setup for me is to have a functions.R file with routines I want
+to use and then to generate a small R script from within Python that
+sources functions.R and calls the functions with the proper variables as
+determined by the script.
+
+
+             	Best         	Standard     	Coefficient of
+Coefficients 	Estimate	Deviation    	Variation (%)
+--------------------------------------------------------------
+c[0]         	-1.1602      	1.33         	-114.6366
+c[1]         	0.0413       	0.0163       	39.5127
+
+T-Test for Univariate Regression
+--------------------------------
+Sum of squares: 48133.5966
+Correlation Coefficient:	0.1939
+R^2 (Coef of Determination):	0.0376
+R-Adjusted:	0.0376
+Correlation Coefficient Probability:	0.0062
+P-Value:	0.9938
+ 
+Correlation y, yhat
+Correlation Coefficient:	0.1939
+Correlation Coefficient Probability:	0.0060
+ 
+Degrees of freedom:	164.0
+Number of data points:	166.0
+Number of estimated paramaters:	2.0
+
+Correlation coefficients of coeff's
+             	c[0]         	c[1]         	
+c[0]         	1.0          	-0.0222      	
+c[1]         	-0.0222      	1.0          	
+
+Correlation coefficients of Y, X's
+             	Y            	X1           	
+Y            	1.0          	0.1939       	
+X1           	0.1939       	1.0          	
+
+p-Values of correlation coefficients of Y, X's
+             	Y            	X1           	
+Y            	1.0          	1.9877       	
+X1           	1.9877       	1.0     

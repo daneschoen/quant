@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laplacian</title>
+
+  <!-- Bootstrap, font-awesome-->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <!--[if lt IE 9]>
+    <link href="/static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <![endif]-->
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link href="/static/css/pe-icon-7-stroke.css" rel="stylesheet" type="text/css" media="screen">
+  <!-- flex slider css -->
+  <link href="/static/css/flexslider.css" rel="stylesheet" type="text/css" media="screen">
+  <!-- animated css  -->
+  <link href="/static/css/animate.css" rel="stylesheet" type="text/css" media="screen">
+  <!-- Revolution Style-sheet -->
+  <link href="/static/css/settings.css" rel="stylesheet" type="text/css" >
+  <link href="/static/css/rev-style.css" rel="stylesheet" type="text/css" >
+  <!--owl carousel css-->
+  <link href="/static/css/owl_002.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="/static/css/owl.css" rel="stylesheet" type="text/css" media="screen">
+  <!--mega menu -->
+  <link href="/static/css/yamm.css" rel="stylesheet" type="text/css">
+  <!--cube css-->
+  <link href="/static/css/cubeportfolio.css" rel="stylesheet" type="text/css">
+
+  <link href="/static/css/magnific-popup.css" rel="stylesheet" type="text/css">
+
+  <link href="/static/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css">
+
+  <!-- CSS - SAN STYLE  -->
+  <link href="/static/css/style.css" rel="stylesheet" type="text/css" media="screen">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- CSS for SITE  -->
+  <link href="/static/css/style_laplacian.css" rel="stylesheet" type="text/css" media="screen">
+  <style>
+  </style>
+
+  <!-- CSS - for this template  -->
+  <style>
+    div.ex {
+      margin-bottom: 30px;
+      /* padding: 15px 15px 0px 15px; */
+      padding: 15px 15px 0px;
+    }
+  </style>
+
+</head>
+
+<!--
+Modal
+-->
+<div class="modal fade modal-nobackdrop" id="modal_" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Rolling Correlation</h4>
+      </div>
+      <div class="modal-body">
+        Demo of distributions based on numpy random functions including user defined PMF.
+        <br><br>
+        This app's stack consists of Django, Python, Pandas, NumPy, Scipy, D3.js
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<body>
+
+  {% include 'laplacian/navtopbar_laplacian.html' %}
+
+  <div class="divide40"></div>
+
+  <!-- =========================================================================
+       MAIN CONTAINER
+       - everything below navbar incl left and right sidebars
+       =========================================================================
+  -->
+  <div class="container">
+    <div class="row">
+
+      <!-- ==================================
+           LEFT SIDEBAR col-xs-2
+           ================================== -->
+      {% include 'laplacian/sidebar_left_laplacian.html' %}
+
+      <!-- ==================================
+           col 2/3: MAIN CONTENT - middle
+           ================================== -->
+      <div class="col-xs-7">
+        <!--div class="category_online" style="border-left: thick solid #0000A0; "-->
+        <img src="/static/images/river.gif" style="display: none"
+          class="img-responsive freezeframe freezeframe-responsive">
+
+        <!--div class="category_online" style="border-left: thick solid #0000A0; "-->
+        <div id="container_main_middle" style="margin-left:-20px">
+          <!--
+                MAIN CONTENT HERE !
+          -->
+          <h3>Distributions<h3>
+
+          <div id="div_userinput">
+
+            <p style="font-size: 13px; width: 100%">
+              <a href="#" id="explain_modal" style="font:8px; text-decoration:none;">*Explanation</a
+            </p>
+            <p style="font-size: 13px; margin-top:-7px; margin-float: left">
+              <a href="quant_code_random">Random PMF code</a>
+            </p>
+            <div style="clear: both">
+            </div>
+
+            <div id="div_form">
+                <form action="{% url 'distributions' %}" method="post">
+                  {% csrf_token %}
+                  <fieldset class="form-group">
+                      <label for="distributions" style="color:#1a1616;">Distributions:</label>
+                      <select id="distributions" name="distributions" class="form-control" style="width: 120px; padding-left: 7px">
+                        <option value="normal">Normal</option>
+                        <option value="lognormal">Lognormal</option>
+                        <option value="custom">PMF: { -1: 0.01, 0: 0.3, 1 :0.58, 2: 0.1, 3: 0.01 } &nbsp;</option>
+                      </select>
+                  </fieldset>
+
+                  <fieldset class="form-group" style="margin-top:10px">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <p style="font-size:14px; margin-bottom:-0.01em">Paramaters - mu, sigma:</p>
+                      <input type="text" id="mu" name="mu" class="form-control" style="width: 100px; margin-right:10px; float:left; padding-left:6px"
+                        value="{% if user_entered %} {{user_entered.mu}} {% else %}0.0{% endif %}"> &nbsp;&nbsp;
+                      <input type="text" id="std" name="std" class="form-control" style="width: 100px; float:left; padding-left:6px"
+                        value="{% if user_entered %} {{user_entered.std}} {% else %}1.0{% endif %}"> &nbsp;&nbsp;
+                      <!--input type="submit" value="Search"  -->
+                      <!--input id="input_btn_search" type="submit" name="btn" class="btn btn-success" value="Search" /-->
+                    </div>
+                    <div class="col-xs-6">
+                      <p style="font-size:14px; margin-bottom:-0.01em">Iterations (Max 10000):</p>
+                      <input type="text" id="iterations" name="iterations" class="form-control" style="width: 80px; float:left; padding-left:6px"
+                          value="{% if user_entered %} {{user_entered.iterations}} {% else %}1000{% endif %}"> &nbsp;&nbsp;
+                    </div>
+                  </div>
+                  <div style="clear:both;"></div>
+                  </fieldset>
+                  {% if error_message %}
+                  <p style="color: #d40000;font: 13px sans-serif; margin: 5px 5px 0 0">{{ error_message }}</p>
+                  {% endif %}
+                  <!--input id="input_btn_search" type="submit" class="btn btn-info btn-sm" value="Run" /-->
+                  <!--button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"-->
+                  <input type="submit" value="Run" class="btn btn-info btn-sm"
+                    style="margin-top: 15px; width: 80px"/>
+                </form>
+
+                <div style="margin-bottom: 40px">
+                </div>
+
+            </div>   <!-- DIV form -->
+
+          </div>  <!-- user input -->
+
+          <div id="result" class="result" style="display: none; margin-top: 10px; margin-bottom: 30px">
+            <!--div class="row row_result">
+              <div class="col-xs-12"-->
+
+            <p class="result_title" style="text-align: center">
+              Histogram
+            </p>
+
+            <div id="container_chart">
+              <div id="chart00"></div>
+              <div id="chart01"></div>
+              <div id="chart02"></div>
+              <div id="chart03"></div>
+              <div style="float:left"></div>
+              <div style="float:clear"></div>
+            </div>
+
+          </div>  <!-- id result -->
+          <div style="margin-bottom: 70px"></div>
+
+        </div>   <!-- MAIN CONTENT END -->
+      </div>  <!-- end col-xs-7 middle -->
+
+      <!-- ==================================
+           RIGHT SIDEBAR col-xs-2
+           ================================== -->
+      {% include 'laplacian/sidebar_right_laplacian.html' %}
+
+    </div>  <!-- end row -->
+  </div>  <!-- container end-->
+
+
+  <!-- =========================================================================
+                                       JS
+       =========================================================================
+  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/jquery.min.js"><\/script>')</script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <!--script src="/static/js/bootstrap.min.js" type="text/javascript" ></script-->
+
+  <script src="/static/js/jquery.sticky.js" type="text/javascript" ></script>
+
+  <!-- Customizable plugin edit according to your needs
+       BUT THIS NEEDS TO BE BEFORE ALL REST OF JS!
+  -->
+  <script src="/static/js/custom.js" type="text/javascript"></script>
+
+  <script src="/static/js/jquery-ui.min.js" type="text/javascript"></script>
+  <!--on scroll animation-->
+  <script src="/static/js/wow.min.js" type="text/javascript"></script>
+  <script src="/static/js/owl.js" type="text/javascript"></script>
+  <!--script src="/static/js/owl.carousel.min.js" type="text/javascript"></script-->
+
+  <script src="/static/js/jquery.magnific-popup.min.js" type="text/javascript"></script>
+
+  <script src="/static/js/jquery.mb.YTPlayer.min.js" type="text/javascript"></script>
+
+  <script src="/static/js/jquery.easing.1.3.min.js" type="text/javascript"></script>
+
+  <!--
+  <script type="text/javascript" src="/static/js/revolution-custom.js"></script>
+  <script src="/static/js/cube-portfolio.js" type="text/javascript"></script>
+  <script src="/static/js/pace.js" type="text/javascript"></script>
+  -->
+
+  <script src="/static/js/jCollapsible.js" type="text/javascript" ></script>
+
+  <script src="/static/js/jquery.color.js" type="text/javascript"></script>
+  <script src="/static/js/jquery-glowing.js" type="text/javascript"></script>
+
+  <!--flex slider plugin-->
+  <script src="/static/js/jquery.flexslider-min.js" type="text/javascript"></script>
+  <!--parallax background plugin-->
+  <script src="/static/js/jquery.stellar.min.js" type="text/javascript"></script>
+  <!--digit countdown plugin-->
+  <script src="/static/js/jquery.counterup.min.js" type="text/javascript"></script>
+  <script src="/static/js/waypoints.js"></script>
+
+  <script src="https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js"></script>
+  <script src="/static/js/freezeframe.min.js"></script>
+
+  <!-- common utils -->
+  <script src="/static/js/utils.js" type="text/javascript"></script>
+
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+  <!--script src="/static/js/d3.v3.min.js" type="text/javascript"></script-->
+  <script src="http://d3js.org/topojson.v0.min.js" type="text/javascript" charset="utf-8"></script>
+  <!--script src="/static/js/topojson-1.0.min.js"></script-->
+  <script src="/static/js/d3.geo.projection.min.js" type="text/javascript" charset="utf-8"></script>
+  <!--script src="/static/js/d3.geo.tile.v0.min.js"-->
+  <script src="/static/js/d3.geo.tile.js"></script>
+  <script src="/static/js/charts.src.qdc.js"></script>
+
+  <!-- JS for THIS SITE -->
+  <script src="/static/js/app_laplacian.js" type="text/javascript"></script>
+
+  <!-- JS for THIS SPECIFIC TEMPLATE -->
+  <!--script src="/static/js/geo_sat_tiles.js" type="text/javascript"></script-->
+
+  <script type="text/javascript">
+    $(function() {
+
+      $('#topbar').scrollTop(0);
+
+      $("#explain_modal").click(function(){
+        $('#modal_').modal('show');
+      });
+
+      $("#result").hide();
+      var success = {{success}};
+      if (success == 1){
+        go_chart_histogram0();
+        //go_chart_histogram1();
+        //go_chart_histogram2();
+        $("#result").show();
+        /* $('#result').css('display','block'); */
+      }
+
+    });
+  </script>
+
+  <script type="text/javascript">
+
+    function go_chart_histogram0(){
+      chart_data = {{chart_data | safe}};
+
+      var plotLines = [{
+          "value": 0.052742011049155,
+          "width": 2,
+          "color": "#666",
+          "zIndex": 10,
+          "dashStyle": "Dash",
+          "label": {
+            "text": "m",
+            "rotation": 0,
+            "align": "center",
+            "x": 0,
+            "y": -5,
+            "style": {
+              "fontSize": "10px"
+            }
+          }
+        }, {
+          "value": -0.89967056903087,
+          "width": 1,
+          "color": "#999",
+          "dashStyle": "Dash",
+          "zIndex": 10,
+          "label": {
+            "text": "-1s",
+            "rotation": 0,
+            "align": "center",
+            "x": 0,
+            "y": -5,
+            "style": {
+              "fontSize": "10px"
+            }
+          }
+        }, {
+          "value": 1.0051545911292,
+          "width": 1,
+          "color": "#999",
+          "dashStyle": "Dash",
+          "zIndex": 10,
+          "label": {
+            "text": "+1s",
+            "rotation": 0,
+            "align": "center",
+            "x": 0,
+            "y": -5,
+            "style": {
+              "fontSize": "10px"
+            }
+          }
+        }, {
+          "value": -1.8520831491109,
+              "width": 1,
+              "color": "#999",
+              "dashStyle": "Dash",
+              "zIndex": 10,
+              "label": {
+              "text": "-2s",
+                  "rotation": 0,
+                  "align": "center",
+                  "x": 0,
+                  "y": -5,
+                  "style": {
+                  "fontSize": "10px"
+              }
+          }
+      }, {
+          "value": 1.9575671712092,
+              "width": 1,
+              "color": "#999",
+              "dashStyle": "Dash",
+              "zIndex": 10,
+              "label": {
+              "text": "+2s",
+                  "rotation": 0,
+                  "align": "center",
+                  "x": 0,
+                  "y": -5,
+                  "style": {
+                  "fontSize": "10px"
+              }
+          }
+      }, {
+          "value": -2.8044957291909,
+              "width": 1,
+              "color": "#999",
+              "dashStyle": "Dash",
+              "zIndex": 10,
+              "label": {
+              "text": "-3s",
+                  "rotation": 0,
+                  "align": "center",
+                  "x": 0,
+                  "y": -5,
+                  "style": {
+                  "fontSize": "10px"
+              }
+          }
+      }, {
+          "value": 2.9099797512892,
+              "width": 1,
+              "color": "#999",
+              "dashStyle": "Dash",
+              "zIndex": 10,
+              "label": {
+              "text": "+3s",
+                  "rotation": 0,
+                  "align": "center",
+                  "x": 0,
+                  "y": -5,
+                  "style": {
+                  "fontSize": "10px"
+              }
+          }
+      }];
+
+      var plotBands = [{
+          "from": -0.89967056903087,
+              "to": 1.0051545911292,
+              "color": "rgba(184,210,236,.1)",
+              "zIndex": 0
+      }, {
+          "from": -1.8520831491109,
+              "to": 1.9575671712092,
+              "color": "rgba(184,210,236,.1)",
+              "zIndex": 0
+      }, {
+          "from": -2.8044957291909,
+              "to": 2.9099797512892,
+              "color": "rgba(184,210,236,.1)",
+              "zIndex": 0
+      }];
+
+      var chart = new Charts.Chart({
+          chart: {
+              renderTo: 'chart00',
+              type: 'column',
+              alignTicks: false,
+              marginTop: 25,
+              showAxes: true
+          },
+          exporting: {
+              enabled: false
+          },
+          title: {
+              text: ''
+          },
+          tooltip: {
+              borderWidth: 1,
+              formatter: function () {
+                  return '<b>Range:</b><br/> ' + this.x + '<br/>' +
+                      '<b>Count:</b> ' + this.y;
+              }
+          },
+          plotOptions: {
+              series: {
+                  minPointLength: 1,
+                  shadow: false,
+                  marker: {
+                      enabled: false
+                  }
+              },
+              area: {
+                  events: {
+                      legendItemClick: function (e) {
+                          if (this.name == 'Sigma Bands') {
+                              toggleBands(this.chart);
+                          }
+                      }
+                  }
+              }
+          },
+          xAxis: {
+              lineColor: '#999',
+              tickColor: '#ccc',
+              plotLines: plotLines,
+              plotBands: plotBands
+          },
+          yAxis: {
+              title: {
+                  text: ''
+              },
+              gridLineColor: '#e9e9e9',
+              tickWidth: 1,
+              tickLength: 3,
+              tickColor: '#ccc',
+              lineColor: '#ccc',
+              endOnTick: false,
+          },
+          series: [{
+              name: 'Sample Distribution',
+              /* data: [
+                  [-2.3138013781265, 1],
+                  [-2.0943590644815, 4],
+                  [-1.8749167508365, 11],
+                  [-1.6554744371915, 12],
+                  [-1.4360321235466, 18],
+                  [-1.2165898099016, 18],
+                  [-0.99714749625658, 24],
+                  [-0.77770518261159, 21],
+                  [-0.55826286896661, 36],
+                  [-0.33882055532162, 40],
+                  [-0.11937824167663, 51],
+                  [0.10006407196835, 40],
+                  [0.31950638561334, 42],
+                  [0.53894869925832, 36],
+                  [0.75839101290331, 40],
+                  [0.9778333265483, 36],
+                  [1.1972756401933, 23],
+                  [1.4167179538383, 18],
+                  [1.6361602674833, 9],
+                  [1.8556025811282, 12],
+                  [2.0750448947732, 3],
+                  [2.2944872084182, 4]
+              ],
+              */
+              data: chart_data,
+              pointRange: 0.21944231364499,
+              borderWidth: .5,
+              borderColor: '#666',
+              pointPadding: .015,
+              groupPadding: 0,
+              color: '#e3e3e3'
+          }, {
+              type: 'spline',
+              lineWidth: 1,
+              name: 'Normal Distribution',
+              color: 'rgba(90,155,212,.75)',
+              fillColor: 'rgba(90,155,212,.15)',
+              data: [[-3.2807020192309, 0.0021874911181827958], [-3.0425988742109, 0.005086069231012639], [-2.8044957291909, 0.011108996538242271], [-2.5663925841709, 0.022794180883611532], [-2.3282894391509, 0.04393693362340816], [-2.0901862941309, 0.07955950871822728], [-1.8520831491109, 0.1353352832366129], [-1.6139800040909, 0.21626516682989264], [-1.3758768590709, 0.3246524673583436], [-1.1377737140509, 0.4578333617716049], [-0.89967056903087, 0.6065306597126441], [-0.66156742401087, 0.7548396019890145], [-0.42346427899086, 0.8824969025846038], [-0.18536113397085, 0.9692332344763498], [0.052742011049155, 1.0], [0.29084515606916, 0.9692332344763498], [0.52894830108917, 0.8824969025846038], [0.76705144610918, 0.7548396019890145], [1.0051545911292, 0.6065306597126225], [1.2432577361492, 0.4578333617716049], [1.4813608811692, 0.3246524673583436], [1.7194640261892, 0.21626516682989264], [1.9575671712092, 0.1353352832366129], [2.1956703162292, 0.07955950871822728], [2.4337734612492, 0.04393693362340816], [2.6718766062692, 0.022794180883611532], [2.9099797512892, 0.011108996538242271], [3.1480828963092, 0.005086069231012639]]
+              /*  [
+                  [-3.2807020192309, 0.10168053006185],
+                  [-3.0425988742109, 0.23641431548771],
+                  [-2.8044957291909, 0.51637633957668],
+                  [-2.5663925841709, 1.0595354537927],
+                  [-2.3282894391509, 2.0423080409267],
+                  [-2.0901862941309, 3.6981421093266],
+                  [-1.8520831491109, 6.2907516383431],
+                  [-1.6139800040909, 10.052592494842],
+                  [-1.3758768590709, 15.090728685704],
+                  [-1.1377737140509, 21.28133847858],
+                  [-0.89967056903087, 28.193192861774],
+                  [-0.66156742401087, 35.086995418605],
+                  [-0.42346427899086, 41.020853564556],
+                  [-0.18536113397085, 45.052593912695],
+                  [0.052742011049155, 46.482716760157],
+                  [0.29084515606916, 45.052593912695],
+                  [0.52894830108917, 41.020853564556],
+                  [0.76705144610918, 35.086995418605],
+                  [1.0051545911292, 28.193192861773],
+                  [1.2432577361492, 21.28133847858],
+                  [1.4813608811692, 15.090728685704],
+                  [1.7194640261892, 10.052592494842],
+                  [1.9575671712092, 6.2907516383431],
+                  [2.1956703162292, 3.6981421093266],
+                  [2.4337734612492, 2.0423080409267],
+                  [2.6718766062692, 1.0595354537927],
+                  [2.9099797512892, 0.51637633957668],
+                  [3.1480828963092, 0.23641431548771]
+              ]
+            */
+          }, {
+              type: 'area',
+              name: 'Sigma Bands',
+          }]
+      });
+
+      function toggleBands(chart) {
+          console.log('index');
+
+          var i = chart.xAxis[0].plotLinesAndBands.length;
+          if (i > 0) {
+              while (i--) {
+                  chart.xAxis[0].plotLinesAndBands[i].destroy();
+              }
+          } else {
+              chart.xAxis[0].update({
+                  plotLines: plotLines,
+                  plotBands: plotBands
+              });
+          }
+
+      }
+
+    }
+  </script>
+
+  <script type="text/javascript">
+
+    function go_chart_histogram1(){
+
+      var chart = new Charts.Chart({
+        chart: {
+            renderTo: 'chart01',
+            defaultSeriesType: 'column',
+            borderWidth: 0,
+            backgroundColor: 'light gray',
+            borderColor: 'black',
+            plotBackgroundColor: 'white',
+            plotBorderWidth: 1,
+            plotBorderColor: 'white'
+        },
+        title: {
+            text: 'Histogram'
+        },
+        plotOptions: {
+            column: {
+                shadow: false,
+                borderWidth: 0.5,
+                borderColor: 'black',
+                pointPadding: 0,
+                groupPadding: 0,
+                color: 'rgba(100,80,60,1)'
+            },
+            spline: {
+                shadow: false,
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        xAxis: [{
+            labels: {
+                rotation: -90,
+                y: 40,
+                style: {
+                    fontSize: '8px',
+                    fontWeight: 'normal',
+                    color: 'black'
+                }
+            },
+            lineWidth: 0,
+            lineColor: 'black',
+            tickLength: 10
+        }, {
+            opposite: true
+        }],
+        yAxis: {
+            title: {
+                text: ' '
+            },
+            gridLineColor: 'gray',
+            tickWidth: 1,
+            tickLength: 5,
+            tickColor: 'black',
+            lineColor: 'black',
+            tickInterval: 2
+        },
+        series: [{
+            name: 'Bars',
+            data: [1.0, 9.0, 30.0, 19.0, 13.0, 10.0, 7.0, 1.0]
+        }, {
+            name: 'Curve',
+            type: 'spline',
+            xAxis: 1,
+            //pointInterval: 0.04,
+            data: [0.020678422694354652, 0.02375298175513706, 0.027246639227579562, 0.031210579109319545, 0.0357013626329489, 0.040781372446370083, 0.046519277595307572, 0.052990518139205862, 0.060277807859864974, 0.068471653115774647, 0.077670885454774352, 0.08798320512454523, 0.099525732116319779, 0.11242556084459229, 0.12682031400778432, 0.14285869059585463, 0.16070100241567695, 0.18051969289945097, 0.20249983135221356, 0.22683957518929615, 0.25375059212190959, 0.28345843367833057, 0.31620285090970851, 0.35223804263433706, 0.39183282613407416, 0.43527071984376109, 0.48284992728173742, 0.53488321126993144, 0.59169764739869068, 0.65363424571761208, 0.72104742979187064, 0.7943043625662366, 0.87378410893751, 0.95987662556086217, 1.0529815692156308, 1.153506916038803, 1.2618673851052358, 1.3784826611959204, 1.5037754131499961, 1.6381691059410133, 1.7820856065480204, 1.9359425857996289, 2.1001507206427044, 2.2751107037121421, 2.46121006963582, 2.6588198501775246, 2.8682910730750772, 3.0899511222421636, 3.324099979838782, 3.5710063735415449, 3.8309038551238848, 4.1039868391477663, 4.3904066331307332, 4.6902674929425467, 5.003622739360237, 5.3304709736255251, 5.67075243146128, 6.0243455162717945, 6.39106355313614, 6.7706518056672467, 7.1627847978191408, 7.5670639822517272, 7.9830157958832553, 8.4100901417575731, 8.8476593343145247, 9.295017542573941, 9.7513807626288109, 10.215887347203314, 10.687599115884883, 11.165503065013937, 11.648513691146064, 12.135475936532393, 12.625168759246767, 13.116309324480802, 13.607557807196654, 14.097522789842714, 14.584767232276771, 15.067814984485027, 15.545157806217546, 16.015262851367137, 16.476580568885559, 16.927552966344049, 17.366622176988116, 17.792239266389419, 18.202873210635765, 18.597019974493218, 18.973211615183782, 19.330025335401718, 19.666092407985129, 19.980106894300359, 20.270834078907665, 20.5371185444674, 20.777891813115559, 20.992179483671439, 21.179107798012442, 21.337909574722637, 21.467929453642959, 21.568628401159923, 21.639587432895656, 21.680510517823237, 21.69122663563957, 21.671690967387391, 21.62198520772715, 21.542316995814222, 21.433018470329543, 21.294543962734966, 21.127466851171729, 20.932475605487564, 20.710369061565384, 20.462050970340616, 20.188523873547954, 19.890882364253905, 19.570305795539905, 19.228050505243925, 18.865441628399743, 18.483864571897104, 18.084756227900108, 17.669596003695148, 17.239896745895102, 16.797195636317621, 16.343045135407536, 15.879004046823448, 15.406628773803172, 14.92746483421797, 14.443038696885514, 13.954849996807781, 13.464364181609051, 12.973005635652728, 12.482151322197572, 11.993124977600786, 11.507191885072862, 11.025554248923257, 10.549347183689031, 10.079635326091397, 9.6174100714914612, 9.1635874304876577, 8.7190064955755968, 8.2844285024340127, 7.8605364654566348, 7.4479353626606875, 7.0471528411016156, 6.6586404104349874, 6.2827750893077949, 5.9198614668404117, 5.570134139578923, 5.233760482948667, 4.9108437154102305, 4.6014262131897556, 4.3054930336004524, 4.0229756055622321, 3.7537555469264308, 3.49766856958563, 3.25450843505373, 3.0240309251967648, 2.8059577950370258, 2.5999806769980021, 2.4057649085620652, 2.222953258034019, 2.0511695259002956, 1.8900220021066851, 1.7391067624100061, 1.5980107897569662, 1.4663149093757808, 1.343596528904804, 1.2294321774035129, 1.1233998394735394, 1.0250810829439672, 0.93406298063190574, 0.8499398285661347, 0.77231466475119281, 0.7008005940477664, 0.6350219260514397, 0.5746151339673724, 0.51922964340726974, 0.46852846078307142, 0.42218865154709112, 0.37990167894030535, 0.34137361416981321, 0.30632522905492171, 0.27449198217122545, 0.24562390939638729, 0.21948542953317413, 0.1958550753678722, 0.17452516012842712, 0.15530138884920539, 0.13800242364029566, 0.12245941131029405, 0.10851548121339055, 0.096025220594304225, 0.084854134097398032, 0.074878093497407816, 0.065982783106051074, 0.058063145717768432, 0.05102283338458314, 0.044773666759207173, 0.039235106220922009, 0.034333737503457355, 0.0300027740803754, 0.026181578132941755, 0.022815201529105014]
+        }]
+      });
+    }
+
+  </script>
+
+  <script type="text/javascript">
+    function go_chart_histogram2(){
+      var chart = new Charts.Chart({
+        chart: {
+          renderTo:'chart02',
+          defaultSeriesType:'column',
+          borderWidth:0,
+          backgroundColor:'#eee',
+          borderWidth:1,
+          borderColor:'#ccc',
+          plotBackgroundColor:'#fff',
+          plotBorderWidth:1,
+          plotBorderColor:'#ccc'
+      },
+      credits:{enabled:false},
+      exporting:{enabled:false},
+      title:{text:'Histogram Test'},
+      legend:{
+          //enabled:false
+      },
+      tooltip:{
+          borderWidth:1,
+          formatter:function() {
+              return '<b>Range:</b><br/> '+ this.x +'<br/>'+
+              '<b>Count:</b> '+ this.y;
+          }
+      },
+      plotOptions:{
+          column:{
+              shadow:false,
+              borderWidth:.5,
+              borderColor:'#666',
+              pointPadding:0,
+              groupPadding:0,
+              color: 'rgba(204,204,204,.85)'
+          },
+          spline:{
+              shadow:false,
+              marker:{
+                  radius:1
+              }
+          },
+          areaspline:{
+              color:'rgb(69, 114, 167)',
+              fillColor:'rgba(69, 114, 167,.25)',
+              shadow:false,
+              marker:{
+                  radius:1
+              }
+          }
+      },
+      xAxis:{
+          categories: ['> 48.00 =< 51.81','> 51.81 =< 54.63','> 54.63 =< 57.44','> 57.44 =< 60.25','> 60.25 =< 63.06','> 63.06 =< 65.88','> 65.88 =< 68.69','> 68.69 =< 71.50','> 71.50 =< 74.31','> 74.31 =< 77.13','> 77.13 =< 79.94','> 79.94 =< 82.75','> 82.75 =< 85.56','> 85.56 =< 88.38','> 88.38 =< 91.19','> 91.19 =< 94.00'],
+          labels:{
+              rotation:-90,
+              y:40,
+              style: {
+                  fontSize:'8px',
+                  fontWeight:'normal',
+                  color:'#333'
+              },
+          },
+          lineWidth:0,
+          lineColor:'#999',
+          tickLength:70,
+          tickColor:'#ccc',
+      },
+      yAxis:{
+          title:{text:''},
+          //maxPadding:0,
+          gridLineColor:'#e9e9e9',
+          tickWidth:1,
+          tickLength:3,
+          tickColor:'#ccc',
+          lineColor:'#ccc',
+          tickInterval:25,
+          //endOnTick:false,
+      },
+      series: [{
+          name:'Bins',
+          data: [3,2,1,6,10,5,13,9,14,21,23,66,47,14,5,2],
+      },{
+          name:'Curve',
+          type:'spline',
+          visible:false,
+          data: [3,2,1,6,10,5,13,9,14,21,23,66,47,14,5,2],
+          //color: 'rgba(204,204,255,.85)'
+      },{
+          name:'Filled Curve',
+          type:'areaspline',
+          visible:false,
+          data: [3,2,1,6,10,5,13,9,14,21,23,66,47,14,5,2],
+          //color: 'rgba(204,204,255,.85)'
+      }]
+
+      });
+    }
+  </script>
+
+
+  <script type="text/javascript">
+    var chart=null;
+    function go_chart_dual_axis(){
+      $('#container_chart').charts({
+          chart: {
+              zoomType: 'xy'
+          },
+          title: {
+              text: 'Average Monthly Weather Data for Tokyo'
+          },
+          subtitle: {
+              text: 'Source: WorldClimate.com'
+          },
+          xAxis: [{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          }],
+          yAxis: [{ // Primary yAxis
+              labels: {
+                  format: '{value}°C',
+                  style: {
+                      color: Charts.getOptions().colors[2]
+                  }
+              },
+              title: {
+                  text: 'Temperature',
+                  style: {
+                      color: Charts.getOptions().colors[2]
+                  }
+              },
+              opposite: true
+
+          }, { // Secondary yAxis
+              gridLineWidth: 0,
+              title: {
+                  text: 'Rainfall',
+                  style: {
+                      color: Charts.getOptions().colors[0]
+                  }
+              },
+              labels: {
+                  format: '{value} mm',
+                  style: {
+                      color: Charts.getOptions().colors[0]
+                  }
+              }
+
+          }, { // Tertiary yAxis
+              gridLineWidth: 0,
+              title: {
+                  text: 'Sea-Level Pressure',
+                  style: {
+                      color: Charts.getOptions().colors[1]
+                  }
+              },
+              labels: {
+                  format: '{value} mb',
+                  style: {
+                      color: Charts.getOptions().colors[1]
+                  }
+              },
+              opposite: true
+          }],
+          tooltip: {
+              shared: true
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'left',
+              x: 120,
+              verticalAlign: 'top',
+              y: 80,
+              floating: true,
+              backgroundColor: (Charts.theme && Charts.theme.legendBackgroundColor) || '#FFFFFF'
+          },
+          series: [{
+              name: 'Rainfall',
+              type: 'column',
+              yAxis: 1,
+              data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+              tooltip: {
+                  valueSuffix: ' mm'
+              }
+
+          }, {
+              name: 'Sea-Level Pressure',
+              type: 'spline',
+              yAxis: 2,
+              data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7],
+              marker: {
+                  enabled: false
+              },
+              dashStyle: 'shortdot',
+              tooltip: {
+                  valueSuffix: ' mb'
+              }
+
+          }, {
+              name: 'Temperature',
+              type: 'spline',
+              data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+              tooltip: {
+                  valueSuffix: ' °C'
+              }
+          }]
+      });
+    }
+  </script>
+
+</body>
+</html>

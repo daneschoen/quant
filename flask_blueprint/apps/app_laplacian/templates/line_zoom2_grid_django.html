@@ -1,0 +1,1144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+
+<html lang="en-us" xmlns:ng="http://angularjs.org" ng-app>
+<!--html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US"-->
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
+  <!--meta charset="utf-8"-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+
+  <title>Dynamic line and histogram chart</title>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <!--link href="/static/css/bootstrap.min.css" rel="stylesheet"-->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-glyphicons.css" type="text/css" rel="stylesheet" />
+
+  <!--link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/base/jquery-ui.css" rel="stylesheet" /-->
+  <!--link href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" type="text/css" rel="stylesheet" /-->
+  <!--link href="/static/js/jquery-ui-1.10.3.css" rel="stylesheet" /-->
+
+  <!--link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"-->
+  <link href="/static/css/font-awesome.css" rel="stylesheet" />
+
+  <!--[if IE 7]>
+    <link href="/static/css/font-awesome-ie7.min.css" rel="stylesheet" />
+  <![endif]-->
+
+  <!-- fonts -->
+  <link href="/static/css/css.css" rel="stylesheet" />
+
+  <!-- themes -->
+  <link href="/static/css/boot_dash.css" rel="stylesheet" />
+  <link href="/static/css/theme.css" rel="stylesheet" />
+
+
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/static/css/ace-ie.min.css" />
+  <![endif]-->
+
+  <!-- DATEPICKER AND TIMEPICKER CSS -->
+  <link href="/static/css/datepicker.css" rel="stylesheet">
+  <!--link href="/static/css/bootstrap-timepicker.min.css" rel="stylesheet"-->
+  <!--link href="../static/css/prettify.css" rel="stylesheet"-->
+  <link href="/static/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+  <!--
+    styles for this page
+  -->
+  <link href="/static/css/index.css" rel="stylesheet">
+
+  <!--
+    inline styles for this page
+  -->
+  <style type='text/css'>
+    body {
+      font: 10px sans-serif;
+      /*margin: 0;*/
+      background-color: #f7f7f7;
+    }
+    
+    .plot {
+       fill: rgba(250, 250, 255, 0.6);
+    }
+    .grid .tick {
+      stroke: lightgrey;
+      opacity: 0.7;
+    }
+    .grid path {
+      stroke-width: 0;
+    }
+    .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+    .x.axis path {
+      display: none;
+    }
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.3px;
+    }
+    
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+    .focus circle {
+      fill: none;
+      /* stroke: steelblue; */
+    }    
+    
+    .bar rect {
+      fill: steelblue;
+      /* shape-rendering: crispEdges; */
+    }
+    .bar text {
+      fill: #fff;
+    }
+    .x.axis line {
+      stroke: #ccc;   /* #fff */
+      stroke-opacity: .5;
+    }           
+    .chart rect {
+      stroke: white;
+      fill: steelblue;
+    }
+    
+    p.reportTitle{
+      font: 23px sans-serif;
+      text-align: center;
+    }
+    p.reportSubTitle{
+      font: 17px sans-serif;
+      margin-left:50px;
+    }
+
+    .modal-body{
+      font: 13px sans-serif;
+    }
+
+  </style>
+
+</head>
+
+
+<!--body class="navbar-fixed pull-top"-->
+<!--body class="pull-top"-->
+<body class="navbar-fixed">
+
+  {% include 'laplacian/navbar.html' %}
+
+  <!--
+  Modal
+  -->
+  <div class="modal fade modal-nobackdrop" id="modal_x" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">Rolling Correlation</h4>
+        </div>
+        <div class="modal-body">
+          The multi-line chart is enabled to zoom and pan. Double click to revert to original view. Single click
+          any individual line for detailed view of that series in the larger chart below. As mouse moves in the multi-line chart the histogram updates
+          to show the level of gaussian characteristics and variance level of the data set.
+          <br><br>
+          This app's stack consists of MongoDB, Django, Python, NumPy, SciPy, Pandas, Matplotlib, and D3.js
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 50px"></div>
+
+  <div>
+    <br>
+    <p class="reportTitle" style="margin-bottom: 30px">Variance and Detail Chart</p>
+    
+    <div id="svg_1_1" style="width:680px; height:370px; float:left;">
+      <p class="reportSubTitle">Variance Chart <a href="#" id="explain_modal" style="font: 12px sans-serif; text-decoration:none;">&nbsp;&nbsp;&nbsp;*Explanation</a></p>
+    </div>
+    <div id="svg_1_2" style="width:300px; height:370px; float:left;">
+      <p class="reportSubTitle">Histogram</p>
+    </div>
+    
+    <div style="clear:both;">
+  </div>
+ 
+  <div>
+    <div id="svg_2_0" style="width:1000px; height:400px; float:left;">
+      <p class="reportSubTitle" id="detail_identifier">Detail Chart &nbsp;- &nbsp;Id:1 &nbsp;&nbsp;&nbsp;Line:0</p>
+    </div>  
+  </div>
+
+
+  <!--=============== JS libraries ===============-->
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+  <script>window.jQuery || document.write('<script src="/static/js/jquery-1.10.2.min.js"><\/script>')</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+  <!--script src="/static/js/jquery-ui-1.10.3.js" type="text/javascript" ></script-->
+  <!--script src="/static/js/jquery.tools.min.js" type="text/javascript" ></script-->
+  <!--script src="/static/jquery.ui.timepicker.js" type="text/javascript"></script-->
+
+  <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+  <!--script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script-->
+  <!--script> if(typeof($.fn.modal) === 'undefined') {document.write('<script src="/static/js/bootstrap.min.js"><\/script>')}</script-->
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+  <![endif]-->
+    <!--script src="/static/js/html5shiv.js"></script-->
+    <!--script src="/static/js/respond.min.js"></script-->
+
+  <!--script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"></script-->
+  <script src="/static/js/d3.min.js" type="text/javascript"></script>
+
+  <!--=============== JS custom ===============-->
+  <script src="/static/js/utils.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    $(function() {
+
+      $("#explain_modal").click(function(){
+        $('#modal_x').modal('show');
+      });
+
+    });
+  </script>
+
+  <script type="text/javascript">
+    var svg_1_2_properties = {};
+    svg_1_2_properties['chart_id'] = 'svg_1_2';
+    svg_1_2_properties['chart_width'] = 300;
+    svg_1_2_properties['chart_height'] = 300;
+    svg_1_2_properties['margin_top'] = 10;
+    svg_1_2_properties['margin_right'] = 10;
+    svg_1_2_properties['margin_bottom'] = 35;
+    svg_1_2_properties['margin_left'] = 43
+    
+    var svg_2_0_properties = {
+      chart_id        : "svg_2_0",
+      parent          : null,
+      //labels        : [ "X", "Y" ],
+      xyTitles        : ["Time", "Detail"],
+      //listeners     : [],
+      //data          : [[0,0],[1,1],[2,4],[3,9],[4,16]],
+      chart_width     : 900,
+      chart_height    : 300,
+      margin_top      : 10,
+      margin_right    : 20,
+      margin_bottom   : 35,
+      margin_left     : 35,
+      //xi              : 0,
+      //yi              : 1,
+      //xoffset         : 0,
+      //yoffset         : 0,
+      chart_color       : ""
+      
+    };
+    
+  </script>
+  
+  <script>
+    Array.prototype.compare = function (array) {
+      // if the other array is a falsy value, return
+      if (!array)
+          return false;
+  
+      // compare lengths - can save a lot of time
+      if (this.length != array.length)
+          return false;
+  
+      for (var i = 0; i < this.length; i++) {
+          // Check if we have nested arrays
+          if (this[i] instanceof Array && array[i] instanceof Array) {
+              // recurse into the nested arrays
+              if (!this[i].compare(array[i]))
+                  return false;
+          }
+          else if (this[i] != array[i]) {
+              // Warning - two different object instances will never be equal: {id:2, x:20} != {x:20}
+              return false;
+          }
+      }
+      return true;
+    }
+    
+    Array.prototype.clone_shallow = function() {
+	return this.slice(0);
+    };
+  </script>
+  
+  <script type='text/javascript'>//<![CDATA[
+   //window.onload=function(){
+    $(document).ready(function() {
+      
+      var data_variance0 = [{id:0, x:0, y:5.85}, {id:0, x:1, y:3.5817986741990381}, {id:0, x:2, y:6.6545924507674342}, {id:0, x:3, y:7.7103677462019742}, {id:9, x:4, y:0.7429844753408281},
+            {id:0, x:5, y:3.7488519894379413}, {id:0, x:6, y:4.7273243567064205}, {id:0, x:7, y:1.6807714704345811}, {id:0, x:8, y:4.614318156658953},
+            {id:0, x:9, y:2.5352800020149668}, {id:0, x:10, y:0.4523580092811287}, {id:0, x:11, y:0.3746807378529138}, {id:0, x:12, y:0.31079937617301795},
+            {id:0, x:13, y:5.26774637468230955}, {id:0, x:14, y:1.25026127072551796}, {id:0, x:15, y:8.26026893133421536}, {id:0, x:16, y:9.296667652108105},
+            {id:0, x:17, y:7.35545043956392275}, {id:0, x:18, y:4.43014612545026853}, {id:0, x:19, y:6.5125317524705432}, {id:0, x:20, y:8.593537807642805}];
+            
+      var dataset_variance=[]
+      //dataset_variance.push(data_variance0);
+      
+      dataset_variance = [];
+      for (var s=0; s<4; s++){
+        dataset_variance.push(d3.range(data_variance0.length).map(function(i) {
+          return {id:s, x:data_variance0[i].x, y:data_variance0[i].y += rnd_snd()*2.0};
+        }))
+      }
+      
+      data_detail = [{
+        "date": 13577148000,
+            "value": 5.2
+      }, {
+        "date": 13577148500,
+            "value": 5.2
+      }, {
+        "date": 13577149000,
+            "value": 5.2
+      }, {
+        "date": 13577149500,
+            "value": 5.1
+      }, {
+        "date": 13577150000,
+            "value": 5.5
+      }, {
+        "date": 13577150500,
+            "value": 5.6
+      }, {
+        "date": 13577151000,
+            "value": 5.6
+      }, {
+        "date": 13577151500,
+            "value": 6
+      }, {
+        "date": 13577152000,
+            "value": 5.1
+      }, {
+        "date": 13577152500,
+            "value": 5.3
+      }, {
+        "date": 13577153000,
+            "value": 5.4
+      }];
+      
+      //foo =[];
+      var tmp
+      dataset_detail = [];
+      for (var s=0; s<dataset_variance.length; s++){
+        dataset_id = [];
+        for (var w=0; w<dataset_variance[0].length; w++){
+          dataset_id.push(d3.range(data_detail.length).map(function(i) {
+            tmp = Math.random()*2;
+            //foo.push(tmp);
+            return {date: data_detail[i].date, value: data_detail[i].value *= tmp};
+          }))
+        }  
+        dataset_detail.push(dataset_id);
+      }
+      
+      renderChart_variance("svg_1_1", 655,290, dataset_variance);
+      
+      svg_2_0_properties.data = dataset_detail[0][0];
+      svg_2_0_properties.data_color = "";
+      renderChart_detail(svg_2_0_properties);
+      
+      renderChart_hist_horizontal(svg_1_2_properties);
+    });
+    
+    
+    function get_svg_hist(){
+      var chart_width = 300;
+      var chart_height = 290;
+      var margin = {top: 20, right: 10, bottom: 10, left: 30},
+          width = chart_width - margin.right - margin.left,
+          height = chart_height - margin.top - margin.bottom;
+          
+      var svg_hist = d3.select("#svg_1_2").append("svg")      
+          .attr("width", width + margin.right + margin.left)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      
+      return svg_hist;
+    }
+    
+    
+    function renderChart_variance(chartid, chart_width, chart_height, dataset){ 
+      /*
+      var p =
+      {
+        parent          : null,
+        labels          : [ "X", "Y" ],
+        listeners       : [],
+        data            : [[0,0],[1,1],[2,4],[3,9],[4,16]],
+        width           : 600,
+        height          : 400,
+        xi              : 0,
+        yi              : 1,
+        xoffset         : 0,
+        yoffset         : 0
+      };
+      */      
+      var chart_id = "#" + chartid;
+      var margin = { top: 10, right: 42, bottom: 35, left: 35 };
+      
+      var width = chart_width - margin.left - margin.right;
+      var height = chart_height - margin.top - margin.bottom;
+      
+      var bisect = d3.bisector(function(d) { return d.x; }).left,
+          formatFloat = d3.format(",.4f"),
+          formatNum = function(d) { return formatFloat(d); };
+          
+      var color = d3.scale.category10();
+      
+      var s=0,
+          len_dataset=dataset.length;
+      
+      color.domain([0,len_dataset-1]);
+      
+      var x_minmax=[999999,-1],
+          y_minmax=[999999,-1];
+          
+      while (s < len_dataset) {
+        dataset[s].forEach(function(d) {
+            if (d.x < x_minmax[0]) {x_minmax[0] = d.x;};
+            if (d.x > x_minmax[1]) {x_minmax[1] = d.x;};
+            if (d.y < y_minmax[0]) {y_minmax[0] = d.y;};
+            if (d.y > y_minmax[1]) {y_minmax[1] = d.y;};
+        });
+        ++s;
+      }
+      y_minmax[0] = Math.max(0, y_minmax[0] - 0.05);
+      y_minmax[1] += 0.05;
+      
+      var x = d3.scale.linear()
+          .domain(x_minmax)
+          //.domain( [ 0, d3.max( dataset[0], function(d) { return d.x; } ) ] )
+          //.domain(d3.extent(chart_data, function (d) {
+          //  return d.date;
+          //}))
+          .range([0, width]);
+      
+      /*
+      var x = d3.scale.ordinal()
+      //.domain( [ 0, d3.max( dataset[0], function(d) { return d.x; } ) ] )
+          .domain( [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] )
+          .rangeBands([0, width]);  
+      */  
+        
+      var y = d3.scale.linear()
+          .domain(y_minmax)
+          //.domain(d3.extent(dataset[0], function (d) {
+          //  return d.y;
+          //}))
+          .range([height, 0]);
+    
+      var line = d3.svg.line()
+        .x(function (d) {
+            return x(d.x);
+        })
+        .y(function (d) {
+            return y(d.y);
+        });
+          
+      var zoom = d3.behavior.zoom()
+        .x(x)
+        .y(y)
+        //.scaleExtent([1, 8])
+        .on("zoom", zoomed);
+            
+      var svg = d3.select(chart_id)
+        .append("svg")
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(zoom)    //* have to call on g element
+        //.call(d3.behavior.zoom().on("zoom", update)).on("dblclick.zoom", null)
+        .on("dblclick.zoom", zoomed_reset);
+        //.on("touchstart.zoom", null);
+        
+      //d3.select("svg").on("dblclick.zoom", null);
+      
+      svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "plot");
+      
+      var get_x_axis = function() {
+        return d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(5);
+      };
+      var get_y_axis = function() {
+        return d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(5);
+      };
+      
+      var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .ticks(5);
+      var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5);
+      
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0, " + height + ")")
+        .call(xAxis)
+        .append("text")
+          .attr("class", "x label")
+          .attr("x", width/2)
+          .attr("y", 32)
+          //.attr("dx", ".71em")
+          .style("text-anchor", "middle")
+          .text("Line");
+          
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Level");
+          
+      svg.append("g")
+        .attr("class", "x grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(get_x_axis()
+          .tickSize(-height, 0, 0)
+          .tickFormat(""));
+      svg.append("g")
+        .attr("class", "y grid")
+        .call(get_y_axis()
+          .tickSize(-width, 0, 0)
+          .tickFormat(""));
+      
+      var clipid = chartid + "_clip";
+      var clip = svg.append("clipPath")
+        .attr("id", clipid)
+        //.attr("id", "clip")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height);  
+      
+      var chartBody = svg.append("g")
+        .attr("clip-path", "url(#" + clipid  + ")");
+        //.attr("clip-path", "url(#clip)");
+      
+      var s=0;
+        while (s < len_dataset) {
+        chartBody.append("path")
+            .datum(dataset[s])
+            .attr("class", "line")
+            .style("stroke", color(s))
+            .attr("d", line)
+        ++s;
+      }
+      
+      var focus = [];
+      var s=0;
+      while (s < len_dataset) {
+        focus[s] = svg.append("g")
+            .attr("class", "focus")
+            .style("display", "none");
+        focus[s].append("circle")
+          .style("stroke", color(s))
+          .attr("r", 3.0);
+        focus[s].append("text")
+          .attr("x", 8)
+          .attr("dy", ".35em");
+        ++s;
+      }    
+        
+      svg.append("rect")
+          .attr("class", "overlay")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", mouseover)
+          .on("mouseout", mouseout)
+          .on("click", click_detail)
+          //.on("mouseover", function() { focus1.style("display", null); })
+          //.on("mouseout", function() { focus1.style("display", "none"); })
+          .on("mousemove", mousemove);
+
+      function click_detail(){
+        var x_invert=[];
+        var s=0;
+        var variance_num;
+        var variance_id;        
+        var min_num=999999;
+        var min_id=999999;
+        while (s < len_dataset) {
+          x_r = x.invert(d3.mouse(this)[0]);
+          y_r = y.invert(d3.mouse(this)[1]);
+          
+          x_invert[s] = x.invert(d3.mouse(this)[0]);
+          var i = bisect(dataset[s], x_invert[s], 1),
+              d0 = dataset[s][i - 1],
+              d1 = dataset[s][i]; 
+          var d = x_invert[s] - d0.x > d1.x - x_invert[s] ? d1 : d0;
+          
+          //console.log(">");
+          //console.log(d.x + " , " + d.y);
+          //console.log(d3.mouse(rect[0][0]));
+          //console.log(x_r + "  ,  " + y_r);
+          if (Math.abs(y_r - d.y) < min_id ){
+            min_id = Math.abs(y_r - d.y);
+            variance_id=dataset[s][0].id;
+          }
+          if (Math.abs(x_r - d.x) < min_num ){
+            min_num = Math.abs(x_r - d.x);
+            variance_num = d.x;
+          }
+          variance_num = d.x
+          ++s;
+        }
+        //console.log(">>>" + min_id + " variance_id:" + variance_id);
+        //console.log(">>>" + min_num + " variance_num:" + variance_num);
+        if (min_id < 0.5){
+          d3.select(".detail").remove();
+          var charttitle = "Detail Chart &nbsp;- &nbsp;Id:" + variance_id + " &nbsp;&nbsp;&nbsp; Line:" + variance_num;
+          d3.select("#detail_identifier").html(charttitle);
+          
+          svg_2_0_properties.data = dataset_detail[variance_id][variance_num];
+          svg_2_0_properties.data_color = color(variance_id);
+          renderChart_detail(svg_2_0_properties);
+        }
+        
+      }
+      
+      function mouseover(){
+        var s=0;
+        while (s < len_dataset) {          
+          focus[s].style("display", null);
+          ++s;
+        }  
+      }
+        
+      function mouseout(){
+        var s=0;
+        while (s < len_dataset) {           
+          focus[s].style("display", "none");
+          ++s;
+        }  
+      }
+      
+      var hist_data=[-1,-1];
+      var hist_data_prev;
+      function mousemove() {
+        hist_data_prev = hist_data;
+        hist_data=[];
+        var x_invert=[];
+        var s=0;
+        while (s < len_dataset) {
+          focus[s].style("display", null);
+          x_invert[s] = x.invert(d3.mouse(this)[0]);
+          var i = bisect(dataset[s], x_invert[s], 1),
+              d0 = dataset[s][i - 1],
+              d1 = dataset[s][i];
+          var d = x_invert[s] - d0.x > d1.x - x_invert[s] ? d1 : d0;
+          //* To deal with y cut-off and x cut-off
+          if ( (y(d.y) >= 0 && y(d.y) <= height) && (x(d.x) <= width) ) {
+            focus[s].attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+            focus[s].select("text").text(formatNum(d.y));
+          } else {
+            focus[s].style("display", "none");  
+          }
+          hist_data.push(d.y);
+          ++s;          
+        }
+        if (!hist_data_prev.compare(hist_data)) {
+          d3.select(".hist").remove();
+          //renderChart_hist_horizontal("svg_1_2", 300,300, hist_data);
+          //svg_1_2_properties['data'] = hist_data;
+          renderChart_hist_horizontal(svg_1_2_properties);
+        }
+      }  
+        
+      function zoomIn() {
+        zm.scale(zm.scale()*2);
+        // probably need to compute a new translation also
+      }
+     
+      function reset() {
+        zm.scale(1);
+        zm.translate([0,0]);
+      }
+      
+      function zoomed_reset() {
+        
+        //svg.translate([0, 0]).scale(1)
+        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          
+        /*
+          var z = d3.behavior.zoom()
+            .x(x)
+            .y(y);
+          z.translate([0, 0]);
+          z.scale(1);
+        */
+        //svg.transition().duration(500).attr('transform', 'translate(' + z.translate() + ') scale(' + z.scale() + ')')
+        //svg.transition().attr('transform', 'translate(' + z.translate() + ') scale(' + z.scale() + ')')
+        
+        //mouseout();
+        zoom.scale(1.0);
+        zoom.translate([0,0]);
+        zoomed();
+        
+        mouseout();        
+      }
+      
+      function zoomed() {
+        mouseout();
+        //console.log(d3.event.translate);
+        //console.log(d3.event.scale);
+        svg.select(".x.axis").call(xAxis);
+        svg.select(".y.axis").call(yAxis);
+        svg.select(".x.grid")
+          .call(get_x_axis()
+            .tickSize(-height, 0, 0)
+            .tickFormat(""));
+        svg.select(".y.grid")
+          .call(get_y_axis()
+            .tickSize(-width, 0, 0)
+            .tickFormat(""));
+        
+        svg.selectAll(".line")
+            .attr("class", "line")
+            .attr("d", line);
+        
+        /*    
+        if(y.domain()[0] < 0) {
+          // To restrict translation to 0 value
+          zm.translate([d3.event.translate[0], height * (1 - zm.scale())]);
+        }
+        */
+        
+      }
+      
+    }//]]>
+    
+    
+    function randomizeData(n, y) {
+      if (arguments.length < 2) y = 400;
+      if (!arguments.length) n = 20;
+      var i = 0;
+      return d3.range(~~(n) + 1).map(function(d, i) { return {
+                x: ++i,
+                y: ~~(Math.random()*y)
+      }});
+    }
+    
+    function rnd_snd() {
+	return (Math.random()*2-1)+(Math.random()*2-1)+(Math.random()*2-1);
+    }
+    
+    function rnd(mean, stdev) {
+	return Math.round(rnd_snd()*stdev+mean);
+    }
+    
+    function randomNormal() {
+      return Math.cos(2 * Math.PI * Math.random()) * Math.sqrt(-2 * Math.log(Math.random()))
+    }
+    /*
+    var a = []
+    for (var i=0; i < 1000; i++){
+      a[i] = randomNormal() / 2 + 1;
+      console.log(a[i]);
+    }
+    */
+    // Generate a log-normal distribution with a median of 30 minutes.
+    //var values = d3.range(1000).map(d3.random.logNormal(Math.log(30), .4));
+    
+    //function renderChart_hist_horizontal(chartid, chart_width, chart_height, data_lines){
+    function renderChart_hist_horizontal(chart_properties){
+      
+      var chart_id = "#" + chart_properties['chart_id'];
+      
+      margin = {};
+      if (typeof chart_properties['chart_width'] === 'undefined') chart_width = 300
+        else chart_width = chart_properties['chart_width'];
+      if (typeof chart_properties['chart_height'] === 'undefined') chart_height = 300
+        else chart_height = chart_properties['chart_height'];
+      if (typeof chart_properties['margin_top'] === 'undefined') margin['top'] = 10
+        else margin['top'] = chart_properties['margin_top'];
+      if (typeof chart_properties['margin_right'] === 'undefined') margin['right'] = 10
+        else margin['right'] = chart_properties['margin_right'];
+      if (typeof chart_properties['margin_bottom'] === 'undefined') margin['bottom'] = 35
+        else margin['bottom'] = chart_properties['margin_bottom'];
+      if (typeof chart_properties['margin_left'] === 'undefined') margin['left'] = 43
+        else margin['left'] = chart_properties['margin_left'];
+        
+      if (typeof chart_properties['data'] === 'undefined')
+        data_lines = [0.5, 2.0, 0.7, 0.90, 0.92, 0.93, 1.1, 1.15, 1.17, 1.18, 1.2, 1.3, 1.4, 1.5, 1.52, 1.6, 1.8];
+      else
+        data_lines = chart_properties['data'];
+        
+      //var margin = {top: 10, right: 10, bottom: 35, left: 43},
+      var width = chart_width - margin.right - margin.left,
+          height = chart_height - margin.top - margin.bottom;
+          
+      var formatFloat = d3.format(",.4f"),
+          formatNum = function(d) { return formatFloat(d); };
+      
+      var x = d3.scale.linear()
+          .range([0, width]);
+      var y = d3.scale.ordinal()
+          .rangeRoundBands([0, height], .1);
+      
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("top")
+          .tickSize(-height);
+      
+      var yAxis = d3.svg.axis()
+          .scale(y)   
+          //.text(formatNum(y))
+          .orient("left")
+          .tickSize(0);
+      
+      var svg_hist = d3.select(chart_id).append("svg")
+          .attr("width", width + margin.right + margin.left)
+          .attr("height", height + margin.top + margin.bottom)
+          .classed('hist', true)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          
+      //margin.left = formatFloat(d3.max(datalines, function(d) { return d; } ));
+      
+      
+      /*
+       * Histogram can reset min-max for each new reference line
+       * or stay fixed for range of entire data-set
+       */
+      /***/
+      //data_lines = [0.5, 2.0, 0.7, 0.90, 0.92, 0.93, 1.1, 1.15, 1.17, 1.18, 1.2, 1.3, 1.4, 1.5, 1.52, 1.6, 1.8];
+      
+      var bins = 20;
+      //var data_lin = $.extend(true, [], data_lines);
+      var data_lin = data_lines.slice(0);
+      
+      var minmax = d3.extent(data_lin, function (d) { return d; });   // { return d.val; }
+      //console.log(Math.round((minmax[1] - minmax[0])/bins));
+      var step = (minmax[1] - minmax[0])/bins
+      var _y_bin;
+      
+      /***/
+      var data_bin = d3.range(bins).map(function(i) {
+        _y_bin = minmax[0] + i*step;
+        return {k: i, y_bin: _y_bin.toFixed(3), val:Math.random()*2+.05};
+      });
+      /***/
+        
+      /***
+      var data_bin = d3.range(bins).map(function(i) {
+        //return {k: i, y_bin: minmax[0] + i*step, val:Math.random()*2+.05};
+        _y_bin = minmax[0] + i*step;
+        return {k: i, y_bin: _y_bin.toFixed(3), y_bin_0: _y_bin, y_bin_1: minmax[0] + (i+1)*step, val:0};
+      });
+      data_bin[bins-1].y_bin_1+=999999;
+      ***/
+      
+      var k=0;
+      //for (var x=minmax[0]; x<minmax[1]-step; x+=step){
+      while (k<bins){    
+          data_lin.forEach(function(d) {
+            if (d >= data_bin[k].y_bin_0 && d < data_bin[k].y_bin_1){
+              data_bin[k].val += 1;
+              //* should remove here
+            }
+        });
+        ++k;
+      }
+      
+      //* Set the scale domain
+      x.domain([0, d3.max(data_bin, function(d) { return d.val; })]);
+      y.domain(data_bin.map(function(d) { return d.y_bin; }));
+      
+      var bar = svg_hist.selectAll("g.bar")
+            .data(data_bin)
+          .enter().append("g")
+            .attr("class", "bar")
+          .attr("transform", function(d) { return "translate(0," + y(d.y_bin) + ")"; });
+      
+      bar.append("rect")
+          .attr("width", function(d) { return x(d.val); })
+          .attr("height", y.rangeBand()+(0.07*y.rangeBand()));
+        
+      svg_hist.append("g")
+          .attr("class", "x axis")
+          .call(xAxis)
+        .append("text")
+          .attr("class", "x label")
+          .attr("x", width/2)
+          .attr("y", height+15)
+          //.attr("dx", ".71em")
+          .style("text-anchor", "middle")
+          .text("Frequency");
+          
+      svg_hist.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", -44)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Level");
+          
+    }
+
+    //function renderChart_detail(chartid, chart_width, chart_height, chart_data, chart_color){
+    function renderChart_detail(chart_properties){
+      /*
+       * Unpack chart_properties
+       */ 
+      var chartid = chart_properties.chart_id,
+          chart_id = "#" + chartid,
+          chart_width = chart_properties.chart_width,
+          chart_height = chart_properties.chart_height,
+          margin = {
+            top    : chart_properties.margin_top,
+            right  : chart_properties.margin_right,
+            bottom : chart_properties.margin_bottom,
+            left   : chart_properties.margin_left
+          },
+          data_color = chart_properties.data_color,
+          chart_data = chart_properties.data;
+          
+          
+      var width = chart_width - margin.left - margin.right,
+          height = chart_height - margin.top - margin.bottom;
+      
+      var formatTime = d3.time.format("%H:%M:%S.%L"),
+          formatDatetime = function(d) { return formatTime(new Date(d)); };
+      
+      var x = d3.time.scale()
+        .domain(d3.extent(chart_data, function (d) {
+            return d.date;
+        }))
+        .range([0, width]);
+
+      /*
+      var y_value = [];
+      for (var x=0; x<chart_data.length; x++){
+        y_value.push(  chart_data[x].value.toFixed(2) );      
+      }
+      
+      console.log("<");
+      console.log(y_value);
+      */
+      
+      var formatFloat = d3.format(",.2f"),
+          formatNum = function(d) { return formatFloat(d); };
+          
+      var y = d3.scale.linear()
+        //.domain(d3.extent(y_value, function(d){ console.log(d);return d; }))
+        .domain(d3.extent(chart_data, function (d) {
+          return formatFloat(d.value)
+        }))
+        .range([height, 0]);
+        
+      var line = d3.svg.line()
+        .x(function (d) {
+            return x(d.date);
+        })
+        .y(function (d) {
+            return y(d.value);
+        });
+          
+      var zoom = d3.behavior.zoom()
+        .x(x)
+        .y(y)
+        //.scaleExtent([1, 8])
+        .on("zoom", zoomed);
+            
+      var svg = d3.select(chart_id)
+        .append("svg")
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .classed('detail', true)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(zoom)    //* have to call on g element
+        //.call(d3.behavior.zoom().on("zoom", update)).on("dblclick.zoom", null)
+        .on("dblclick.zoom", zoomed_reset);
+        //.on("touchstart.zoom", null);
+        
+      //d3.select("svg").on("dblclick.zoom", null);
+      
+      svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "plot");
+    
+      var get_x_axis = function() {
+        return d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(10);
+      };
+      var get_y_axis = function() {
+        return d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10);
+      };
+      
+      var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        //.ticks(d3.time.seconds, 0.10)
+        //.tickFormat(d3.time.format("%H:%M:%S.%L"));
+        .tickFormat(formatTime);
+        
+      var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(10);
+      
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0, " + height + ")")
+        .call(xAxis)
+        .append("text")
+          .attr("class", "x label")
+          .attr("x", width/2)
+          .attr("y", 35)
+          //.attr("dx", ".71em")
+          .style("text-anchor", "middle")
+          .text("Time");
+          
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("x", -16)
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Detail");
+          
+      svg.append("g")
+        .attr("class", "x grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(get_x_axis()
+          .tickSize(-height, 0, 0)
+          .tickFormat(""));
+      svg.append("g")
+        .attr("class", "y grid")
+        .call(get_y_axis()
+          .tickSize(-width, 0, 0)
+          .tickFormat(""));
+        
+      var clipid = chartid + "_clip";
+      var clip = svg.append("clipPath")
+        .attr("id", clipid)
+        //.attr("id", "clip")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height);
+      
+      var svg_chart = svg.append("g")
+        .attr("clip-path", "url(#" + clipid  + ")");
+        //.attr("clip-path", "url(#clip)");
+        
+      svg_chart.append("path")
+        .datum(chart_data)
+        .attr("class", "line")
+        .style("stroke", data_color)
+        .attr("d", line);
+  
+      function zoomIn() {
+        zm.scale(zm.scale()*2);
+        // probably need to compute a new translation also
+      }
+     
+      function reset() {
+        zm.scale(1);
+        zm.translate([0,0]);
+      }
+      
+      function zoomed_reset() {
+        //svg.translate([0, 0]).scale(1)
+        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          
+        /*
+          var z = d3.behavior.zoom()
+            .x(x)
+            .y(y);
+          z.translate([0, 0]);
+          z.scale(1);
+        */
+        //svg.transition().duration(500).attr('transform', 'translate(' + z.translate() + ') scale(' + z.scale() + ')')
+        //svg.transition().attr('transform', 'translate(' + z.translate() + ') scale(' + z.scale() + ')')
+        
+        zoom.scale(1.0);
+        zoom.translate([0,0]);
+        zoomed();
+      }
+      
+      function zoomed() {
+        
+        svg.select(".x.axis").call(xAxis);
+        svg.select(".y.axis").call(yAxis);
+        svg.select(".x.grid")
+          .call(get_x_axis()
+            .tickSize(-height, 0, 0)
+            .tickFormat(""));
+        svg.select(".y.grid")
+          .call(get_y_axis()
+            .tickSize(-width, 0, 0)
+            .tickFormat(""));
+        
+        svg.selectAll(".line")
+            .attr("class", "line")
+            .attr("d", line);
+        
+        /*    
+        if(y.domain()[0] < 0) {
+          // To restrict translation to 0 value
+          zm.translate([d3.event.translate[0], height * (1 - zm.scale())]);
+        }
+        */        
+      }
+      
+    }//]]>    
+    
+  </script>
+  
+</body>
+
+
+</html>
+

@@ -1,0 +1,53 @@
+
+  <!--div class="navbar navbar-fixed-top sticky" role="navigation"-->
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a href="#" class="navbar-brand">Daniel S. Cho</a>
+      </div>
+
+      <div class="collapse navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="{% url 'index_url_name' %}">HOME</a></li>
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown">PROJECTS<b class="caret"></b></a>
+
+                  <ul class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
+                      <li><a href="{% url 'nlp_resume' %}">Analyze resume</a></li>
+                      <li><a href="{% url 'nlp_facebook' %}">Analyze Facebook</a></li>
+                      <li><a href="{% url 'nlp_article_blog' %}">Analyze article and blog</a></li>
+                      <li><a href="{% url 'nlp_article_blog' %}">Analyze Twitter</a></li>
+
+                      <li class="divider"></li>
+
+                      <li><a href="{% url 'correlation_rolling' %}">Rolling Correlation</a></li>
+                      <li><a href="{% url 'correlation_matrix' %}">Correlation Matrix of Set of Assets</a></li>
+                      <li><a href="{% url 'quantlib' %}">QuantLib</a></li>
+
+                      <li class="divider"></li>
+
+                      <li><a href="{% url 'd3_scatter_dynamic' %}">D3.js Scatter Matrix</a></li>
+                      <li><a href="{% url 'd3_line_histogram_dynamic' %}">D3.js Line and Histogram</a></li>
+
+                      <li class="divider"></li>
+
+                      <li><a href="{% url 'gis_river' %}">GIS D3.js River</a></li>
+                      <li><a href="{% url 'gis_rainfall' %}">GIS Weather Data</a></li>
+                      <li><a href="{% url 'gis_openlayers_esri' %}">GIS OpenLayers and ESRI REST API</a></li>
+                      <li><a href="{% url 'gis_typhoon_tracking' %}">GIS Typhoon Tracking</a></li>
+                      <li><a href="{% url 'gis_openlayers_kml_earthquake' %}">GIS OpenLayers + KML Earthquake Regions</a></li>
+
+                      <li><a href="{% url 'd3_geo_sat_land' %}">D3.js Satellite Map</a></li>
+                      <li><a href="{% url 'd3_geo_sat_tiles' %}">D3.js Satellite Map Tiles</a></li>
+                      <li><a href="{% url 'd3_geo_projection_earth_torus' %}">D3.js Geo Projection Torus</a></li>
+                      <li><a href="{% url 'd3_geo_projection_earth_mollweide' %}">D3.js Geo Projection Mollweide</a></li>
+
+                      <!--li class="divider"></li-->
+
+                  </ul>
+              </li>
+              <li><a href="{% url 'contact_me' %}">CONTACT ME</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>

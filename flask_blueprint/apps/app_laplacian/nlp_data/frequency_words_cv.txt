@@ -1,0 +1,22 @@
+Daniel Cho
+
+Education:
+University Rene Descartes (Paris V) France, September 2006
+Masters, Applied Mathematics and Computer Science
+
+INPG (Institut National Polytechnique de Grenoble), France, June 2004
+Masters, Cognitive Science (Specialization: Machine Learning)
+
+New York University, May 1990
+B.S. Physics
+
+Programming Skills:
+• Python, Django, Pylons, Javascript, jQuery, D3.js
+• Java/J2EE, JBoss JSP/JSF, Swing, EJB's, AJAX, Boss, Tomcat, Spring, Hibernate, Struts, JAX-RS/WS, JMS
+• Statistical analysis and machine learning using R, Matlab, scikit, pandas, NumPy, SciPy, Matplotlib, BeautifulSoup
+• RabbitMQ, Redis task queues, parallel processing, REST/SOAP Web Services, ESB middleware, XML/XSL, XSD
+• MongoDB, mySQL, Postgres deployed on AWS EC2, Oracle, Memcached, Git, Subversion, Maven
+
+Projects / Work Experience
+Rivercast Capital,  Jan 2008 – August 2013
+Development of Python/Django application for statistical trading system for new hedge fund. Trade processing module  implemented in Python, Django, Memcached, Javascript, jQuery. Middleware using RabbitMQ, Redis queues. MongoDB and screen scraping for JSON structured data, news clips and financial blogs. MySQL for trade data. Data analysis using Python modules SciPy, NumPy, Matplotlib, and R/S+, including extensive data visualization using d3.js

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% include 'index_laplacian_head.html' %}
+</head>
+
+<body>
+  <!-- ==========================     NAVBAR     =========================== -->
+  {% include 'navtopbar_laplacian.html' %}
+
+  <div class="divide40"></div>
+
+  <!-- ========================== MAIN CONTAINER =========================== -->
+
+  <div class="container" style="overflow-x: hidden">
+    <div class="row">
+
+      <!-- ==================================
+           LEFT SIDEBAR col-xs-2
+           ================================== -->
+      {% include 'sidebar_left_laplacian.html' %}
+
+      <!-- ==================================
+           col 2/3: MAIN CONTENT - middle
+           ================================== -->
+      <div class="col-xs-7">
+
+        <!--div class="category_online" style="border-left: thick solid #0000A0; "-->
+        <div id="container_main_middle">
+          <!--
+                MAIN CONTENT HERE !
+          -->
+
+          <div id="content_main" ></div>
+
+          <!-- MAIN CONTENT END -->
+        </div>
+
+      </div>  <!-- end col-xs-7 middle -->
+
+      <!-- ==================================
+           RIGHT SIDEBAR col-xs-2
+           ================================== -->
+      {% include 'sidebar_right_laplacian.html' %}
+
+    </div>  <!-- end row -->
+  </div>  <!--end container -->
+
+  <!--============================= JS scripts ==============================-->
+
+  {% include 'index_laplacian_tail.html' %}
+
+  <!-- script for this template -->
+  <script>
+    $(function() {
+
+    });
+  </script>
+
+</body>
+</html>
