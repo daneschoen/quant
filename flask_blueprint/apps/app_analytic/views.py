@@ -38,78 +38,6 @@ from apps.settings.constants import *
 # Routes
 # ==============================================================================
 
-# -------------------------
-# Testing
-# -------------------------
-
-@app_analytic.route('test/protected')
-@login_required
-def protected():
-    return "Working - login required working. U r: " #+ str(current_user.username) #current_user.id
-    #return render_template('secret.html')
-
-@app_analytic.route('test/test_endpoints')
-def test_endpoints():
-    return render_template('test_endpoints.html')
-
-@app_analytic.route('test/logging')
-def test_logging():
-    logger.warning('A warning occurred (%d alert)', 91)
-    logger.debug('this is debug - occurred')
-    logger.error('An error occurred')
-    logger.info('Info occurred')
-    print('print test')
-    return 'tail -20 /var/log/uwsgi/rivercast_uwsgi.log'
-
-
-@app_analytic.route('test/session')
-def test3():
-    # X res = jsonify(session)
-
-    session['foo'] = 'bar'
-    session['user'] = current_user.username
-    session['pd_'] = {'pi': 3.14, 'k': 'poo'}
-
-    d = {}
-    for k, v in session.items():
-        if k == 'data':
-            if 'es' in session['data']:
-                d[k] = str(session[k]) #+ str(df.iloc[0,0])
-            if 'us' in session['data']:
-                d[k] = str(session[k]) #+ str(df.iloc[0,0])
-        else:
-            d[k] = v
-
-    return jsonify(d)
-
-@app_analytic.route('test/app_config')
-def test_app_config():
-    return app.config['PORT']
-
-
-@app_analytic.route('test/json')
-def test4():
-    # old json version:
-    #return make_response(jsonify({'error': 'Not found'}), 404)
-
-    res = {
-      'status': 'ok',
-      'foo': 3.14,
-      'instr_meta': [
-        { 'instr_name': 'es',
-          'dt_lst': ['12/23/2015','12/24/2015','12/25/2015']
-        },
-        { 'instr_name': 'cl',
-          'dt_lst': ['---']
-        }
-      ]
-    }
-
-    res = jsonify(res)
-    res.status_code = 200
-    return res
-
-
 @app_analytic.route('graph/chartstock_line_basic')
 def chartstock_line_basic():
     return render_template('chartstock_line_basic.html')
@@ -216,7 +144,7 @@ def get_instr_meta(instr_str):
         res_jsn['status_code'] = 500
         return jsonify(res_jsn)
 
-    time_entry_lst = ['C', 'O']
+    time_entry_lst = ['std', 'var']
     dtime = datetime.datetime(2000,1,1)
     for t in range(24*60):
         time_entry_lst.append(dtime.strftime('%H:%M'))
@@ -268,10 +196,6 @@ def get_instr_meta(instr_str):
 @app_analytic.route('analytics/import_data/<instr_str>')
 @login_required
 def import_tick(instr_str):
-    """
-    http://192.241.219.240/analytics/all | es | es---us---da
-    http://localhost:8007/api/import?instr=es---us---da
-    """
     if instr_str == 'all':
         instr_lst = INSTRS_NAME
     else:

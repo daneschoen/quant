@@ -20,18 +20,6 @@ from apps.settings.constants import *
 # ==============================================================================
 
 def go(instr_lst):
-    '''
-    http://localhost:8007/api/import?instr=es---us
-
-    - return json
-
-    - Check for files:
-      instr_missing = esdata1min24hr.asc,
-      econhol = excludees.txt, holes.txt, econXYZ.txt
-    - Call java api
-    - set InstrX.imported = True if no errors
-    - import_data_pandas(instr_lst)
-    '''
 
     if type(instr_lst) != list:
         return {
@@ -182,26 +170,12 @@ def import_data_pandas_session(instr_lst, instr_file_base=INSTR_FILENAME_OUT_1MI
 
 
 def import_data_pandas(path_file):
-    '''
-    $ cd ~/projects/rivercast/flask_blueprint; p3
-    >>> import pandas as pd
-    >>> from apps.app_analytic.import_data import import_data_pandas
-    >>> res = import_data_pandas('~/sandbox/esdata1col.csv')
-    >>> df_data = res['df_data']
-
-    >>> df_data.columns
-
-    >>> se_1615_1 = df_data.loc[:,'1615'].diff(periods=1)
-    >>> se_ = df_data.loc[:,'1615'].diff(periods=2)
-
-    '''
-
     res_jsn = {
       'df_data': None,
       'status_msg': 'ERROR'
     }
     try:
-      """
+
       with open(file_path) as f:
         #buf = f.readlines()  # reads the entire file
         f.readline()
@@ -212,7 +186,6 @@ def import_data_pandas(path_file):
       InstrX = Instr_Singleton(instr)
       InstrX.imported = True
       InstrX.dt_lst = dt_lst
-      """
 
       parser = lambda M_D_Y: pd.datetime.strptime(M_D_Y, '%m %d %Y')
       df_data = pd.read_csv(path_file, parse_dates=[[0,1,2]], date_parser=parser, index_col=0)

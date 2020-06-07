@@ -21,7 +21,6 @@ import seaborn as sns
 
 
 # ==============================================================================
-"""
 
 class Regr_cv():
 
@@ -64,48 +63,9 @@ class Regr_cv():
 
     def graph(self):
         pass
-"""
-
-# ==============================================================================
-"""
-$ cp /opt/www/rivercast/data/regression_feature_admin.csv regression_feature_X.csv
-
-$ scp stats_instr.py admin@192.241.219.240:~/projects/rivercast/flask_blueprint/apps/app_analytic/analysis_r/
-
->>> from stats_instr import *
-
-1. Working well now.  Enter 1615, Exit next 1615,
-O<C1
-C<C2
-C2<C4
-C3<C5
-
-y: c-c1
-X: o1-c2, c1-c3, c3-c5, c4-c6
-
-2. Strategy that used to work, but not now,  Enter 1615, Exit next 1615
-O<C1
-C<O
-C<C3
-
-y: c-c1
-X: o1-c2, c1-c4
-
-'regression_feature_admin_6.csv'
-y : c-c1
-X1: o1-c2, X2: o1-c1, X3: o2-c3, X4: c1-c2, X5: c2-c3, X6: c3-c4
-
-
-y: c-c1
-X: c3-c5, c4-c6, c1-c4
-adjR^2: 0.08
-
-"""
-
-# ------------------------------------------------------------------------------
 
 FNAME = 'regression_feature_6.csv'
-# Index(['c_c1', 'o1_c2', 'o1_c1', 'o2_c3', 'c1_c2', 'c2_c3', 'c3_c4'], dtype='object')
+# Index(['std_dev', 'std_var', 'o1_c1', 'o2_c3', '4_std_3_dev', '2_std_3_dev', '3_std_3_dev'], dtype='object')
 FPATH = ''
 FPATHNAME = os.path.join(FPATH, FNAME)
 
@@ -137,9 +97,7 @@ df.describe().transpose()
 df.info()
 
 df.corr()
-"""
-o1_c1 and c1_c2 is 0.8, so DONT want both in same X
-"""
+
 df.shape
 
 
@@ -148,77 +106,16 @@ df.shape
 df_train = df.iloc[:-N_TEST]
 df_test = df.iloc[-N_TEST:]
 
-#df_train_3up = df_train[(df_train.c1_c2 >= 0) & (df_train.c2_c3 >= 0) & (df_train.c3_c4 >= 0)].loc[:,['c_c1', 'c1_c2', 'c2_c3', 'c3_c4']]
-#df_test_3up = df_test[(df_test.c1_c2 >= 0) & (df_test.c2_c3 >= 0) & (df_test.c3_c4 >= 0)].loc[:,['c_c1', 'c1_c2', 'c2_c3', 'c3_c4']]
-df_train_3up = df_train[(df_train.c1_c2 >= 0) & (df_train.c2_c3 >= 0) & (df_train.c3_c4 >= 0)]
-df_test_3up = df_test[(df_test.c1_c2 >= 0) & (df_test.c2_c3 >= 0) & (df_test.c3_c4 >= 0)]
+#df_train_3up = df_train[(df_train.4_std_3_dev >= 0) & (df_train.2_std_3_dev >= 0) & (df_train.3_std_3_dev >= 0)].loc[:,['std_dev', '4_std_3_dev', '2_std_3_dev', '3_std_3_dev']]
+#df_test_3up = df_test[(df_test.4_std_3_dev >= 0) & (df_test.2_std_3_dev >= 0) & (df_test.3_std_3_dev >= 0)].loc[:,['std_dev', '4_std_3_dev', '2_std_3_dev', '3_std_3_dev']]
+df_train_3up = df_train[(df_train.4_std_3_dev >= 0) & (df_train.2_std_3_dev >= 0) & (df_train.3_std_3_dev >= 0)]
+df_test_3up = df_test[(df_test.4_std_3_dev >= 0) & (df_test.2_std_3_dev >= 0) & (df_test.3_std_3_dev >= 0)]
 
-df_train_3dn = df_train[(df_train.c1_c2 <= 0) & (df_train.c2_c3 <= 0) & (df_train.c3_c4 <= 0)]
-df_test_3dn = df_test[(df_test.c1_c2 <= 0) & (df_test.c2_c3 <= 0) & (df_test.c3_c4 <= 0)]
+df_train_3dn = df_train[(df_train.4_std_3_dev <= 0) & (df_train.2_std_3_dev <= 0) & (df_train.3_std_3_dev <= 0)]
+df_test_3dn = df_test[(df_test.4_std_3_dev <= 0) & (df_test.2_std_3_dev <= 0) & (df_test.3_std_3_dev <= 0)]
 
-"""
-df = pd.read_csv("NBA_train.csv")
-model = smf.ols(formula="W ~ PTS + oppPTS", data=df).fit()
-model.summary()
-
-# OR
-y = df['W']
-X = df[['PTS', 'oppPTS']]
-X = sm.add_constant(X)
-model = sm.OLS(y, X).fit()
-model.summary()
-"""
-
-print("--------------------------------------------")
-fm = "c_c1 ~ c1_c2 + c2_c3 + c3_c4"
-model = smf.ols(formula=fm, data=df_train_3up).fit()
-print(fm)
-print("All other vars up or dn")
-print("--------------------------------------------")
-print(model.summary())
-
-
-df_train_3up_o = df_train[ (df_train.c1_c2 >= 0) & (df_train.c2_c3 >= 0) & (df_train.c3_c4 >= 0)
-                           & (df_train.o1_c2 >= 0)
-                           & (df_train.c1_c2 + df_train.c2_c3 + df_train.c3_c4 >= THRESH_SUM_C)
-                         ]
-df_test_3up_o = df_test[ (df_test.c1_c2 >= 0) & (df_test.c2_c3 >= 0) & (df_test.c3_c4 >= 0)
-                         & (df_test.o1_c2 >= 0)
-                         & (df_test.c1_c2 + df_test.c2_c3 + df_test.c3_c4 >= THRESH_SUM_C)
-                       ]
-
-print(df_train_3up_o.describe())
-print('\n\n')
-
-fm_=[]
-model_={}
-fm_.append("c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2")  # Adj. R-squared: 0.073
-#fm_ = "c_c1 ~ c1_c2 + c2_c3:c3_c4 + o1_c2"  # Adj. R-squared: 0.082
-# ! BUT THESE IS STILL ONLY DATA WHERE C2 > C3, C3 > c4
-fm_.append("c_c1 ~ c1_c2 + o1_c2")    # Adj. R-squared: 0.081
-fm_.append("c_c1 ~ c1_c2:o1_c2")      # Adj. R-squared: 0.183
-for fm_m in fm_:
-    model_m = smf.ols(formula=fm_m, data=df_train_3up_o).fit()
-    model_[fm_m] = model_m
-    print("--------------------------------------------")
-    print(fm_m)
-    print("--------------------------------------------")
-    print(model_m.summary())
-
-print('\n\n')
-
-"""
 fpathname, f_ext = os.path.splitext(FPATHNAME)
-df_train_3up_o.to_csv(fpathname + '_train_3up_o' + f_ext)   #, cols=['a', 'b']), sep='\t', encoding='utf-8')
-df_train_3up_o.to_csv(fpathname + '_test_3up_o' + f_ext)
-"""
 
-"""
---------------------------------------------------------------------------------
-Out of sample prediction
---------------------------------------------------------------------------------
-"""
-"""
 x_test = np.linspace(0, N_TEST-1, N_TEST)
 #Xnew = np.column_stack((x1n, np.sin(x1n), (x1n-5)**2))
 #Xnew = sm.add_constant(Xnew)
@@ -226,7 +123,7 @@ x_test = np.linspace(0, N_TEST-1, N_TEST)
 
 # ypred_outsample = model.predict(X[-10:,:])   # predict out of sample
 
-X = df_test_3up.loc[:, ['c1_c2', 'o1_o2']]
+X = df_test_3up.loc[:, ['4_std_3_dev', 'o1_o2']]
 X = sm.add_constant(X)
 ypred_outsample = model.predict(X)
 print(ynewpred)
@@ -236,15 +133,15 @@ print ("""----------------------------------------------------------------------
 Out of sample prediction
 --------------------------------------------------------------------------------\n\n
 """)
-# fm_ == ['c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2', 'c_c1 ~ c1_c2 + o1_c2', 'c_c1 ~ c1_c2:o1_c2']
+# fm_ == ['std_dev ~ 4_std_3_dev + 2_std_3_dev + 3_std_3_dev + std_var', 'std_dev ~ 4_std_3_dev + std_var', 'std_dev ~ 4_std_3_dev:std_var']
 ypred_test_={}
 df_test_={}
-#df_X = df_test_3up_o.loc[:, ['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2']]
-df_test_[fm_[0]] = df_test_3up_o[['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2']]
-df_test_[fm_[1]] = df_test_3up_o[['c1_c2','o1_c2']]
-df_test_[fm_[2]] = df_test_3up_o[['c1_c2','o1_c2']]
-# df_test_[fm_[2]] = pd.concat([df_test_3up_o.loc[:,'c1_c2']*df.loc[:,'o1_c2']], axis=1, keys=['c1-c2:o1_c2'])
-#                  df_test_3up_o['c1_c2']*df_test_3up_o['o1_c2']  # series
+#df_X = df_test_3up_o.loc[:, ['4_std_3_dev', '2_std_3_dev', '3_std_3_dev', 'std_var']]
+df_test_[fm_[0]] = df_test_3up_o[['4_std_3_dev', '2_std_3_dev', '3_std_3_dev', 'std_var']]
+df_test_[fm_[1]] = df_test_3up_o[['4_std_3_dev','std_var']]
+df_test_[fm_[2]] = df_test_3up_o[['4_std_3_dev','std_var']]
+# df_test_[fm_[2]] = pd.concat([df_test_3up_o.loc[:,'4_std_3_dev']*df.loc[:,'std_var']], axis=1, keys=['c1-c2:std_var'])
+#                  df_test_3up_o['4_std_3_dev']*df_test_3up_o['std_var']  # series
 
 for fm_m in fm_:
     X_m = sm.add_constant(df_test_[fm_m])
@@ -259,18 +156,18 @@ print('\n\n')
 """
 Verify predict: y ~ model.params*X
 
-fm_m = 'c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2'
+fm_m = 'std_dev ~ 4_std_3_dev + 2_std_3_dev + 3_std_3_dev + std_var'
 df_test_[fm_m].ix[2902]  # .iloc[0]
 model_[fm_m].params * df_test_[fm_m].ix[2902].T
 
-fm_m = 'c_c1 ~ c1_c2:o1_c2'
+fm_m = 'std_dev ~ 4_std_3_dev:std_var'
 df_test_[fm_m].ix[2902,0]*df_test_[fm_m].ix[2902,1]*model_[fm_m].params[1] + model_[fm_m].params[0]
   == ypred_test_[fm_m][0]
 
 df_test_[fm_m].ix[:,0]*df_test_[fm_m].ix[:,1]*model_[fm_m].params[1] + model_[fm_m].params[0]
   == ypred_test_[fm_m]
 
-y_true: df_test_3up_o['c1_c2'] == df_test_[fm_m]['c1_c2']
+y_true: df_test_3up_o['4_std_3_dev'] == df_test_[fm_m]['4_std_3_dev']
 
   y_hat[0] = regr.params[0]*X[0,0] + regr.params[1]*X[0,1] + regr.params[2]*X[0,2] + regr.params[3]*X[0,3]
   y_hat    = regr.params[0]*X[:,regr.params[0]*X[:,0] + regr.params[1]*X[:,1] + regr.params[2]*X[:,2] + regr.params[3]*X[:,3]0] + regr.params[1]*X[:,1] + regr.params[2]*X[:,2] + regr.params[3]*X[:,3]
@@ -285,7 +182,7 @@ RMS
 for fm_m in fm_:
     print("--------------------------------------------")
     print(fm_m)
-    ytrue = df_test_3up_o['c_c1']
+    ytrue = df_test_3up_o['std_dev']
     ypred = ypred_test_[fm_m]
     rms = np.sqrt( sum( (t-p)**2 for t,p in zip(ytrue, ypred) )/ytrue.shape[0])
     print("RMS : " + str(rms))
@@ -294,7 +191,7 @@ print('\n')
 
 
 print("--------------------------------------------")
-fm_m = 'c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2'
+fm_m = 'std_dev ~ 4_std_3_dev + 2_std_3_dev + 3_std_3_dev + std_var'
 print(fm_m)
 print('ALL PREDICTIONS\n')
 N_pred_nothresh_both=0
@@ -304,7 +201,7 @@ expect_gain=0.0
 N_true_shrt=0
 
 
-ytrue = df_test_3up_o['c_c1']
+ytrue = df_test_3up_o['std_dev']
 ypred = ypred_test_[fm_m]
 
 print("ypred       ytrue")
@@ -322,7 +219,7 @@ print("Pct correct shrt :  {0:7.2}\n".format(N_pred_nothresh_correct_shrt/N_true
 print("Pct dn           :  {0:7.2}\n".format(N_true_shrt/N_pred_nothresh_both))
 
 # Include threshold
-ytrue = df_test_3up_o['c_c1']
+ytrue = df_test_3up_o['std_dev']
 for fm_m in fm_:
     N_pred_nothresh_both=0
     N_pred_nothresh_correct_both=0
