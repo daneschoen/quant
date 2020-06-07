@@ -3,10 +3,6 @@ require(graphics)
 require(stats)
 
 
-"""
-# http://www.cookbook-r.com/
-"""
-
 
 """
 ================================================================================
@@ -14,9 +10,6 @@ acf
 ================================================================================
 """
 require(quantmod)
-
-setwd('/Users/acrosspond/Agape/development/projects/fintech/data_in')
-dir()
 
 kpss.test
 adf.test
@@ -376,8 +369,3 @@ library(car)
 scatterplotMatrix(dat[,1:3],
                    diagonal="histogram",
                    smooth=FALSE)
-
-
-
-# ==============================================================================
-# ==============================================================================

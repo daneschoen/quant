@@ -78,10 +78,6 @@ def izmeginat_tpl_lapas():
     return render_template('index_quant_lapas.html')
 
 
-@app_datasciencery.route('izmeginat/article')
-def test_article():
-    return render_template('article_tribal.html')
-
 @app_datasciencery.route('izmeginat/modal')
 def test_index():
     return render_template('index_test.html')
@@ -195,7 +191,7 @@ def izmeginat_redis_put():
       reg_model = 3.14,
       dtime = str(datetime.datetime.utcnow())
     )
-    
+
     res = redis_db.set('key', pickle.dumps(session_data_obj))
 
     return str(res)
@@ -768,7 +764,7 @@ def contactme():
 
         msg_subject = "CONTACTME - From: " + email + "  Name: " + name
         logger.info("EMAIL " + msg_subject + " Body: " + msg_body)
-        ret_email = email_smtp(_w_g, EMAIL_SERVER_PORT_GMAIL, EMAIL_GMAIL, EMAIL_ACROSSPOND, msg_subject, msg_body)
+        ret_email = email_smtp(_w_g, EMAIL_SERVER_PORT, msg_subject, msg_body)
 
         # Using requsts post:
         # url = 'http://192.168.3.45:8080/api/v2/event/log'

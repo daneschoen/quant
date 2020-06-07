@@ -12,9 +12,6 @@ import and pctchg
 ================================================================================
 """
 
-setwd('/Users/acrosspond/Agape/development/projects/fintech/data_out_charts')
-PATH = '/Users/acrosspond/Agape/development/projects/fintech/data_in/'
-
 df_es <- read.table(paste0(PATH, "df_es.csv"), header = TRUE, sep = ",")
 df_btcusd <- read.table(paste0(PATH, "df_btcusd.csv"), header = TRUE, sep = ",")
 df_matrix <- read.table(paste0(PATH, "df_btcusd_es.csv"), header = TRUE, sep = ",")
@@ -128,40 +125,6 @@ df_matrix_pctchg_dn = df_matrix_pctchg[df_matrix_pctchg$es < 0, ]
 ================
 Monte Carlo
 ================
-
-
-================
-Daily, Intraday
-================
-
-Daily
----------
-Daily Arbitrage
----------------
-btcusd_2359[0] ~ es_1859[0]
-
-
-Daily Shift
-------------
-btcusd_2359[0] ~ es_1859[-1]
-btcusd_2359-[0] ~ es_0930_1615[0] + btcusd_[0]
-btcusd_2359-[0] ~ btcusd__2359[-1] + btcusd__2359[-2] + btcusd__2359[-3] + btcusd__2359[-4] + btcusd__2359[-5]
-
-btcusd[0] ~ google-search
-
-
-
-es_1900[-1] ~ btcusd_2359[0]
-
-
-down only
-----------
-
-
-up only
-----------
-
-pairs
 
 
 arima
@@ -321,16 +284,8 @@ x_dn = df_matrix_pctchg_dn$es[-nrow(df_matrix_pctchg_btcusd_dn)]
 y_up = shift(df_matrix_pctchg_btcusd_up$es,-1)
 y_up = y_up[-length(y_up)]
 x_up = df_matrix_pctchg_up$es[-nrow(df_matrix_pctchg_btcusd_up)]
-#2
 
 
-#3
-
-
-
-# ------------------------------------------------------------------------------
-# es<0> ~ btcusd<-1> ; es <0
-# ------------------------------------------------------------------------------
 plot_scatter <- function(y, x, per_end=FALSE, per_beg=FALSE, per=200, npar=TRUE, bl_save=TRUE) {
   if (!per_end) {
     per_end = length(x)
@@ -370,9 +325,6 @@ abline(lm(df_matrix_pctchg_es_up$btcusd[per_beg:per_end] ~ df_matrix_pctchg_es_u
 plot_scatter(df_matrix_pctchg_es_up$btcusd, df_matrix_pctchg_es_up$es)
 
 
-# ----------------
-# btc<0> ~ es<-1>
-# -----------------
 plot(y_es_dn ~ x_es_dn, cex=0.5)
 abline(lm(y_es_dn ~ x_es_dn))
 N = length(y_es_dn)
@@ -445,10 +397,6 @@ plot_scatter(df_es_3[['btcusd']], df_es_3[['es']], nrow(df_es_3)-100)
 
 
 
-# ----------------
-# es<0> ~ btc<-1>
-# ----------------
-
 plot(df_matrix_pctchg_dn$es ~ df_matrix_pctchg_dn$btcusd)
 abline(lm(df_matrix_pctchg_dn$es) ~ df_matrix_pctchg_dn$btcusd)
 N_dn = nrow(df_matrix_pctchg_dn)
@@ -468,9 +416,6 @@ plot(df_matrix_pctchg_up$es[per_beg:per_end] ~ df_matrix_pctchg_up$btcusd[per_be
 abline(lm(df_matrix_pctchg_up$es[per_beg:per_end] ~ df_matrix_pctchg_up$btcusd[per_beg:per_end]))
 
 
-# ------------------------------------------------------------------------------
-# btc<0> ~ es<-1> ; es <0
-# ------------------------------------------------------------------------------
 plot(y_dn ~ x_dn, cex=0.5)
 abline(lm(y_dn ~ x_dn))
 N_dn = nrow(df_matrix_pctchg_dn)
@@ -489,33 +434,6 @@ per_end = N_up-100  # N-200   # N ;  N-per
 per_beg = per_end - per
 plot(y_up[per_beg:per_end] ~ x_up[per_beg:per_end])
 abline(lm(y_up[per_beg:per_end] ~ x_up[per_beg:per_end]))
-
-
-
-"""
---------------------------------------------------------------------------------
-autoregressive btcusd
---------------------------------------------------------------------------------
-"""
-
-# ------------------------------------------------------------------------------
-# btc[0] ~ btc[-1, -2, -3, -4, -5]
-# ------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-# ----------------
-# es<0> ~ es<-1>
-# ----------------
-
-
-
 
 
 
@@ -581,10 +499,3 @@ distributions
 require(distr)
 N = 1000
 t <- 1:N
-
-
-
-
-
-# ==============================================================================
-# ==============================================================================

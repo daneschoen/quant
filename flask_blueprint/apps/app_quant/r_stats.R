@@ -12,9 +12,6 @@ import and pctchg
 ================================================================================
 """
 
-setwd('/Users/acrosspond/Agape/development/projects/fintech/data_out_charts')
-PATH = '/Users/acrosspond/Agape/development/projects/fintech/data_in/'
-
 df_es <- read.table(paste0(PATH, "df_es.csv"), header = TRUE, sep = ",")
 df_btcusd <- read.table(paste0(PATH, "df_btcusd.csv"), header = TRUE, sep = ",")
 df_matrix <- read.table(paste0(PATH, "df_btcusd_es.csv"), header = TRUE, sep = ",")
@@ -114,77 +111,7 @@ abline(lm(df_btcusd_cls_pctchg[per_beg:per_end] ~ df_es_1700_pctchg[per_beg:per_
 # filter, shift
 # names(df_matrix_pctchg)
 # [1] "df_es_1700_pctchg"    "df_btcusd_cls_pctchg"
-"""
-> max(df_matrix_pctchg$es)
-[1] 0.08035004
-> min(df_matrix_pctchg$es)
-[1] -0.09176301
 
-df_matrix_pctchg_dn = df_matrix_pctchg[df_matrix_pctchg$es < 0, ]
-> nrow(df_matrix_pctchg_dn)
-[1] 864
-
-
-================
-Monte Carlo
-================
-
-
-================
-Daily, Intraday
-================
-
-Daily
----------
-Daily Arbitrage
----------------
-btcusd_2359[0] ~ es_1859[0]
-
-
-Daily Shift
-------------
-btcusd_2359[0] ~ es_1859[-1]
-btcusd_2359-[0] ~ es_0930_1615[0] + btcusd_[0]
-btcusd_2359-[0] ~ btcusd__2359[-1] + btcusd__2359[-2] + btcusd__2359[-3] + btcusd__2359[-4] + btcusd__2359[-5]
-
-btcusd[0] ~ google-search
-
-
-
-es_1900[-1] ~ btcusd_2359[0]
-
-
-down only
-----------
-
-
-up only
-----------
-
-pairs
-
-
-arima
------
-
-
-Intraday
----------
-Intraday Arbitrage
-------------------
-
-Intraday Shift
---------------
-btcusd_2115_2359-<0> ~ es_0930_1615<0>
-btcusd_2115_2359-<0> ~ es_1615<0>
-
-pairs
------
-
-arima
------
-
-"""
 
 
 # ------------------------------------------------------------------------------
@@ -497,40 +424,6 @@ abline(lm(y_up[per_beg:per_end] ~ x_up[per_beg:per_end]))
 autoregressive btcusd
 --------------------------------------------------------------------------------
 """
-
-# ------------------------------------------------------------------------------
-# btc[0] ~ btc[-1, -2, -3, -4, -5]
-# ------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-# ----------------
-# es<0> ~ es<-1>
-# ----------------
-
-
-
-
-
-
-
-
-"""
-================================================================================
-acf
-================================================================================
-"""
-
-
-
-
-
 s_rand <- runif(1000, 0.0, 1.0)
 s_rand_diff = diff(s_rand)
 s_randn<-rnorm(1000)
@@ -566,25 +459,6 @@ taperedacf(wineind, nsim=50)
 taperedpacf(wineind, nsim=50)
 
 
-"""
-================================================================================
-acf
-================================================================================
-"""
-
-
-"""
-================================================================================
-distributions
-================================================================================
-"""
 require(distr)
 N = 1000
 t <- 1:N
-
-
-
-
-
-# ==============================================================================
-# ==============================================================================

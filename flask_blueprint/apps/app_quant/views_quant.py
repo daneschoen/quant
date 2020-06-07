@@ -48,23 +48,7 @@ from apps.settings.constants import *
 
 ###todo from apps.settings.settings_server import EMAIL_FINTECH_ADMIN #,
 from apps.app_util.util_email import email_smtp
-    #EMAIL_SERVER_PORT_GMAIL
-# from apps.settings._w import _w_g, _w_z
-w_g = ""
-w_z = ""
 
-
-# ==============================================================================
-# Routes
-# ==============================================================================
-
-# ------------------------------------------------------------------------------
-# CONTROLLERS - test
-# ------------------------------------------------------------------------------
-
-# ----------------
-# Test: Templates
-# ----------------
 @app_quant.route('izmeginat/tpl/resize')
 def izmeginat_tpl_resize():
     return render_template('nav_bs4_resize.html')
@@ -85,11 +69,6 @@ def izmeginat_tpl_sciencestrange():
 @app_quant.route('izmeginat/tpl/lapas')
 def izmeginat_tpl_lapas():
     return render_template('index_quant_lapas.html')
-
-
-@app_quant.route('izmeginat/article')
-def test_article():
-    return render_template('article_tribal.html')
 
 @app_quant.route('izmeginat/modal')
 def test_index():
@@ -157,41 +136,6 @@ def izmeginat_log1():
     return 'ok'
 
 
-# ---------------------
-# Test: session, redis
-# ---------------------
-@app_quant.route('izmeginat/session_put')
-def izmeginat_session_put():
-    # X res = jsonify(session)
-    # X return jsonify(session)
-
-    session['cow'] = 'moo'
-    session['dtime'] = datetime.datetime.utcnow()
-    session['sid2'] = session.sid
-    #session['_id'] = session._id
-    session['user'] = current_user.username
-    session['pd_'] = {'pi': 3.14, 'k': 'poo'}
-
-    return jsonify(current_user.username)
-
-@app_quant.route('izmeginat/session_get')
-def izmeginat_session_get():
-    # X res = jsonify(session)
-    res = {}
-
-    res['sid'] = session.sid
-    res['uid'] = session.get('uid')
-    res['dtime'] = session.get('dtime', None)
-    res['foo'] = session.get('foo', None)
-    res['cow'] = session.get('cow', None)
-    res['_id'] = session.get('_id', None)
-    res['user'] = session.get('user', None)
-    res['pd_'] = session.get('pd_', None)
-
-    return jsonify(res)
-
-# -----
-
 @app_quant.route('izmeginat/redis_put')
 def izmeginat_redis_put():
     session_data_obj = dict(
@@ -235,7 +179,7 @@ def izmeginat_route_host():
 # ------------------------------
 # Test: ASYNC PROIMSE, DEFERRED
 # ------------------------------
-"""
+
 @app_quant.route('test/api_async0/')
 @app_quant.route('test/api_async0/<foo>')
 def test_async0(foo=None):
@@ -246,38 +190,7 @@ def test_async0(foo=None):
 
     #return jsonify(x)
     #return jsonify({'foo':foo})  # => js = {foo: null}
-"""
-# -----------------------
-# Test: paramaters in url
-# -----------------------
-# 2 params MUST - required
-@app_quant.route('test/api0/<foo>/<bar>')
-def test_api0(foo, bar):
-    return jsonify({'foo':foo, 'bar':bar})
 
-# X same!
-@app_quant.route('test/api1/<foo>/<bar>')
-def test_api1(foo='foo', bar='bar'):
-    return jsonify({'foo':foo, 'bar':bar})
-
-# X same!
-@app_quant.route('test/api2/<foo>/<bar>/')
-def test_api2(foo='foo', bar=None):
-    return jsonify({'foo':foo, 'bar':bar})
-
-
-@app_quant.route('test/api3/<foo>/<bar>')
-def test_api3(foo, bar):
-    return jsonify(ret={'foo':foo, 'bar':bar})
-
-@app_quant.route('test/api4/<foo>/cow/<bar>')
-def test_api4(foo, bar):
-    return jsonify({'foo':foo, 'bar':bar})
-
-
-"""
-For optional-default paramters: Have to have TWO ROUTES, TWO, TWOOOOO:
-"""
 @app_quant.route('test/api_default0/')
 @app_quant.route('test/api_default0/<foo>')
 def test_api_default0(foo=None):
@@ -335,18 +248,6 @@ def test_api_catch_all(path):
     return jsonify({'the path':path})
 
 
-"""
-$ curl 127.0.0.1:5000          # Matches the first rule
-You want path:
-$ curl 127.0.0.1:5000/foo/bar  # Matches the second rule
-You want path: foo/bar
-"""
-
-
-# ------------------------------------------------------------------------------
-# Health здоровье - veselība
-# ------------------------------------------------------------------------------
-#@app.route('zdorovye/check|verify', defaults={'component': None}')
 @app_quant.route('zdorovye/parbaudit')
 @app_quant.route('zdorovye/parbaudit/<component>')
 def zdorovye_check(component=None):
@@ -370,19 +271,6 @@ def zdorovye_check(component=None):
 @app_quant.route('zdorovye/vesture/<sym>')
 @app_quant.route('zdorovye/vesture/<sym>/<last_per>')
 def zdorovye_vesture(sym="BTC", last_per=5):
-    '''
-    https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=7
-    last_dtime =
-    = col_coin_hist_daily.find_one(
-      { 'sym':sym },
-      { '_id':0, 'hist': 1 }
-    )['hist'][-1]['time']
-
-    = col_coin_hist_daily.find_one(
-      { 'sym': sym },
-      { '_id':0, 'sym':1, 'hist': { '$slice':-1 }  }
-    )['hist'][0]['time']
-    '''
     last_per = int(last_per)
     sym = sym.upper()
 
@@ -393,52 +281,8 @@ def zdorovye_vesture(sym="BTC", last_per=5):
 
     return jsonify(last_docs)
 
-
-"""
-# ------------------------------------------------------------------------------
-# CONTROLLERS - get & API - private - data and plots
-# ------------------------------------------------------------------------------
-api/data/get_crypto_now
-api/data/get_crypto_live
-api/data/coin_top
-api/data/get_hist_daily/<sym0>/<sym1>
-
-api/plot/2d_btc_sp
-api/plot/3d_ribbon
-api/plot/3D_volatility
-api/plot/3d_scatter_crypto_sp_
-
-api/data/get_coin_spec/<sym>
-api/tron/run_get_update_coin_hist
-"""
-### Todo - protect!
-@app_quant.route('api/data/get_crypto_now')
-def get_crypto_now():
-    return get_crypto_live()
-    # get_crypto_mongo()
-
-
-@app_quant.route('api/data/get_crypto_live')
-def get_crypto_live():
-    d_res = data_crypto.get_crypto_live_()
-    if d_res is None:
-        d_res = {'status_msg':'error'}
-    d_res['status_msg'] = 'ok'
-    return jsonify(d_res)
-
-
 @app_quant.route('api/data/coin_top')
 def get_coin_top():
-    """
-    l_top_10_pop = col_coin_top.find_one({'top_10_pop': {'$exists': True}},{'_id':0})['top_10_pop']
-    l_top_10_mkt = col_coin_top.find_one({'top_10_mkt': {'$exists': True}},{'_id':0})['top_10_mkt']
-    l_top_100    = col_coin_top.find_one({'top_100': {'$exists': True}},{'_id':0})['top100']
-    d_res = {
-      'top_10_pop': l_top_10_pop,
-      'top_10_mkt': l_top_10_mkt,
-      'top_100': l_top_100,
-    }
-    """
     d_top = col_coin_top.find_one({'top_10_pop': {'$exists': True}},{'_id':0})
 
     if d_top is None:
@@ -543,9 +387,6 @@ def api_plot_3d_volatility():
 
 @app_quant.route('api/plot/3d_scatter_crypto_sp_')
 def api_plot_3d_scatter_crypto_sp_():
-#@app_quant.route('api/plot/3d_scatter_crypto_sp_time')
-#def api_plot_3d_scatter_crypto_sp_time():
-
     d_fig = plot.get_plot_3d_scatter_crypto_sp_()
     return jsonify(d_fig)
 
@@ -659,18 +500,6 @@ def contact(name=None):
     )
     #return jsonify(result=list(cursor))
 
-    """
-    lst_jsn=[]
-    enc = CustomJSONEncoder()
-    for r in cursor:
-        r = enc.encode(r)
-        lst_jsn.append(r)
-    return Response(lst_jsn, mimetype='application/json')   # ok, just no pretty
-    return json.dumps({'result': lst_jsn},                  # ok, just no pretty
-            default = json_util.default,
-            indent = 4)
-    """
-
     lst_jsn=[]
     result_count = cursor.count()
     for r in cursor:
@@ -736,9 +565,6 @@ def contact_get():
     }
     return jsonify(result)
 
-# ------------------------------------------------------------------------------
-# public API
-# ------------------------------------------------------------------------------
 @app_quant.route('email/contactme', methods=['GET', 'POST'])
 def contactme():
     res_jsn = {
@@ -760,13 +586,8 @@ def contactme():
 
         msg_subject = "CONTACTME - From: " + email + "  Name: " + name
         logger.info("EMAIL " + msg_subject + " Body: " + msg_body)
-        ret_email = email_smtp(_w_g, EMAIL_SERVER_PORT_GMAIL, EMAIL_GMAIL, EMAIL_ACROSSPOND, msg_subject, msg_body)
+        ret_email = email_smtp(_w_g, EMAIL_SERVER_PORT, msg_subject, msg_body)
 
-        # Using requsts post:
-        # url = 'http://192.168.3.45:8080/api/v2/event/log'
-        # data = {"eventType": "AAS_PORTAL_START", "data": {"uid": "hfe3hf45huf33545", "aid": "1", "vid": "1"}}
-        # params = {'sessionKey': '9ebbd0b25760557393a43064a92bae539d962103', 'format': 'xml', 'platformId': 1}
-        # requests.post(url, params=params, json=data)
         mailinglist_insert(email)
 
         if not ret_email:

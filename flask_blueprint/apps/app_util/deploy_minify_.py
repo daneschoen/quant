@@ -13,22 +13,14 @@ file_tail_quant_lst = ['index_tail_dia', 'index_tail_rak']                   # j
 file_head_blog_visuably_lst = ['index_head_dia_']   # css
 file_tail_blog_visuably_lst = ['index_tail_dia_']   # js
 
-file_index_def_blog_visuably_lst = ['index_land_visuably', 'index_finance']   # css + js
 file_index_def_blog_datasciencery_lst = ['index_land_datasciencery']
 
 file_index_def_lst_ = list(set(file_index_def_blog_visuably_lst).union(set(file_index_def_blog_datasciencery_lst)))
 
-css_def_lst = ['app_lapas','app_visuably']
-js_def_lst = ['app_quantcypher', 'app_visuably']  #! 'app_lapas',
-
 file_ext = ".html"
 
 PATH_QUANT = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_quant', 'templates'))
-PATH_BLOG_VISUABLY = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_blog_visuably', 'templates'))
 PATH_DATASCIENCERY = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_datasciencery', 'templates'))
-PATH_BLOG_SCIENCEISMETA = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_blog_scienceismeta', 'templates'))
-PATH_BLOG_SCIENCESTRANGE = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_blog_sciencestrange', 'templates'))
-PATH_BLOG_MOLTENWARS = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'app_blog_moltenwars', 'templates'))
 
 # ==============================================================================
 
@@ -243,10 +235,7 @@ def mv_dev_prod_min(file_head_lst=file_head_blog_visuably_lst,
             print(os.path.basename(path_file_in) + "  => " + os.path.basename(path_file_out) + "\n")
 
 
-def cp_dev_prod(file_head_lst=file_head_blog_visuably_lst,
-                file_tail_lst=file_tail_blog_visuably_lst,
-                path_template=PATH_BLOG_VISUABLY,
-                mode="prod",
+def cp_dev_prod(mode="prod",
                 tpl_lst=[] ):
 
     # ['art_abc.html']
@@ -303,7 +292,6 @@ def cp_dev_prod(file_head_lst=file_head_blog_visuably_lst,
 
 
 def get_path_template(tpl_lst_str):
-    path_template = PATH_BLOG_VISUABLY
 
     txt = ''
     if isinstance(tpl_lst_str, str):
@@ -327,11 +315,10 @@ def get_subprocess(dir):
         print(l)
 
 def sanity_check():
-    base_env_dir = os.getcwd().split('Agape')[0]
-    base_proj_dir = base_env_dir + 'Agape/development/'
-    print(get_subprocess(base_proj_dir + "projects/fintech/flask_blueprint/apps/static/js/"))
-    print(get_subprocess(base_proj_dir + "projects/fintech/flask_blueprint/apps/static/css/"))
-    print(get_subprocess(PATH_BLOG_VISUABLY))
+    base_env_dir = os.getcwd().split('adf')[0]
+    base_proj_dir = base_env_dir + 'adf'
+    print(get_subprocess(base_proj_dir + "adf"))
+    print(get_subprocess(base_proj_dir + "adf"))
     print(get_subprocess(PATH_DATASCIENCERY))
 
 
@@ -344,16 +331,6 @@ if __name__ == "__main__":
     parser.add_argument('--tpl', nargs='+')
     parser.add_argument('--mode', nargs='?', default='prod')
     args = parser.parse_args()
-
-    """
-    for _, value in parser.parse_args()._get_kwargs():
-        if value is not None:
-            print(value)
-    print(args)
-    print(args.tpl)
-    print(args.css is None)
-    print(args.mode)
-    """
 
     css_lst = []
     js_lst = []
@@ -377,43 +354,3 @@ if __name__ == "__main__":
     cp_dev_prod(tpl_lst=tpl_lst, path_template=path_template, mode=args.mode)
 
     sanity_check()
-
-
-    '''
-    # --------------------------------------------------------------------------
-    # UNITTEST
-    # --------------------------------------------------------------------------
-    - MUST BE IDEMPOTENT
-
-    $ cp templates/index0.html templates/index.html
-    $ cp templates/index_finance0.html templates/index_finance.html
-    $ cp index_tail_dia_dev0.html index_tail_dia_dev.html
-    $ cp index_tail_dia_prod0.html index_tail_dia_prod.html
-    $ cp about_0.html about_.html
-
-    $ p3 ../app_util/minify_.py
-    $ p3 ../app_util/minify_.py --tpl index_land           # assert index0.html == index.html,  index_dev0.html == index_dev.html
-    $ p3 ../app_util/minify_.py --tpl index_finance        # $ diff templates/index_dev.html templates/index.html
-    $ p3 ../app_util/minify_.py --tpl index index_finance  # $ diff templates/index_finance0.html templates/index_finance.html
-                                                           # $ diff templates/index_finance_dev.html templates/index_finance.html
-
-    $ p3 ../app_util/minify_.py --css app_quantcypher                    # NOTHING
-    $ p3 ../app_util/minify_.py --css lapas                              # new q: index*.html, index_head_dia
-    $ p3 ../app_util/minify_.py --css app_quantcypher --tpl index_land   # new q: index.html, index_head_dia
-    $ p3 ../app_util/minify_.py --css app_quantcypher --tpl index_land index_finance
-
-    $ p3 ../app_util/minify_.py --js app_quantcypher
-    $ p3 ../app_util/minify_.py --js app_quantcypher --tpl index
-
-    $ p3 ../app_util/minify_.py --css lapas --js app_quantcypher
-    $ p3 ../app_util/minify_.py --css lapas --js app_quantcypher --tpl index_finance
-
-    $ p3 ../app_util/minify_.py --tpl about_                      #
-    $ p3 ../app_util/minify_.py --tpl about_ --css foo            #
-    $ p3 ../app_util/minify_.py --tpl about_ --css lapas
-    $ p3 ../app_util/minify_.py --tpl about_ --css lapas --js app_quantcypher
-    '''
-
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================

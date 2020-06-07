@@ -1,7 +1,3 @@
-# PATH_CODE = '/Users/acrosspond/Agape/development/projects/fintech/quant/'
-# source(paste0(PATH_CODE, "r_rand_polynomial.R"))
-
-# script.dir <- dirname(sys.frame(1)$ofile)
 
 if (FALSE){
 times <- seq(0, 800, 16.66)

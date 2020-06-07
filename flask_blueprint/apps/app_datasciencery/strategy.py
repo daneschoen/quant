@@ -22,15 +22,6 @@ import statsmodels.graphics.api as smg
 
 from sklearn import linear_model
 
-#from flask_apps.stats import *
-#from flask_apps.globals import *
-
-#from os import listdir
-#from os.path import isfile, join
-#import glob
-#sp500 = glob.glob("/Users/acrosspond/Agape/development/projects/fintech/data_in/equity_future_com/sp500/*.csv")
-#os.curdir, os.listdir()
-
 #from . import stats_regression
 from apps.app_quant import stats_regression
 
@@ -38,19 +29,6 @@ from apps.app_quant import stats_regression
 from apps.settings.settings import PATH_PROJ, PATH_APP
 from apps.settings.constants_fin import *
 
-# ==============================================================================
-# pth_wrk = os.path.join(PATH_PROJ, "data_in")
-# pth_equity = "data_in/equity/"
-# pth_com_fx = "data_in/com_fx/"
-# pth_econ = "data_in/econ/"
-# pth_crypto = "data_in/crypto/"
-
-# PATH_FUT = os.path.join(PATH_PROJ, pth_fut)
-# PATH_DATA_SP500 = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '../../..', pth_sp500))
-# PATH_EQUITY_SP500 = os.path.join(PATH_PROJ, pth_equity_sp500)
-    # cur_path = os.getcwd()
-    # if cur_path[:7] == '/Users/':
-    #     PROJ_ROOT = cur_path.rsplit('/', 3)
 
 pth_fut = "data_in/future/fut_1min"      # "fut_2018/"
 pth_equity_sp500 = "data_in/equity/sp500_1min/"
@@ -68,50 +46,6 @@ EXT = ".csv"
 FNAME_SUFFIX_EXT = FNAME_SUFFIX + EXT
 
 TIME_PREFIX = 'p'   # 't_'
-
-# ------------------------------------------------------------------------------
-''' Used by:
-~/Agape/development/ml_stats_quant/trade_quant/trade_strategy/fut_setup.py
-
-
-sys.path.append(... "projects/fintech/flask_blueprint/apps/app_quant")
-~/Agape/development/ml_stats_quant/statsmodels_regression_scikit/regression_stats.ipynb
-
-~/Agape/development/ml_stats_quant/trade_quant/trade_strategy/*.py
-~/projects/fintech/flask_blueprint/apps/app_plot_pair, app_plot_ml
-~/projects/fintech/flask_blueprint/apps/app_quant/import_transform
-
-
-#fut_files = ['esdata1col.csv', 'usdata1col.csv']
-#fut_files_dct = {fut[:2].lower():fut for fut in fut_files}
-
-df_fut = strategy.import_fut_dct_df(sym_lst=['es','us'])
-
-df_fut_pctchg = {fut: df_.pct_change()[1:] for fut, df_ in df_fut.items()}
-
-display( df_fut_pctchg['es'].columns )
-display( df_fut['es'].head() )
-
-
-df_stk_sp500 = strategy.import_equity_sp500_dct_df()
-df_stk_nasdaq100 = strategy.import_equity_nasdaq100_dct_df()
-
-df_stk = strategy.import_equity_dct_df()
-df_stk['sp500']
-df_stk.keys())
-
-df_stk['aapl'].head()
-df_stk['goog'].tail()
-
-df_stk_pctchg = {sym: df_.pct_change()[1:] for sym, df_ in df_stk.items()}
-df_stk['aapl'].head()
-df_stk_pctchg['aapl'].head()
-
-df_stk_pctchg['aapl'].columns
-
-df_stk_pctchg = {sym: df_.pct_change()[1:] for sym, df_ in df_stk.items()}
-
-'''
 
 
 def get_sym_lst(src='pth_equity_sp500'):
@@ -248,31 +182,6 @@ def import_crypto(crp_lst=['btc'], bl_debug=False):
 
 
 def merge_df(*df_lst, columns=[]):
-    ''' Use:
-
-    df_stk_es = merge_df(df_stk[sym_stk], df_fut[sym_fut])
-              = merge_df(*[df_stk[sym_stk], df_fut[sym_fut]])
-
-    #df_a.join(df_b, how='inner')     # ==   ONLY on index and only pair
-    #pd.merge(df_a, df_b, on='date')  # ==   NEED TO HAVE NAME FOR INDEX
-
-    df_stk_es = merge_df(df_stk[sym_stk], df_fut[sym_fut])
-              = merge_df(*[df_stk[sym_stk], df_fut[sym_fut]])
-
-
-    # Merge-concat on dates, but only include certain cols
-    cols_incl = ['Adj. Open', 'Adj. High', 'Adj. Low', 'Adj. Close', 'Adj. Volume']
-    df_pair = pd.concat([df_stk[syms[0]].loc[:,cols_incl],
-                         df_stk[syms[1]].loc[:,cols_incl]], axis=1, join='inner')
-
-    #df_a.join(df_b, how='inner')     # ==   ONLY on index and not more than pair
-    #pd.merge(df_a, df_b, on='date')  # ==   NEED TO HAVE NAME FOR INDEX
-
-    #df_es_us_.drop(df_es_us_.index[0],inplace=True)
-    '''
-    #df_a.join(df_b, how='inner')     # ==   ONLY on index and only pair
-    #pd.merge(df_a, df_b, on='date')  # ==   NEED TO HAVE NAME FOR INDEX
-
     df_ = pd.concat(df_lst, axis=1, join='inner')
     df_.dropna(inplace=True)
     if columns:
@@ -284,12 +193,6 @@ def pctchg_df(df_asset):
     return {asset: df_.pct_change()[1:] for asset, df_ in df_asset.items()}
 
 
-"""
-# ------------------------------------------------------------------------------
-# strategy tools
-# ------------------------------------------------------------------------------
-"""
-
 def strip_eqn_y_x(eqn_model):
     eqn_model = eqn_model.lower()
 
@@ -300,30 +203,6 @@ def strip_eqn_y_x(eqn_model):
 
 
 def calc_feat(feat_str, method='diff'):
-    ''' Usage:
-    feat_df = calc_feat('fut_us_c_1p1615')
-    feat_df = calc_feat('fut_us_1p1615')
-    feat_df = calc_feat('fut_es_l')
-    feat_df = calc_feat('fut_es_o')
-
-    feat_df['fut_es_c_c1']  = es[c_es] - es[c_es].shift(1)
-    feat_df['fut_es_c1_c2'] = es[c_es].shift(1) - es[c_es].shift(2)
-    feat_df['fut_es_c2_c3'] = es[c_es].shift(2) - es[c_es].shift(3)
-    feat_df['fut_es_c3_c4'] = es[c_es].shift(3) - es[c_es].shift(4)
-    feat_df['fut_es_o_c1']  = es[o_es] - es[c_es].shift(1)
-    feat_df['fut_es_c_o1']  = es[c_es] - es[o_es].shift(1)
-    feat_df['fut_es_p1500_1p1500'] = es['fut_es_1500'] - es['fut_es_1500'].shift(1)
-
-    feat_df['fut_us_c_c1']  = us[c_us] - us[c_us].shift(1)
-    feat_df['fut_us_c_1p1615'] = us[c_us]- us['fut_us_1615'].shift(1)
-    feat_df['fut_us_c1_c2'] = us[c_us].shift(1) - us[c_us].shift(2)
-    feat_df['fut_us_c2_c3'] = us[c_us].shift(2) - us[c_us].shift(3)
-    feat_df['fut_us_c3_c4'] = us[c_us].shift(3) - us[c_us].shift(4)
-    feat_df['fut_us_o_c1']  = us[o_us] - us[c_us].shift(1)
-    feat_df['fut_us_c_o1']  = us[c_us] - us[o_us].shift(1)
-    feat_df['fut_us_1p1700_1p1615']  = us[c_us].shift(1) - us['fut_us_1615'].shift(1)
-    '''
-
     feat_str_lst = feat_str.lower().split('_')
     asset = feat_str_lst[0]            # fut, stk
     sym = feat_str_lst[1]              # us, es
@@ -451,13 +330,6 @@ def calc_model(eqn_model, strat, bl_recalc_model=True, method='diff'):
 
 
 def parse_eqn_model_filter(eqn_model_filter):
-    ''' Usage:
-    eqn_model_filter = 'fut_es_c_o ~ fut_es_o_c1 < 0 + fut_es_c1_c2 < 0 + fut_es_c2_c3 < 0 + fut_es_c3_c4 < 0'  #*****!
-    eqn_model_filter = 'fut_es_c_o ~ fut_es_o_c1 + fut_es_c1_c2 < 0 + fut_es_c2_c3 < 0 + fut_es_c3_c4 < 0'
-
-    eqn_model = strategy.parse_eqn_model_filter(eqn_model_filter)
-    '''
-
     y, X = eqn_model_filter.lower().split('~')
     eqn_model = y.strip() + ' ~ '
 
@@ -553,16 +425,6 @@ def graph_pl():
 
 
 def pl(df_test, reg_model, pred_thresh_pct=None, pred_thresh_pts=0.33):
-    ''' Usage:
-    - df_test
-      - columns can ONLY contain relevant y, X: [y, x_1, x_2, ..., x_k]
-      - can be test or valid
-      - can be any length, >= 1
-    - reg_model.params can be from model or filter
-      - BUT DATES MUST MATCH ! test, valid dates > reg dates
-        This fn does NOT CHECK if dates match !
-    '''
-
     X = sm.add_constant(df_test.iloc[:, 1:])
     y_test_hat = np.dot(X, reg_model.params)
 
@@ -628,9 +490,7 @@ def pl(df_test, reg_model, pred_thresh_pct=None, pred_thresh_pts=0.33):
             else:
                 df_pl.iloc[i]['win_shrt'] = '-'
             df_pl.iloc[i]['win_long'] = ' '
-        # --------------------------
-        # thresh - skip near pred 0:
-        # --------------------------
+
         if pred_thresh_pct:
             if np.abs(y_test_hat[i]) < pred_thresh_pct*max_y_test :
                 pass   # dont trade
@@ -876,15 +736,7 @@ def calc_model_filter_rolling(eqn_model_filter, strat, eqn_model=None, train_tes
 # ------------------------------------------------------------------------------
 
 def strat_scanner(strat, freq='30min', num_coef=3):
-    '''
-    Every M min increments
 
-    eqn_model  = "fut_es_0015_0010 ~ fut_es_0010_0005 + fut_es_0005_0000"
-    eqn_model  = "fut_es_1000_0930 ~ fut_es_0930_0900 + fut_es_0900_0830"
-    eqn_model_filter = "fut_es_1000_0930 ~ fut_es_0930_0900 > 0 + fut_es_0900_0830 > 0"
-
-    '''
-    freq_lst = ['1min','2min','3min','4min','5min','10min','15min','30min','H']
     if freq:
         freq = freq
     time_inc_lst = [ x[11:16].replace(':','') for x in pd.date_range('2019-01-01', '2019-01-02', freq=freq, tz='UTC').astype(str) ][:-1]
@@ -963,7 +815,3 @@ def calc_permute_eqn_model_filter(eqn_model_filter_lst, strat):
             print('*train_len, test_len:', strat[eqn_model_filter]['train_len'], strat[eqn_model_filter]['test_len'], '\n\n')
 
         i+=1
-
-
-# ==============================================================================
-# ==============================================================================

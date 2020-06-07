@@ -23,11 +23,8 @@ def get_mongodb(hostname, port, dbname):
 
 mongoclient_fintech, mongodb_fintech = get_mongodb(app.config['MONGO_HOSTNAME_FINTECH'], app.config['MONGO_PORT_FINTECH'], app.config['MONGO_DBNAME_FINTECH'])
 mongoclient_geo, mongodb_geo = get_mongodb(app.config['MONGO_HOSTNAME_GEO'], app.config['MONGO_PORT_GEO'], app.config['MONGO_DBNAME_GEO'])
-mongoclient_tribal, mongodb_tribal = get_mongodb(app.config['MONGO_HOSTNAME_TRIBAL'], app.config['MONGO_PORT_TRIBAL'], app.config['MONGO_DBNAME_TRIBAL'])
 
 mongoclient, mongodb = mongoclient_fintech, mongodb_fintech
-
-col_visuably_newsletter = mongodb['visuably_newsletter']
 
 col_coin_spec = mongodb[COL_COIN_SPEC]
 col_coin_top = mongodb[COL_COIN_TOP]
@@ -44,29 +41,7 @@ col_geo_cnty = mongodb_geo[COL_GEO_CNTY]
 
 col_fx = mongodb_geo[COL_FX]
 
-col_blog_tribal = mongodb_tribal[COL_BLOG_TRIBAL]
 
-
-# PUT THIS IN SYSTEM INIT SETUP
-# mongodb.create_collection(COL_EQUITYCURVE, capped=True, size=2000000, max=20)
-# mycollection.options() returns a dict with 'capped': Tru
-# db.command('collstats','mycollection')
-# db.createCollection("cappedLogCollection",{capped:true,size:10000,max:1000})
-# db.collection_names(include_system_collections=False)
-
-
-# ==============================================================================
-# LOGGER
-# ==============================================================================
-# -------------------------------------------------------------
-# Logging - 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'
-# logging.basicConfig(filename='error.log',level=logging.DEBUG)
-# -------------------------------------------------------------
-#import logging
-#from logging.handlers import RotatingFileHandler
-#from logging import Formatter, FileHandler
-#logging.basicConfig(filename='example.log',level=logging.DEBUG,
-#                    format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 logger_flask = logging.getLogger(app.config['LOG_FLASK'])   # 'LOG_UWSGI_PATH_NAME'
 logger_user = logging.getLogger(app.config['LOG_USER'])
 

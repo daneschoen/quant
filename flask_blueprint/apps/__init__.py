@@ -19,7 +19,7 @@ from .cache import cache
 # Flask app creation
 # ==============================================================================
 app = Flask(__name__)
-# app = Flask(__name__, host_matching=True, static_host='quantcypher.com')   # url_map.host_matching => True
+# app = Flask(__name__, host_matching=True, static_host='datasciencery.com')   # url_map.host_matching => True
 
 
 class Blueprint_host(Blueprint):
@@ -78,21 +78,11 @@ PLOT_ROUTES = dict(
   machinelearning = 'machinelearning/'       # <= @app_quant.route('/machinelearning/')
 )
 
-# ------------------------------------------------------------------------------
-# import app's for ALL DOMAINS , then register blueprint
-# => EACH DOMAIN MUST BE REGISTERED IN NGINX IN ITS OWN SERVER BLOCK DIRECTIVE!
-# ------------------------------------------------------------------------------
 from apps.app_auth import app_auth
 from apps.app_admin import app_admin
 
 from apps.app_geo import app_geo
 from apps.app_fx import app_fx
-
-from apps.app_laplacian import app_laplacian  # (<= old version: django)
-# from apps.app_holivue import app_holivue
-
-#from apps.app_blog_tribal import app_blog_tribal
-from apps.app_blog_visuably import app_blog_visuably
 
 from apps.app_datasciencery import app_datasciencery
 from apps.app_quant import app_quant
@@ -113,39 +103,7 @@ app.register_blueprint(app_auth, url_prefix='/account/')
 app.register_blueprint(app_admin, url_prefix='/admin/')
 app.register_blueprint(app_geo, url_prefix='/geo/')
 app.register_blueprint(app_fx, url_prefix='/fx/')
-
 app.register_blueprint(app_laplacian, url_prefix='/laplacian')
-
-# app.register_blueprint(app_holivue, url_prefix='/holivue/')
-# sapp.register_blueprint(app_kiklearn, url_prefix='/')
-# app.register_blueprint(app_blog_tribal, url_prefix='/tribalassembly/')
-
 app.register_blueprint(app_datasciencery, url_prefix='/datasciencery')
 app.register_blueprint(app_quant, url_prefix='/quant')
 app.register_blueprint(app_plot, url_prefix='/plot/')
-
-
-# -----------------------------------
-# DOMAINS - BLOGS: # www.visuably.com
-# ------------------------------------
-app.register_blueprint(app_blog_visuably, url_prefix='/')
-# domain - blog: # www.sciencestrange.com
-#app.register_blueprint(app_blog_scienceismeta, url_prefix='/sciencestrange')
-# domain - blog: # www.scienceismeta.com
-#app.register_blueprint(app_blog_scienceismeta, url_prefix='/scienceismeta')
-# domain - blog: # www.moltenwars.com
-#app.register_blueprint(app_blog_moltenwars, url_prefix='/moltenwars')
-# domain - blog: # www.historyismeta.com
-#app.register_blueprint(app_blog_historyismeta, url_prefix='/historyismeta')
-
-
-
-# ==============================================================================
-# Mongo, ...
-# ==============================================================================
-# PUT THIS IN SYSTEM INIT SETUP
-# mongodb.create_collection(COL_EQUITYCURVE, capped=True, size=2000000, max=20)
-# mycollection.options() returns a dict with 'capped': Tru
-# db.command('collstats','mycollection')
-# db.createCollection("cappedLogCollection",{capped:true,size:10000,max:1000})
-# db.collection_names(include_system_collections=False)

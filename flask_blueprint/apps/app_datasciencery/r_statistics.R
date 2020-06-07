@@ -3,9 +3,6 @@ require(graphics)
 require(stats)
 
 
-"""
-# http://www.cookbook-r.com/
-"""
 
 
 """
@@ -14,9 +11,6 @@ acf
 ================================================================================
 """
 require(quantmod)
-
-setwd('/Users/acrosspond/Agape/development/projects/fintech/data_in')
-dir()
 
 kpss.test
 adf.test
@@ -324,16 +318,6 @@ shift <- function(x, lag) {
 }
 
 
-
-
-
-
-
-
-
-
-
-The lattice package provides options to condition the scatterplot matrix on a factor.
 
 # Scatterplot Matrices from the lattice Package
 library(lattice)
