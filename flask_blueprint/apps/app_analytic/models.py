@@ -1,6 +1,5 @@
 from flask_login import UserMixin, AnonymousUserMixin
 
-"""
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
@@ -8,32 +7,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
-    ....
-"""
-
-"""
-pwd_hashed = bcrypt.hashpw(pwd.encode(), bcrypt.gensalt())
-pwd_hashed == bcrypt.hashpw(pwd.encode(), pwd_hashed)
-
-user_jsn = {
-  'username': 'john',                     # MUST BE UNIQUE
-  'email': 'john@rivercastcapital.com',   # MUST BE UNIQUE
-  'pwd': pwd_hashed,
-  'register_date': new Date(),
-  'note': "Droplet Name: Rivercast ssh admin@192.241.219.240",
-
-  'name_first': 'john',
-  'name_last': 'dunbar',
-  'cty': 'usa',
-  'city': 'boulder',
-  'state': 'co',
-  'zip': '80302',
-  'tel': '123.456.8883',
-  'addr': '1942 Broadway, Suite 729',
-  'addr2': ''
-}
-
-"""
 
 class User(UserMixin):
 

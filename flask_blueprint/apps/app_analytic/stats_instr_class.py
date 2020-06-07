@@ -26,75 +26,6 @@ from nolearn.lasagne import NeuralNet
 #from flask_apps.stats import *
 #from flask_apps.globals import *
 
-
-# ==============================================================================
-
-"""
-$ cp /opt/www/rivercast/data/regression_feature_admin.csv regression_feature_X.csv
-
-$ scp stats_instr.py admin@192.241.219.240:~/projects/rivercast/flask_blueprint/apps/app_analytic/analysis_r/
-
->>> from stats_instr import *
-
-1. Working well now.  Enter 1615, Exit next 1615,
-O<C1
-C<C2
-C2<C4
-C3<C5
-
-y: c-c1
-X: o1-c2, c1-c3, c3-c5, c4-c6
-
-2. Strategy that used to work, but not now,  Enter 1615, Exit next 1615
-O<C1
-C<O
-C<C3
-
-y: c-c1
-X: o1-c2, c1-c4
-
-'regression_feature_admin_6.csv'
-y : c-c1
-X1: o1-c2, X2: o1-c1, X3: o2-c3, X4: c1-c2, X5: c2-c3, X6: c3-c4
-
-
-y: c-c1
-X: c3-c5, c4-c6, c1-c4
-adjR^2: 0.08
-
-
-TODO:
-    - thresh matrix for performance
-    - completely separte performance from algorithm - for ex include nn
-    - train, valid, test - all rolling
-    - pre segment thresholds: df_train.c1_c2 >= 1.0
-    - o is opposite
-    - rms: corr SEPARATELY for long and shrt
-    - Statistics: matrix of threshold predictions
-    - AVG loss (not max)
-    - New segmentation, new models: logistic regression w regularization, loess
-
-- Do rolling training with data from 1999 and predict next month.
-  This way you will have thousands of predictions to see how it really does.
-- Research more models, maybe variations on your favorite models.
-  Should have at least dozen models. 3-5 models for long and 3-5 models for shrt
-  and 12 sets of these for each class of trades such as 3up, 3dn, 1-4up,
-  intrady trades: o-c trades, p@1000, etc.
-- Automated training of coefficients on dozens of models on weekly or monthly
-  basis and automatic prediction on daily basis. Once top dozen models or so are
-  tested and chosen, everything should be automated.
-
-On the issue of Rsquared, I realize why they are so low. Traditional statistics
-will penalize if it predicts a bit long and it is actually very long. And it will
-penalize less if it predicts a bit long and is a bit short. This is opposite of
-what we want. If it is very long with a small long prediction this is a good thing.
-
-"""
-
-# ==============================================================================
-
-FIN_NAME = 'regression_feature_6.csv'
-# Index(['c_c1', 'o1_c2', 'o1_c1', 'o2_c3', 'c1_c2', 'c2_c3', 'c3_c4'], dtype='object')
 FIN_PATH = ''
 FIN_PATHNAME = os.path.join(FIN_PATH, FIN_NAME)
 
@@ -104,7 +35,7 @@ DATA_DT_COL = 0
 DATA_TIME_COL = 0
 DATA_DTIME_COL = 0
 DATA_YTRUE_COL = 0
-DATA_YTRUE_NAME = 'c_c1'
+DATA_YTRUE_NAME = 'std_2_dev'
 
 # [3391 rows x 7 columns]  13 years = 2003 - 2016-quarter
 # N_NOSEG = 5000
@@ -128,20 +59,6 @@ class Struct_dot:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
-"""
-l = [0.0 for x in THRESHPRED_LST]
-d_threshpred = {
-    'thresh_both':l.copy(), 'thresh_long':l.copy(), 'thresh_shrt':l.copy()
-}
-
-{'thresh_long': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 'thresh_both': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 'thresh_shrt': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}
-
-foo = {}
-for fm_m in self.fm_:
-    foo[fm_m] = Struct_dot(**deepcopy(d_threshpred))
-
-"""
-# ------------------------------------------------------------------------------
 
 class Prediction:
 
@@ -152,7 +69,7 @@ class Prediction:
         self.seg_name = seg_name
 
         self.FIN_NAME = FIN_NAME
-        # Index(['c_c1', 'o1_c2', 'o1_c1', 'o2_c3', 'c1_c2', 'c2_c3', 'c3_c4'], dtype='object')
+        # Index(['std_2_dev', '4_std_3_dev', 'o1_c1', 'o2_c3', 'std_dev', 'std_dev', 'std_3_dev'], dtype='object')
         self.FIN_PATH = FIN_PATH
         self.FIN_PATHNAME = os.path.join(FIN_PATH, FIN_NAME)
 
@@ -162,7 +79,7 @@ class Prediction:
         self.DATA_TIME_COL = DATA_TIME_COL   # 0
         self.DATA_DTIME_COL = DATA_DTIME_COL   # 0
         self.DATA_YTRUE_COL = DATA_YTRUE_COL     # 0
-        self.DATA_YTRUE_NAME = DATA_YTRUE_NAME   # 'c_c1'
+        self.DATA_YTRUE_NAME = DATA_YTRUE_NAME   # 'std_2_dev'
 
         # N_Seg ~ 500
         self.kfoldpartition_type = KFOLDPARTITION_TYPE
@@ -186,13 +103,6 @@ class Prediction:
         self.d_threshpred_fd = {
             'thresh_both':l_fd.copy(), 'thresh_long':l_fd.copy(), 'thresh_shrt':l_fd.copy()
         }
-        """
-        foo = {}
-        for fm_m in self.fm_:
-            foo[fm_m] = Struct_dot(**deepcopy(d_threshpred))
-
-        foo[fm_m].thresh_long[thresh_z]
-        """
 
 
     def import_data_np(self):
@@ -236,7 +146,7 @@ class Prediction:
 
             print(self.df.corr(), '\n')
             """
-            o1_c1 and c1_c2 is 0.8, so DONT want both in same X
+            o1_c1 and std_medis 0.8, so DONT want both in same X
             """
 
 
@@ -248,24 +158,24 @@ class Prediction:
         #df_train_seg_ = {}
         #df_test_seg_ = {}
 
-        #df_train_3up = df_train[(df_train.c1_c2 >= 0) & (df_train.c2_c3 >= 0) & (df_train.c3_c4 >= 0)].loc[:,['c_c1', 'c1_c2', 'c2_c3', 'c3_c4']]
-        #df_test_3up = df_test[(df_test.c1_c2 >= 0) & (df_test.c2_c3 >= 0) & (df_test.c3_c4 >= 0)].loc[:,['c_c1', 'c1_c2', 'c2_c3', 'c3_c4']]
+        #df_train_3up = df_train[(df_train.std_med>= 0) & (df_train.std_dev >= 0) & (df_train.std_3_dev >= 0)].loc[:,['std_2_dev', 'std_dev', 'std_dev', 'std_3_dev']]
+        #df_test_3up = df_test[(df_test.std_med>= 0) & (df_test.std_dev >= 0) & (df_test.std_3_dev >= 0)].loc[:,['std_2_dev', 'std_dev', 'std_dev', 'std_3_dev']]
 
         df_seg_['all'] = df
-        df_seg_['3up'] = df[ (df.c1_c2 >= thresh_seg) & (df.c2_c3 >= thresh_seg) & (df.c3_c4 >= thresh_seg) ]
-        df_seg_['3dn'] = df[ (df.c1_c2 <= thresh_seg) & (df.c2_c3 <= thresh_seg) & (df.c3_c4 <= thresh_seg) ]
-        df_seg_['3up_oup'] = df[ (df.c1_c2 >= thresh_seg) & (df.c2_c3 >= thresh_seg) & (df.c3_c4 >= thresh_seg)
-                                 & (df.o1_c2 >= thresh_seg)
-                                 #& (df_train.c1_c2 + df_train.c2_c3 + df_train.c3_c4 >= THRESH_SUM_C)
+        df_seg_['std'] = df[ (df.std_med>= thresh_seg) & (df.std_dev >= thresh_seg) & (df.std_3_dev >= thresh_seg) ]
+        df_seg_['std'] = df[ (df.std_med<= thresh_seg) & (df.std_dev <= thresh_seg) & (df.std_3_dev <= thresh_seg) ]
+        df_seg_['std_oup'] = df[ (df.std_med>= thresh_seg) & (df.std_dev >= thresh_seg) & (df.std_3_dev >= thresh_seg)
+                                 & (df.4_std_3_dev >= thresh_seg)
+                                 #& (df_train.std_med+ df_train.std_dev + df_train.std_3_dev >= THRESH_SUM_C)
                                ]
-        df_seg_['3up_odn'] = df[ (df.c1_c2 >= thresh_seg) & (df.c2_c3 >= thresh_seg) & (df.c3_c4 >= thresh_seg)
-                                 & (df.o1_c2 <= thresh_seg)
+        df_seg_['std_odn'] = df[ (df.std_med>= thresh_seg) & (df.std_dev >= thresh_seg) & (df.std_3_dev >= thresh_seg)
+                                 & (df.4_std_3_dev <= thresh_seg)
                                ]
-        df_seg_['3dn_odn'] = df[ (df.c1_c2 <= thresh_seg) & (df.c2_c3 <= thresh_seg) & (df.c3_c4 <= thresh_seg)
-                                & (df.o1_c2 <= thresh_seg)
+        df_seg_['std_odn'] = df[ (df.std_med<= thresh_seg) & (df.std_dev <= thresh_seg) & (df.std_3_dev <= thresh_seg)
+                                & (df.4_std_3_dev <= thresh_seg)
                                ]
-        df_seg_['3dn_oup'] = df[ (df.c1_c2 <= thresh_seg) & (df.c2_c3 <= thresh_seg) & (df.c3_c4 <= thresh_seg)
-                                 & (df.o1_c2 >= thresh_seg)
+        df_seg_['std_oup'] = df[ (df.std_med<= thresh_seg) & (df.std_dev <= thresh_seg) & (df.std_3_dev <= thresh_seg)
+                                 & (df.4_std_3_dev >= thresh_seg)
                                ]
         self.df_seg_ = df_seg_
 
@@ -296,10 +206,6 @@ class Prediction:
                 kfold_rvt[k].test  = (t_beg, t_end)
 
         elif alg == "nooverlap":
-            """ 392 >>> 4*46+4*27+4*25
-            k:9 [9R+9*50+9*30:10R+9*50+9*30] [10R+9*50+9*30:10R+10*50+9*30] [10R+10*50+9*30:10R+10*50+10*30]
-            R = (N_Seg - KV - KT)/K
-            """
             N_Train = int( (N_Seg - K_Fold*( N_Valid + N_Test))/K_Fold )
             for k in range(K_Fold):
                 r_beg, r_end = k*N_Train + k*N_Valid + k*N_Test, (k+1)*N_Train + k*N_Valid + k*N_Test
@@ -329,57 +235,8 @@ class Prediction:
 
         return N_Train, kfold_rvt
 
-        """
-        [0...500-1]   Train: 335 = 500 - (50+25+90)
-        Kfold   Train     Valid     Test
-                    +335       +50       +25
-        0      [0   :335] [335:385] [385:410]
-        1      [+10 :345] [345:395] [395:420]
-        k      N: [F*k     : F*k+N]
-               V: [F*k+N   : F*k+N+V]
-               T: [F*k+N+V : F*k+N+V+T]
-               ...
-        9      [90  :425] [425:475] [475:500]
-
-        NVT = [T, 50, 25]
-        K_F = [10, 10]
-        [0...392-1]   Train: 227 = 392 - (50+25+ (10*9))
-        0      [0   :227] [227:277] [277:302]
-        9      [90  :317] []        [   :392]
-
-        NVT = [T, 50, 25]
-        K_F = [20, 5]
-        [0...392-1]   Train: 222 = 392 - (50+25+ 5*(20-1))
-        0      [0   :222] [222:272] [272:297]
-        19     [95 :T+95] [T+95: T+95+50] [T+50+95 :  T+50+25+95]
-        19     [95 :] [317:317+50] [367:392]
-
-        NVT = [T, 50, 25]
-        K_F = [10, 5]
-        [0...392-1]   Train: 272 = 392 - (50 + 25 + (5*(10-1)))
-        0      [0  :272] [272:322] [322:347]
-        1      [5  :277] [277:327] [327:352]
-        9      [45 :317] [317:367] [342:392]
-
-        K_FOLD = 1
-        self.CV_TRAIN = self.N_Seg - ( CV_VALID + CV_TEST + K_FOLD_FWD*(K_FOLD-1) )
-                      = 392 - (50 + 25)
-
-        ------------------------------------------------------------------------
-        RVT = [R, 50, 30]
-        K_F = [10, 5]
-        [0...392-1]   Train: 272 = 392 - (50 + 25 + (5*(10-1)))
-        0      [0  :R]       [R:R+50]  [R+50:R+50+30]
-        1      [R+50+30:2R+50+30] [2R+50+30:2R+2*50+30] [2R+2*50+30:2R+2*50+2*30]
-        9      [9R+9*50+9*30:10R+9*50+9*30] [10R+9*50+9*30:10R+10*50+9*30] [10R+10*50+9*30:10R+10*50+10*30]
-
-        K(R+V+T) = N_Seg
-        R = (N_Seg - KV - KT)/K
-        """
-
 
     def crossvalidate_kfold(self):
-        print("\n================================================================================\n")
 
         self.metric_seg_k_ = []
 
@@ -455,7 +312,7 @@ class Prediction:
         self.model_selected = self.select_model()
         if self.verbose >= 1:
             print("Model Selected: ", self.model_selected)
-            print("\n================================================================================\n\n")
+
 
 
     def select_model(self):
@@ -488,34 +345,34 @@ class Prediction:
         self.fmX_=[]
         model_={}
         # ! THESE IS STILL ONLY DATA WHERE C2 > C3, C3 > c4
-        self.fm_.append("c_c1 ~ c1_c2 + c2_c3 + c3_c4")  # Adj. R-squared: 0.073
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4'])
+        self.fm_.append("std_2_dev ~ std_med+ std_dev + std_3_dev")  # Adj. R-squared: 0.073
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2")  # Adj. R-squared: 0.073
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2'])
+        self.fm_.append("std_2_dev ~ std_med+ std_dev + std_3_dev + 4_std_3_dev")  # Adj. R-squared: 0.073
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev', '4_std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2:o1_c2")    # Adj. R-squared:
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2'])
+        self.fm_.append("std_2_dev ~ std_med+ std_dev + std_3_dev + 4_std_3_dev:4_std_3_dev")    # Adj. R-squared:
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev', '4_std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2:o1_c2 + c2_c3:c3_c4")    # Adj. R-squared: 0.082
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2'])
-        self.fm_.append("c_c1 ~ c1_c2:c2_c3 + o1_c2:c3_c4")    # Adj. R-squared:
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2'])
-        self.fm_.append("c_c1 ~ c1_c2:c3_c4 + c2_c3:o1_c2")    # Adj. R-squared:
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2'])
+        self.fm_.append("std_2_dev ~ std_dev:4_std_3_dev + std_dev:std_3_dev")    # Adj. R-squared: 0.082
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev', '4_std_3_dev'])
+        self.fm_.append("std_2_dev ~ std_dev:std_dev + 4_std_3_dev:std_3_dev")    # Adj. R-squared:
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev', '4_std_3_dev'])
+        self.fm_.append("std_2_dev ~ std_dev:std_3_dev + std_dev:4_std_3_dev")    # Adj. R-squared:
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev', '4_std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2 + c2_c3:c3_c4")
-        self.fmX_.append(['c1_c2', 'c2_c3', 'c3_c4'])
+        self.fm_.append("std_2_dev ~ std_med+ std_dev:std_3_dev")
+        self.fmX_.append(['std_dev', 'std_dev', 'std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2 + o1_c2")    # Adj. R-squared: 0.081
-        self.fmX_.append(['c1_c2', 'o1_c2'])
-        self.fm_.append("c_c1 ~ c1_c2*o1_c2")
-        self.fmX_.append(['c1_c2', 'o1_c2'])
+        self.fm_.append("std_2_dev ~ std_med+ 4_std_3_dev")    # Adj. R-squared: 0.081
+        self.fmX_.append(['std_dev', '4_std_3_dev'])
+        self.fm_.append("std_2_dev ~ std_dev*4_std_3_dev")
+        self.fmX_.append(['std_dev', '4_std_3_dev'])
 
-        self.fm_.append("c_c1 ~ c1_c2 + c2_c3")    # Adj. R-squared: 0.081
-        self.fmX_.append(['c1_c2', 'c2_c3'])
-        self.fm_.append("c_c1 ~ c1_c2:c2_c3")      # Adj. R-squared: 0.183
-        self.fmX_.append(['c1_c2', 'o1_c2'])
+        self.fm_.append("std_2_dev ~ std_med+ std_dev")    # Adj. R-squared: 0.081
+        self.fmX_.append(['std_dev', 'std_dev'])
+        self.fm_.append("std_2_dev ~ std_dev:std_dev")      # Adj. R-squared: 0.183
+        self.fmX_.append(['std_dev', '4_std_3_dev'])
 
         for fm_m in self.fm_:
             model_m = smf.ols(formula=fm_m, data=df_train).fit()
@@ -535,9 +392,6 @@ class Prediction:
 
     def savefiles_segment(self):
         fpathname, f_ext = os.path.splitext(FIN_PATHNAME)
-        df_train_3up_oup.to_csv(fpathname + '_train_3up_o' + f_ext)   #, cols=['a', 'b']), sep='\t', encoding='utf-8')
-        df_train_3up_oup.to_csv(fpathname + '_test_3up_o' + f_ext)
-
 
     """
     ============================================================================
@@ -551,7 +405,6 @@ class Prediction:
 
     # yhat_outsample = model.predict(X[-10:,:])   # predict out of sample
 
-    X = df_test_3up.loc[:, ['c1_c2', 'o1_o2']]
     X = sm.add_constant(X)
     yhat_outsample = model.predict(X)
     print(ynewpred)
@@ -568,16 +421,6 @@ Calc yhat for Out of sample prediction - for all models
         """)
 
         yhat_outsample_m_ ={}
-        """
-        df_outsample_m_ = {}
-        #df_X = df_test_3up_oup.loc[:, ['c1_c2', 'c2_c3', 'c3_c4', 'o1_c2']]
-        for fm_m, fmX_m in zip(self.fm_, self.fmX_):
-            #df_test_[fm_m] = self.df_test_3up_oup[fmX_m]
-            df_outsample_m_[fm_m] = df_outsample[fmX_m]
-        """
-        # df_test_[fm_[2]] = pd.concat([df_test_3up_oup.loc[:,'c1_c2']*df.loc[:,'o1_c2']], axis=1, keys=['c1-c2:o1_c2'])
-        # df_test_3up_oup['c1_c2']*df_test_3up_oup['o1_c2']  # series
-
         for fm_m in self.fm_:
             #X_m = sm.add_constant(df_outsample_[fm_m])
             X_m = sm.add_constant(df_outsample)
@@ -596,18 +439,14 @@ Calc yhat for Out of sample prediction - for all models
     """
     Verify predict: y ~ model.params*X
 
-    fm_m = 'c_c1 ~ c1_c2 + c2_c3 + c3_c4 + o1_c2'
     df_test_[fm_m].ix[2902]  # .iloc[0]
     model_[fm_m].params * df_test_[fm_m].ix[2902].T
 
-    fm_m = 'c_c1 ~ c1_c2:o1_c2'
     df_test_[fm_m].ix[2902,0]*df_test_[fm_m].ix[2902,1]*model_[fm_m].params[1] + model_[fm_m].params[0]
       == yhat_test_[fm_m][0]
 
     df_test_[fm_m].ix[:,0]*df_test_[fm_m].ix[:,1]*model_[fm_m].params[1] + model_[fm_m].params[0]
       == yhat_test_[fm_m]
-
-    y_true: df_test_3up_oup['c1_c2'] == df_test_[fm_m]['c1_c2']
 
       y_hat[0] = regr.params[0]*X[0,0] + regr.params[1]*X[0,1] + regr.params[2]*X[0,2] + regr.params[3]*X[0,3]
       y_hat    = regr.params[0]*X[:,regr.params[0]*X[:,0] + regr.params[1]*X[:,1] + regr.params[2]*X[:,2] + regr.params[3]*X[:,3]0] + regr.params[1]*X[:,1] + regr.params[2]*X[:,2] + regr.params[3]*X[:,3]
@@ -697,7 +536,7 @@ RMS
 
     def get_performance(self, ytrue, yhat_m_, df, **meta):
         #ytrue = df_seg_par_k[self.DATA_YTRUE_NAME]
-        #ytrue = self.df_test_3up_oup['c_c1']
+        #ytrue = self.df_test_3up_oup['std_2_dev']
 
         metric = {}
         # metric['rms'] = self.get_perf_rms_m(ytrue, yhat_m_, **meta)
@@ -767,7 +606,7 @@ RMS
                 for y, (ytrue_y, yhat_m_y) in enumerate(zip(ytrue, yhat_m)):
                     """ both """
                     if not self.segment_post or ( self.segment_post and
-                        (df.iloc[y]['c1_c2'] >= 0.0 and df.iloc[y]['c2_c3'] >= 0.0 and df.iloc[y]['c3_c4'] >= 0.0) ) :
+                        (df.iloc[y]['std_dev'] >= 0.0 and df.iloc[y]['std_dev'] >= 0.0 and df.iloc[y]['std_3_dev'] >= 0.0) ) :
 
                         if yhat_m_y <= -threshpred_z or yhat_m_y >= threshpred_z:    # just to be super clear what we are doing in for block
                             metric_m_[fm_m]['N_trd'].thresh_both[z] += 1
@@ -908,177 +747,8 @@ Performance Metrics - for all models - for a given seg, k, and partition
         # self.CV_TRAIN = None
 
         self.crossvalidate_kfold()
-        # self.calc_models()
-        # self.calc_predictions()
-        # self.calc_rms()
-        # self.calc_cv(df_test_, yhat_test_)
-        # graph()
-
-        """
-from s import *
-from stats_instr_class import *
-
-seg_name = '3up_oup'
-# pred = Prediction()
-pred = Prediction(seg_name)
-
-# pred.THRESHSEGMENT_LST = [1.0]
-# pred.go_segment_kfold(seg_name)
-
-pred.verbose = 3
-pred.segment_post = False
-pred.test_usevalid = False
-pred.train_sizevar = False
-
-# -kfold overlap 5 20 None 27 25
-# 392 >>> 4*46+4*27+4*25
-pred.kfoldpartition_type = 'overlap'
-pred.K_FOLD = 4
-pred.K_FOLD_FWD = None
-pred.CV_TRAIN = None
-pred.CV_VALID = 27
-pred.CV_TEST = 25
-
-pred.kfoldpartition_type = 'overlap'
-pred.K_FOLD = 5
-pred.K_FOLD_FWD = 20
-pred.CV_TRAIN = None
-pred.CV_VALID = 50
-pred.CV_TEST = 50
-
-pred.import_data_pandas()
-pred.segment_data()
-pred.seg_name = seg_name
-
-pred.df_seg = pred.df_seg_[pred.seg_name]
-pred.N_Seg = pred.df_seg.shape[0]    # 392
 
 
-pred.crossvalidate_kfold()
-
-
-OR
-
-pred.df_seg_.keys()
-print('pred.seg_name:', pred.seg_name)
-pred.df_seg_['all'].head(30)
-pred.df_seg.head(10)
-
-
-pred.CV_TRAIN, pred.kfold_rvt = pred.split_kfold_partition(pred.kfoldpartition_type, pred.train_sizevar, pred.N_Seg, pred.K_FOLD, pred.K_FOLD_FWD, pred.CV_VALID, pred.CV_TEST, pred.CV_TRAIN)
-
-# pd.describe_option('display')
-pd.set_option('display.max_rows', 5000)
-
-
-m = "c_c1 ~ c1_c2 + c2_c3 + c3_c4"
-model_train = self.calc_ols(fm, self.df_seg_['all'])
-print(fm)
-print(self.df_train.describe(), '\n')
-print(model_train.summary())
-
-
-
-------------
-N_trd_both=0
-N_trd_long=0
-N_trd_shrt=0
-
-N_trd_both_correct_z=0
-N_trd_long_correct_z=0
-N_trd_shrt_correct_z=0
-
-expectgain_both=0
-expectgain_long=0
-expectgain_shrt=0
-
-yhat_m = yhat_valid_seg_k_m_[m]
-ytrue = ytrue_seg_valid_k
-
-
-for y, (ytrue_y, yhat_m_y) in enumerate(zip(ytrue, yhat_m)):
-    N_trd_both+=1
-    if yhat_m_y >= 0:
-        N_trd_long += 1
-        expectgain_long += (ytrue_y)
-    if yhat_m_y <= 0:
-        N_trd_shrt += 1
-        expectgain_shrt += (-ytrue_y)
-    if (yhat_m_y <= 0 and ytrue_y <= 0) or (yhat_m_y >= 0 and ytrue_y >= 0):
-        N_trd_both_correct_z += 1
-    if (yhat_m_y >=0 and ytrue_y >= 0):
-        N_trd_long_correct_z += 1
-    if (yhat_m_y <=0 and ytrue_y <= 0):
-        N_trd_shrt_correct_z += 1
-
-
-pctcorrect_both = N_trd_both_correct_z / N_trd_both
-pctcorrect_long = N_trd_long_correct_z / N_trd_long
-pctcorrect_shrt = N_trd_shrt_correct_z / N_trd_shrt
-
-expectgain_pertrd_both = expectgain_both / N_trd_both
-expectgain_pertrd_long = expectgain_long / N_trd_long
-expectgain_pertrd_shrt = expectgain_shrt / N_trd_shrt
-
-print(N_trd_both, N_trd_long, N_trd_shrt)
-
-print(pctcorrect_both, pctcorrect_long, pctcorrect_shrt)
-
-print(expectgain_pertrd_both, expectgain_pertrd_long, expectgain_pertrd_shrt)
-
-print('\n\n')
-
->>> print(pctcorrect_both)
-0.52
->>> print(pctcorrect_long)
-0.4583333333333333
->>> print(pctcorrect_shrt)
-0.5769230769230769
->>>
->>> print(expectgain_pertrd_both)
-0.0
->>> print(expectgain_pertrd_long)
--2.5625
->>> print(expectgain_pertrd_shrt)
-0.663461538462
->>> N_trd_both
-50
->>> N_trd_long
-24
->>> N_trd_shrt
-26
-
-
---------------------------------------------------------------------------------
-
-arr = df.values   # df.as_matrix(columns=df.columns[1:])
-
-
-================================================================================
-"""
-
-
-"""
-================================================================================
-p stats_instr_class.py --segment 3up_oup -v 3 --kfold overlap 5 20 None 50 50 > stats_instr_class_debug_all.txt
-p stats_instr_class.py --segment 3up_oup --kfold overlap 5 20 None 50 50 > stats_instr_class_3up_oup.txt
-
-
-p stats_instr_class.py --segment 3up --kfold overlap 5 20 None 50 50 > stats_instr_class_3up.txt
-p stats_instr_class.py --segment 3up --test_usevalid --kfold overlap 5 20 None 50 50 > stats_instr_class_testvalid_3up.txt
-p stats_instr_class.py --segment 3up --train_sizevar --kfold overlap 5 20 None 50 50 > stats_instr_class_3up_trainsizevar.txt
-
-
-p stats_instr_class.py --segment all  > stats_instr_class_all.txt
-
-p stats_instr_class.py --segment all --segment_post --kfold overlap 5 20 None 100 100 > stats_instr_class2_segpost_all.txt
-p stats_instr_class.py --segment all --segment_post --test_usevalid --kfold overlap 5 20 None 100 100 > stats_instr_class2_segpost_testvalid_all.txt
-
-
-p stats_instr_class.py --segment 3up_oup -kfold nooverlap 4 None None 27 25 > stats_instr_class2a_3up_oup.txt
-p stats_instr_class.py --segment 3up_oup -kfold overlap 4 25 None 40 40 > stats_instr_class2a_3up_oup.txt
-
-"""
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
