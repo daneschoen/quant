@@ -18,8 +18,6 @@ print(pth_wrk, end="\n\n")
 if pth_wrk[:6] == '/Users':
     os.system('touch /var/log/uwsgi/flask.log')
     pth_root = pth_wrk[:pth_wrk.find('development')+12]
-else:
-    pth_root = pth_wrk[:pth_wrk.find('Agape')]
 
 pth_proj_fin_app = "projects/fintech/flask_blueprint/"
 path_app = os.path.abspath(os.path.join(pth_root, pth_proj_fin_app))
@@ -64,9 +62,6 @@ dirs_transform = ["future/z"]  #["future/fut_1min"]
 dirs_clean = ["equity/sp500_1min"]
 
 def extract_zip(lst_dir=dirs_extract):
-    '''
-    extract('~/Agape/development/projects/fintech/data_in/stk/sp500_1min')
-    '''
     if type('s') == str:
         lst_dir = [lst_dir]
     for dir_extract in lst_dir:
@@ -926,10 +921,6 @@ def transform_grid_stk(sym_lst=None, pth=pth_stk_sp500):
 
 
 def get_sym_lst(pth=pth_stk_sp500, file_suffix='.txt'):
-    '''
-    stk_sp500_lst = import_transform.get_sym_lst()
-    stk_sp500_lst = import_transform.get_sym_lst('~/Agape/development/projects/fintech/data_in/stk/sp500_1min')
-    '''
     # sp500_lst = [ f.split('.csv')[0].lower() for f in os.listdir(PATH_DATA_SP500) if os.path.isfile(os.path.join(PATH_DATA_SP500, f)) and 'table_' not in f ]
     # return sp500_lst
 
