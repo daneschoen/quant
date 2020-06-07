@@ -9,7 +9,7 @@ import zipfile
 import pandas as pd
 import numpy as np
 
-# /Users/acrosspond/Agape/development/ml_stat_quant/trade_quant/trade_strategy/
+
 pth_wrk = os.getcwd()  # X! - ONLY in IPYTHON
 pth_wrk = os.path.abspath(os.path.dirname( __file__ ))
 
@@ -20,49 +20,16 @@ if pth_wrk[:6] == '/Users':
     pth_root = pth_wrk[:pth_wrk.find('development')+12]
 else:
     pth_root = pth_wrk[:pth_wrk.find('Agape')]
-# pth_proj_fin = "projects/fintech/"
+
 pth_proj_fin_app = "projects/fintech/flask_blueprint/"
-# pth_proj_fin_app_quant = "projects/fintech/flask_blueprint/apps/app_quant"
-# pth_proj_fin_app_constants = "projects/fintech/flask_blueprint/apps/settings"
-# pth_proj_fin_data_in = "projects/fintech/data_in/"
-
-# # PATH_FIN_FLASK = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '../../..', PROJ_FIN_FLASK))
-# path_proj = os.path.abspath(os.path.join(pth_wrk, rel_pth, pth_proj_fin))
 path_app = os.path.abspath(os.path.join(pth_root, pth_proj_fin_app))
-# path_app_quant = os.path.abspath(os.path.join(pth_wrk, rel_pth, pth_proj_fin_app_quant))
-# path_app_constants = os.path.abspath(os.path.join(pth_wrk, rel_pth, pth_proj_fin_app_constants))
-# path_data_in = os.path.abspath(os.path.join(pth_wrk, rel_pth, pth_proj_fin_data_in))
-
-# sys.path.append(path_proj)
 sys.path.append(path_app)
-# sys.path.append(path_app_constants)
-# sys.path.append(path_data_in)
 
 from apps.app_util.util_json import jprint
 
 from apps.settings.constants_fin import *  # INSTR_SPECS as InstrX
 from apps.settings.settings import PATH_PROJ, PATH_APP, PATH_DATA_IN
 
-# ==============================================================================
-# pth_wrk = os.path.join(PATH_PROJ, "data_in")
-
-# pth_equity = "data_in/equity/"
-# pth_com_fx = "data_in/com_fx/"
-# pth_econ = "data_in/econ/"
-# pth_crypto = "data_in/crypto/"
-
-# PATH_FUT = os.path.join(PATH_PROJ, pth_fut)
-# PATH_DATA_SP500 = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '../../..', pth_sp500))
-# pth_stk_SP500 = os.path.join(PATH_PROJ, pth_stk_sp500)
-    # cur_path = os.getcwd()
-    # if cur_path[:7] == '/Users/':
-    #     PROJ_ROOT = cur_path.rsplit('/', 3)
-"""
-# ------------------------------------------------------------------------------
-# CONVENTION:
-# pth_[asset]_[group]
-# ------------------------------------------------------------------------------
-"""
 pth_fut_use = "fut/use_1min/"  # "fut/fut_2005__2018/"   INSTR_SPECS['fut']['path']   #
 pth_stk_sp500 = "stk/sp500_1min/"  # INSTR_SPECS['stk']['sp500']['path']    #
 pth_stk_nasdaq100 = "stk/nasdaq100_1min/"  # INSTR_SPECS['stk']['sp500']['path']   #
@@ -95,51 +62,6 @@ dirs_extract = [("equity/z", "equity/sp500_1min")]
 dirs_transform = ["future/z"]  #["future/fut_1min"]
 
 dirs_clean = ["equity/sp500_1min"]
-
-'''
-# ------------------------------------------------------------------------------
-Used by:
-~/Agape/development/ml_stats_quant/trade_quant/trade_strategy/strategy.py
-  ~/Agape/development/ml_stats_quant/trade_quant/trade_strategy/fut_setup.py
-
-sys.path.append(... "projects/fintech/flask_blueprint/apps/app_quant")
-~/Agape/development/ml_stats_quant/statsmodels_regression_scikit/regression_stats.ipynb
-
-~/Agape/development/ml_stats_quant/trade_quant/trade_strategy/*.py
-~/projects/fintech/flask_blueprint/apps/app_plot_pair, app_plot_ml
-~/projects/fintech/flask_blueprint/apps/app_quant/import_transform
-
-
-#fut_files = ['esdata1col.csv', 'usdata1col.csv']
-#fut_files_dct = {fut[:2].lower():fut for fut in fut_files}
-
-df_fut = strategy.import_fut_dct_df(sym_lst=['es','us'])
-
-df_fut_pctchg = {fut: df_.pct_change()[1:] for fut, df_ in df_fut.items()}
-
-display( df_fut_pctchg['es'].columns )
-display( df_fut['es'].head() )
-
-
-dct_stk_sp500 = strategy.import_equity_sp500_dct_df()
-dct_stk_nasdaq100 = strategy.import_equity_nasdaq100_dct_df()
-
-dct_stk = strategy.import_equity_dct_df()
-dct_stk['sp500']
-dct_stk.keys())
-
-dct_stk['aapl'].head()
-dct_stk['goog'].tail()
-
-dct_stk_pctchg = {sym: df_.pct_change()[1:] for sym, df_ in dct_stk.items()}
-dct_stk['aapl'].head()
-dct_stk_pctchg['aapl'].head()
-
-dct_stk_pctchg['aapl'].columns
-
-dct_stk_pctchg = {sym: df_.pct_change()[1:] for sym, df_ in dct_stk.items()}
---------------------------------------------------------------------------------
-'''
 
 def extract_zip(lst_dir=dirs_extract):
     '''
@@ -243,30 +165,6 @@ class InstrX(dict, metaclass=Singleton):
         asset_sym_time_lst = list(df_grid.columns)
 
         def delta_dytime_idx(asset_sym_time, min_incr=0):
-            '''
-            Instr.fut_es.delta_dytime_idx('fut_es_0000', 0)  == (0, 33)
-            Instr.fut_es.delta_dytime_idx('fut_es_2359', 0)  == (0, 1472)
-            Instr.fut_es.delta_dytime_idx('fut_es_2359', 1)  == (1, 33)
-
-            Instr.fut_es.delta_dytime_idx('fut_es_0000', -1)    == (-1, 1456)
-            Instr.fut_es.delta_dytime_idx('fut_es_0000', -1440) == (-1, 33)
-            Instr.fut_es.delta_dytime_idx('fut_es_0000', -2880) == (-2, 33)
-
-            Instr.stk_amgn.delta_dytime_idx('stk_amgn_0930', 0) == (0, 4)
-            Instr.stk_amgn.delta_dytime_idx('stk_amgn_1600', 1) == (1, 4)
-            Instr.stk_amgn.delta_dytime_idx('stk_amgn_0930', -1) == (0, 394)
-            Instr.stk_amgn.df_grid.columns[394] == 'stk_amgn_1600'
-
-            6 + 0   = 6 - (0*7)    => (0, 6)
-            5 + 3   = 8 - (1*7)    => (1, 1)
-            5 + 11  = 16 - (2*7)   => (1, 2)
-            6 - 0   = 6   =>  7 + 6 - (0+1)*7  => (0, 6)
-            6 - 6   = 0   =>  7 + 0 - (0+1)*7  => (0, 0)
-            5 - 8   = -3  =>  7 + -3 - (-1+1)*7  => (-1, 4)
-            5 - 15  = -10 =>  7 + -10 - (-2+1)*7 => (-2, 4)
-            '''
-            # if len(col_time) > 4:  # 'fut_es_0930' | '0930' => col index
-            #    return cols_time.index(col_time[-4:])
             dy_incr=0
             col_idx = self[asset_sym].df_grid.columns.get_loc(asset_sym_time) + min_incr
             if min_incr == 0:
@@ -285,24 +183,6 @@ class InstrX(dict, metaclass=Singleton):
             return (dy_incr, col_idx)
 
         def delta_dytime(asset_sym_time, min_incr=0, dtimestamp=None):
-            '''
-            Instr.fut_es.delta_dytime('fut_es_0000')     == (0, None, 'fut_es_0000')
-            Instr.fut_es.delta_dytime('fut_es_2359', 1)  == (1, None, 'fut_es_0000')
-            Instr.fut_es.delta_dytime('fut_es_0000', -1) == (-1, None, 'fut_es_2359')
-
-            Instr.fut_es.delta_dytime('fut_es_o', -1)    == (0, None, 'fut_es_0929')
-            Instr.fut_es.delta_dytime('fut_es_c', -1)    == (0, None, 'fut_es_1559')
-
-            Instr.fut_es.delta_dytime('fut_es_0000', -1, dtimestamp)
-            Instr.fut_es.delta_dytime('fut_es_0000', -1, pd.Timestamp('2002-09-11')) == (-1, Timestamp('2002-09-10 00:00:00'), 'fut_es_2359')
-            Instr.fut_es.delta_dytime('fut_es_0000', -1, pd.Timestamp('07/29/2019')) == (-1, Timestamp('2019-07-28 00:00:00'), 'fut_es_2359')
-
-            Instr.stk_amgn.delta_dytime('stk_amgn_0930') == (0, None, 'stk_amgn_0930')
-            Instr.stk_amgn.delta_dytime('stk_amgn_0930', -1) == (-1, None, 'stk_amgn_1600')
-            Instr.stk_amgn.delta_dytime('stk_amgn_1600', 1, ts('2020-03-20')) == (1, Timestamp('2020-03-23 00:00:00'), 'stk_amgn_0930')
-            Instr.stk_amgn.delta_dytime('stk_amgn_0930', -1, ts('2020-03-23')) == (-1, Timestamp('2020-03-20 00:00:00'), 'stk_amgn_1600')
-            '''
-
             asset, sym, time = asset_sym_time.split('_')
             asset_sym_ = asset+'_'+sym+'_'
             if time[0] == 'o' or time[0] == 'c':
@@ -319,20 +199,6 @@ class InstrX(dict, metaclass=Singleton):
         def search_val(cond, fwd_bak, dtimestamp_beg,
                        time_beg, time_end=None, dy_max=None,
                        min_max=None, bl_bracket=False):
-            ''' val, dy_incr, dtimestamp_found, asset_sym_time, min_incr =
-            Instr[asset_sym].search_val('== 2945.25', 'f', dtimestamp, '0000')
-            Instr[asset_sym].search_val('== 3019.25', 'b', dtimestamp, '1615')
-
-            Instr[asset_sym].search_val('== 3015.50', 'f', dtimestamp, '0930', '1000', dy_max=0)
-            Instr[asset_sym].search_val('== 3015.50', 'b', dtimestamp, '1000', '0930', dy_max=0)
-
-            Instr[asset_sym].search_val('== 2984.25', 'f', dtimestamp, '2353', '0010', dy_max=1)
-            Instr[asset_sym].search_val('== 2984.25', 'b', dtimestamp+pd.Timedelta(days=1), '0007', '2350', dy_max=1)
-
-            Instr[asset_sym].search_val('> 2984.75', 'f', dtimestamp, '2350')
-            Instr[asset_sym].search_val('< 2984', 'f', dtimestamp, '2350')
-            Instr[asset_sym].search_val('< 2984', 'b', dtimestamp+pd.Timedelta(days=1), '0015')
-            '''
             asset_sym_ = asset_sym+'_'
             eq = re.findall(r'[><!=]+', cond)[0]
             val = float(cond.split(eq)[-1])
@@ -449,35 +315,6 @@ class InstrX(dict, metaclass=Singleton):
           )
         )
 
-"""
-class InstrX2(metaclass=Singleton):
-    df = {}
-
-    def __init__(self):
-        pass
-
-    def append_instr(self, asset_sym, df_grid, df_hol, instr_specs):
-        df[asset_sym] = df_grid
-        # test.__dict__[a_string]
-        setattr(self, asset_sym, '')
-        self.df_grid = df_grid
-        self.df_hol = df_hol
-        self.specs = instr_spec
-        self.columns = list(self.df_grid.columns)
-
-    def col_idx(self, col_time):
-        col_time = col_time[-4:]   # 'fut_es_1200'
-        return self.columns.index(col_time)
-
-    def df(self, asset_sym):
-        return df
-"""
-"""
-class InstrX3(InstrX_Base, metaclass=Singleton):
-    pass
-"""
-
-# ------------------------------------------------------------------------------
 def get_aliases(asset_sym, Instr):
     df_grid, specs, df_hol = Instr[asset_sym].df_grid, Instr[asset_sym].specs, Instr[asset_sym].hol
     asset_sym_time_lst = Instr[asset_sym].asset_sym_time_lst   # list(df_grid.columns)
@@ -537,26 +374,6 @@ def update_hilo(Instr, asset_sym):
         row_min_prev = df_grid.loc[row_dtimestamp, asset_sym_+specs['ob_time'][0]:].min()
 
 
-    """
-    df_grid[asset_sym_ + 'hdy'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['c_time'][0]].max(axis=1)
-    df_grid[asset_sym_ + 'ldy'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['c_time'][0]].min(axis=1)
-    df_grid[asset_sym_ + 'hdyb'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['cb_time'][0]].max(axis=1)
-    df_grid[asset_sym_ + 'ldyb'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['cb_time'][0]].min(axis=1)
-    df_grid[asset_sym_ + 'hdya'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['cb_time'][0]].max(axis=1)
-    df_grid[asset_sym_ + 'ldya'] = df_grid.loc[:, asset_sym_+specs['o_time'][0]:asset_sym_+specs['cb_time'][0]].min(axis=1)
-
-    asset_sym_time = Instr[asset_sym].delta_dytime('fut_es_o', -1)[2]  # == (0, None, 'fut_es_0929')
-    df_grid[asset_sym_ + 'ha'] = df_grid.loc[:, asset_sym_+'0000':asset_sym_time].max(axis=1)
-    df_grid[asset_sym_ + 'la'] = df_grid.loc[:, asset_sym_+'0000':asset_sym_time].min(axis=1)
-
-    df_grid[asset_sym_ + 'hb'] = df_grid.loc[:, asset_sym_+'0000':].max(axis=1)
-    df_grid[asset_sym_ + 'lb'] = df_grid.loc[:, asset_sym_+'0000':].min(axis=1)
-    df_grid[asset_sym_ + 'hc'] = df_grid.loc[:, asset_sym_+'0000':asset_sym_+specs['c_time'][0]].max(axis=1)
-    df_grid[asset_sym_ + 'lc'] = df_grid.loc[:, asset_sym_+'0000':asset_sym_+specs['c_time'][0]].min(axis=1)
-    df_grid[asset_sym_ + 'hd'] = df_grid.loc[:, asset_sym_+specs['ob_time'][0]:].max(axis=1)
-    df_grid[asset_sym_ + 'ld'] = df_grid.loc[:, asset_sym_+specs['ob_time'][0]:].min(axis=1)
-    """
-
 def clean_forward(row_dtimestamp, asset_sym, Instr):
     df_grid, specs, df_hol, asset_sym_time_lst, asset_sym_ = get_aliases(asset_sym, Instr)
     #for i, cont_row in enumerate(df_file.itertuples(), 0):
@@ -566,42 +383,6 @@ def clean_forward(row_dtimestamp, asset_sym, Instr):
 
 
 def clean_fill_zeros(asset_sym, Instr):
-    '''
-    A) FIRST DAY: 0000 <= bfill
-    B) LAST DAY: ffill
-
-    C) HOL:
-       # ffill
-       # bfill
-
-    D) 1800 == 0:
-       # 1800 <- 1830-2359 - search first nonzero after 1800, then bfill to 1800
-       # ffill 1800 -> 2359
-
-    E) 0000 == 0:
-       # prev day '2359' OR bfill, whichever is shorter distance
-       # ffill to 0929
-
-    FILL BACKWARDS
-    B) late open - only back to Open
-       0830, 0831, ... 0930, 0931, ..., 1200
-             2765.50
-       INSTR_SPECS[asset][group][sym]['o_time'][0] <= first non-zero
-    C) 1600 <- 1615 <- 1700 <- 1800 <- 1830
-
-    K) SUN:
-       1) sun: 1800 -> ffill, then bfill
-       2) sun's           <= prev fri's 0000:1759
-       3) sun's 1800:2359 => prev fri
-
-    FILL FORWARDS 03/09/2020, 10, 16, 18
-    - early Close: eg 1300 -> 1800
-    - Friday Close => Sunday Open-1: INSTR_SPECS[asset][group][sym]['o_time'][4]
-    - new year 0630 or 1800
-
-    time_idx += 1
-    if TIME_LST.index(cont_row.Time) != time_idx:  # TIME_LST.index('1800') == 1080
-    '''
     this_fn_name = inspect.currentframe().f_code.co_name
     # caller_fn_name = inspect.currentframe().f_back.f_code.co_name
 
@@ -828,63 +609,10 @@ def clean_fill_zeros(asset_sym, Instr):
     print(Instr[asset_sym].df_grid.index[-1])
     print(Instr[asset_sym].df_grid.shape)
 
-    # df_grid = clean_row_alias_time(df_grid, row_dtimestamp, asset_sym_, specs)
-
-    #lst_dtimestamp_zero_sun_1800 = df_grid[(df_grid[asset_sym_+'1800']==0) & (df_grid.index.dayofweek == 6) & (~df_grid.index.isin(df_hol.date))].index.tolist()
-    # df_grid = clean_row_alias_time(df_grid, row_dtimestamp, asset_sym_, specs)
-
-    # FILL FORWARDS
-    # 1500 -> 1600 -> 1700 - 1759
-    ###cols_idx_zero = np.nonzero(df_grid.loc[row_dtimestamp].values == 0)[0]
-    ###for col_idx in cols_idx_zero:
-
-    ###df_grid = row_alias_time(df_grid, row_dtimestamp, asset_sym_, specs)
-
     return Instr
 
 
 def transform_grid_import(src, sym_lst=[], bl_new=True, bl_out_zeros=True, bl_no_clean=False, bl_ret_grid=True):
-    ''' Use:
-
-    Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'])                      # prod
-    Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'], bl_out_zeros=False)
-    Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'], bl_no_clean=True)    # debug
-
-    os.chdir(os.path.join(PATH_DATA_IN, 'fut/use_tmp/'))
-    os.chdir(os.path.join(PATH_DATA_IN, 'fut/use_1min/'))
-    df_grid = transform_grid_import(src='pwd', sym_lst=['es'], bl_ret_grid=True)
-    df_grid = transform_grid_import(src=os.path.join(PATH_DATA_IN, 'fut/use_tmp/'), sym_lst=['es'], bl_ret_grid=True)
-
-    missing_o = df_grid[(df_grid['asset_sym_O']==0) & (df_grid.index.dayofweek != 6) & (~df_grid.index.isin(df_hol.date))].index.tolist()
-    df_grid.loc[df_grid.index.isin(missing_o),'asset_sym_0914':'asset_sym_0931'].iloc[0]
-
-    (df_grid.iloc[:,:] == 0).any().any()
-    (df_grid.iloc[:,:] == 3.14).any(axis=1)
-
-    df_grid[df_grid.index.isin(df_hol.date)]
-    df_hol.date.iloc[-23] == df_grid.index[-59]
-                             df_grid.iloc[-59,:].name
-
-    df_grid.loc[pd.Timestamp('2002-09-11'),'asset_sym_0914':'asset_sym_0931']
-    df.A.ne('a').idxmax()
-    df_grid.loc[pd.Timestamp('2002-09-11'),'asset_sym_0000':].eq(0).idxmax()
-
-    df_grid[df_grid['asset_sym_O']==2943.50]  ==  df_grid.loc[df_grid['asset_sym_O']==2943.50]
-    df_grid.loc[pd.Timestamp('2019-07-28'),'asset_sym_0500':'asset_sym_1000']
-
-    df[df.apply(lambda r: r.str.contains('b', case=False).any(), axis=1)]
-
-    print(df_file.index.max())
-    print(df_file.iloc[0, :])
-    print(df_file.iloc[-1, :])
-    print(df_file.iloc[-1, :].Close)
-
-
-    fill forward, backward ...
-
-    "pth_fut_use"
-    "pth_stk_sp500"
-    '''
     if src[:4] == 'pth_':
         tmp_asset_group = src.split('_')
         asset, group = tmp_asset_group[1], tmp_asset_group[2]
@@ -940,10 +668,6 @@ def transform_grid_import(src, sym_lst=[], bl_new=True, bl_out_zeros=True, bl_no
         file_path_des_zero = os.path.join(pth_src, fname[:-4].lower() + '_zero' + DES_EXT)
         file_path_des_clean = os.path.join(pth_src, fname[:-4].lower() + DES_EXT)
 
-        """ slow for some reason ...
-        date_parser = lambda d, t: pd.datetime.strptime(d+' '+t, '%m/%d/%Y %H%M')
-        df_file = pd.read_csv(pth_file_src, index_col='Dtime', parse_dates={'Dtime':['Date','Time']}, date_parser=date_parser)
-        """
         df_file = pd.read_csv(file_path_src, dtype = {"Time" : "str"})
         dtimes = pd.to_datetime(df_file.Date + ' ' + df_file.Time, format= '%m/%d/%Y %H%M')
         df_file.set_index(dtimes, inplace=True)
@@ -1089,18 +813,6 @@ def transform_grid_import(src, sym_lst=[], bl_new=True, bl_out_zeros=True, bl_no
 
 
 def transform_grid_stk(sym_lst=None, pth=pth_stk_sp500):
-    '''
-    stk_sp500_lst = import_transform.get_sym_lst()
-    import_transform.transform_grid_stk(stk_sp500_lst[:100])
-    import_transform.transform_grid_stk(stk_sp500_lst[100:200])
-    import_transform.transform_grid_stk(stk_sp500_lst[200:300])
-    import_transform.transform_grid_stk(stk_sp500_lst[300:400])
-    import_transform.transform_grid_stk(stk_sp500_lst[400:])
-
-    import_transform.transform_grid_stk()
-
-    0930 - 1559 only
-    '''
     ts = pd.Timestamp
 
     if pth[0] == '~' or pth[0] == '/':
@@ -1225,16 +937,6 @@ def get_sym_lst(pth=pth_stk_sp500, file_suffix='.txt'):
         from apps.settings.constants_fin import SP500_LST
         # but prob easier if just import right above ...
         return SP500_LST
-    # if src == 'pth_stk_sp500_eod':
-    #    pth = os.path.abspath(os.path.join(PATH_PROJ, 'pth_stk_sp500_eod_1998_2013'))
-    #    return [ f.split('.csv')[0].lower() for f in os.listdir(pth) if os.path.isfile(os.path.join(pth, f)) and 'table_' not in f ]
-    # if src == 'STK_SP500_LST':
-    #     l = []
-    #     for l_row in csv.reader(open(path_file), delimiter='\t'):
-    #         if len(l_row) > 0:
-    #             l.append(l_row[0])
-    #     # l2 = sorted(list(set(SP500_LST)-set(l)))
-    #     return l
 
     elif pth[0] == '~' or pth[0] == '/':
         pth_src = os.path.expanduser(pth)
@@ -1260,17 +962,6 @@ def import_hol(asset_group):
 
 
 def import_fut_Instr(src, sym_lst=['es'], bl_new=True):
-    '''
-    Instr = import_fut_Instr(src='pth_fut_use', sym_lst=['es'], bl_new=True)
-            import_fut_Instr(src='~/Agape/development/projects/fintech/data_in/fut/use_1min', sym_lst=['es'], bl_new=True)
-
-    Instr['fut_es'], Instr['stk_sp500_appl']
-    Instr.fut_es.df.loc[pd.Timestamp('2002-09-11'),'fut_es_0914':'fut_es_0931']
-    Instr.fut_es.df.columns
-    Instr.fut_es.columns
-    Instr.fut_es.specs['o_time']
-    '''
-
     if src[:4] == 'pth_':
         tmp_asset_group = src.split('_')
         asset, group = tmp_asset_group[1], tmp_asset_group[2]
@@ -1375,18 +1066,6 @@ def import_fut_dct_df(src='pth_fut_use', sym_lst=['es'], bl_debug=True):
             print("Importing - " + str(cnt) + ": " + sym)
 
         file_path = os.path.join(PATH_DATA_IN, globals()[src], sym.lower() + '.csv')
-        # file_path = os.path.join(PATH_DATA_IN, asset_group, sym.upper() + '.csv')
-        # file_path = os.path.join(PATH_DATA_IN, INSTR_SPECS[asset]['path'], sym.upper() + '.csv')
-
-        # #df_dct[sym] = pd.read_csv(join(PATH_DATA_FUT, + file_name), parse_dates=['Date']).set_index('Date')
-        # df_fut[sym] = pd.read_csv(file_path, parse_dates=[[0,1,2]], date_parser=parser, index_col=0)
-        #
-        # df_fut[sym].rename(columns=lambda x: x.replace(':', ''), inplace=True)
-        # #df_fut[fut].rename(columns=lambda x: FUT_TIME_PREFIX+x, inplace=True)
-        # df_fut[sym].rename(columns=lambda x: asset+'_'+sym+'_'+x, inplace=True)
-        # df_fut[sym].rename(columns={asset+'_'+sym+'_'+'HIGH':asset+'_'+sym+'_h', asset+'_'+sym+'_'+'LOW':asset+'_'+sym+'_l', asset+'_'+sym+'_'+'W':asset+'_'+sym+'_w'}, inplace=True)
-        # #df_fut[fut].drop('w', axis=1, inplace=True)
-        # df_fut[sym] = pd.read_csv(file_path, parse_dates=[[0,1,2]], date_parser=parser, index_col=0)
         df_fut[sym] = pd.read_csv(file_path, parse_dates=['Date']).set_index('Date')
         df_fut[sym].index.names = ['date']
 
@@ -1394,26 +1073,10 @@ def import_fut_dct_df(src='pth_fut_use', sym_lst=['es'], bl_debug=True):
 
 
 def import_stk(sym_lst, pth=pth_stk_sp500):
-    '''
-    sym_lst = STK_SP500_DRUG_LST
-    dct_stk = import_transform.import_stk(sym_lst)
-
-    dct_stk = import_transform.import_stk(['zbra','zion','zts'])
-
-    dct_stk = {}
-    sym = 'zion'
-    dct_stk[sym] = import_transform.import_stk(sym)
-
-    dct_stk[sym] = import_transform.import_stk(sym, '~/Agape/development/projects/fintech/data_in/stk/sp500_1min/')
-
-    dct_stk = import_transform.import_stk(sym)
-
-    dct_stk = pd.read_csv('~/Agape/development/projects/fintech/data_in/stk/sp500_1min/ZION.csv', parse_dates=['Date']).set_index('Date')
-    '''
     strat = getattr(builtins, 'strat')
     Instr = strat['Instr']
     specs = INSTR_SPECS['stk']['sp500']
-    hol = Instr.fut_es.hol  
+    hol = Instr.fut_es.hol
 
     if pth[0] == '~' or pth[0] == '/':
         pth_src = os.path.expanduser(pth)
@@ -1467,43 +1130,7 @@ def import_crypto(crp_lst=['btc'], bl_debug=False):
 
     return df_
 
-# ==============================================================================
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-    # extract()
-
-    # Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'])                      # prod
-    # Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'], bl_out_zeros=False)
-    # Instr = transform_grid_import(src='pth_fut_use', sym_lst=['es'], bl_no_clean=True)    # debug
-
-
-    # DEBUG
-    # transform_grid_import(src='fut/use_tmp/, sym_lst=['es3']')
-
-
-''' Use:
-] os.chdir(os.environ['PATH_APP_FINTECH'])
-$ cd $PATH_APP_FINTECH
-
-
-from apps.app_util.import_transform import *
-Instr = import_fut_Instr(src='pth_fut_use', sym_lst=['es'], bl_new=True)
-
-
-$ cd $PATH_APP
-$ python -m apps.app_util.import_transform
-] %run -m apps.app_util.import_transform
-  %run -m apps.app_util.import_transform.import_transform_grid(src='pth_fut_us')
-
-
-pd.options.display.max_rows = None
-pd.options.display.max_columns = None
-
-
-asset_sym = 'fut_es'
-dtimestamp = Instr.fut_es.df_grid.index[-3]
-Instr.fut_es.df_grid.loc[dtimestamp,'fut_es_0930':'fut_es_1000']
-print(Instr.fut_es.df_grid.loc[dtimestamp,'fut_es_2340':])
-print(Instr.fut_es.df_grid.loc[dtimestamp+pd.Timedelta(days=1),'fut_es_0000':'fut_es_0010'])
-'''
+    extract()
