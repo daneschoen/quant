@@ -11,146 +11,6 @@ from flask_sqlalchemy import SQLAlchemy
 from celery import Celery
 # ....
 from settings import config
-
-celery = Celery()
-db = SQLAlchemy()  # or in models.py BUT NOT IN create_app
-                   # so the extension object does not initially get bound to the application.
-                   # Using this design pattern, no application-specific state is stored on the extension object,
-                   # so one extension object can be used for multiple apps. 
-"""
-================================================================================
-Method #0: - cannot control initialization, for ex cannot change config
-================================================================================
-"""
-app = Flask(__name__)
-
-app.config.from_object('config')
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config.from_pyfile('settings/settings.py')
-
-# app.config['DEBUG'] = True
-# app.debug = True
-# app.config.update(
-#    DEBUG=True,
-#    SECRET_KEY='...'
-# )
-
-
-api_blueprint = Blueprint('xyz.api',  __name__, None)
-api_blueprint.config = {}
-
-@api_blueprint.record
-def record_params(setup_state):
-  app = setup_state.app
-  api_blueprint.config = dict([(key,value) for (key,value) in app.config.iteritems()])
-
-
-"""
-================================================================================
-Method #1a: app factory
-------------------------
-- Control initialization - config settings
-- Easier deployment
-- Clearer dependencies
-- Testing
-- Using this design pattern, no application-specific state is stored on the
-  extension object, so one extension object can be used for multiple apps.
-
-../manage.py  (flask_run.py, run_server.py, ...) :
--------------------------------------------------
-from apps import app
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
-
-VS:
-
-from apps import create_app
-
-if __name__ == "__main__":
-    app = create_app('development')
-    app.run(host='0.0.0.0')
-
-or:
-
-app = create_app('development')
-
-$ flask run
-
-================================================================================
-"""
-
-def create_app(config_name=None):
-    app = Flask(__name__)
-
-    # app.config.from_pyfile(config_filename)
-
-    if config_name is None:
-        config_name = os.environ.get('CONFIG', 'development')
-
-    app.config.from_object(config[config_name])
-
-    celery.config_from_object(app.config)
-    # session ...
-
-    # from yourapplication.model import db
-    db.init_app(app)
-
-    from apps.app_admin import app_admin
-    app.register_blueprint(app_admin, url_prefix='/admin/')
-
-    from yourapplication.views.admin import admin
-    from yourapplication.views.frontend import frontend
-    app.register_blueprint(admin)
-    app.register_blueprint(frontend)
-
-    from earlauto.views import home
-    app.register_blueprint(home)
-
-    return app
-
-
-The downside is that you cannot use the application object in the blueprints at
-import time. You can however use it from within a request.
-How do you get access to the application with the config? Use current_app:
-
-from flask import current_app, Blueprint, render_template
-admin = Blueprint('admin', __name__, url_prefix='/admin')
-
-@admin.route('/')
-def index():
-    return render_template(current_app.config['INDEX_TEMPLATE'])
-
-
-To run such an application, you can use the flask command:
-
-$ export FLASK_APP=myapp
-$ flask run
-
-Flask will automatically detect the factory (create_app or make_app) in myapp.
-You can also pass arguments to the factory like this:
-
-$ FLASK_APP=main.py venv/bin/flask run
-
-or:
-
-$ export FLASK_APP="myapp:create_app('dev')"
-$ flask run
-
-
-
-api_blueprint = Blueprint('xxx.api',  __name__, None)
-api_blueprint.config = {}
-
-@api_blueprint.record
-def record_params(setup_state):
-  app = setup_state.app
-  api_blueprint.config = dict([(key,value) for (key,value) in app.config.iteritems()])
-
-
-
-"""
-Method 2: app factory
-"""
 import datetime
 import flask_migrate
 import logging
@@ -186,7 +46,48 @@ from pygments.lexers import JsonLexer
 from pygments.lexers.special import TextLexer
 
 
-def create_app():
+celery = Celery()
+db = SQLAlchemy()
+
+
+@api_blueprint.record
+def record_params(setup_state):
+  app = setup_state.app
+  api_blueprint.config = dict([(key,value) for (key,value) in app.config.iteritems()])
+
+
+def create_app(config_name=None):
+    app = Flask(__name__)
+
+    # app.config.from_pyfile(config_filename)
+
+    if config_name is None:
+        config_name = os.environ.get('CONFIG', 'development')
+
+    app.config.from_object(config[config_name])
+
+    celery.config_from_object(app.config)
+    # session ...
+
+    # from yourapplication.model import db
+    db.init_app(app)
+
+    from apps.app_admin import app_admin
+    app.register_blueprint(app_admin, url_prefix='/admin/')
+
+    from geo.views.admin import admin
+    from geo.views.frontend import frontend
+    app.register_blueprint(admin)
+    app.register_blueprint(frontend)
+
+    from geo..views import home
+    app.register_blueprint(home)
+
+    return app
+
+
+
+def create_app2():
     app = Flask('ara')
 
     configure_app(app)
@@ -372,13 +273,6 @@ def configure_blueprints(app):
 
 
 def configure_db(app):
-    """
-    0.10 is the first version of ARA that ships with a stable database schema.
-    We can identify a database that originates from before this by checking if
-    there is an alembic revision available.
-    If there is no alembic revision available, assume we are running the first
-    revision which contains the latest state of the database prior to this.
-    """
     models.db.init_app(app)
     log = logging.getLogger('ara.webapp.configure_db')
     log.debug('Setting up database...')
