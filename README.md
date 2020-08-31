@@ -1,4 +1,4 @@
 # datasciencery
 
-Machine Learning hedging arbitrage models for Crypto and Financial Assets
+Machine Learning hedging arbitrage models for Time Series and Financial Assets
 
